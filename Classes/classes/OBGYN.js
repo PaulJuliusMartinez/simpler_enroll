@@ -1,0 +1,5 @@
+OBGYN = {"282":{"department":"OBGYN","number":"282","title":"Pregnancy, Birth, and Infancy (PEDS 282)","min_units":3,"max_units":3,"autumn_classes":[],"winter_classes":[],"spring_classes":[{"days":[false,false,true,false,false],"start_time":"10:00:00","end_time":"11:30:00"}],"gers":""},
+"81Q":{"department":"OBGYN","number":"81Q","title":"Perspectives on the Abortion Experience in Western Fiction","min_units":3,"max_units":3,"autumn_classes":[],"winter_classes":[],"spring_classes":[{"days":[true,false,false,false,false],"start_time":"17:00:00","end_time":"20:30:00"}],"gers":""},
+"256":{"department":"OBGYN","number":"256","title":"Current Controversies in Women's Health (HUMBIO 125)","min_units":2,"max_units":3,"autumn_classes":[],"winter_classes":[],"spring_classes":[{"days":[true,false,true,false,false],"start_time":"15:15:00","end_time":"16:45:00"}],"gers":""},
+"216":{"department":"OBGYN","number":"216","title":"Current Issues in Reproductive Health","min_units":1,"max_units":1,"autumn_classes":[],"winter_classes":[{"days":[true,false,false,false,false],"start_time":"12:00:00","end_time":"13:00:00"}],"spring_classes":[],"gers":""}
+}

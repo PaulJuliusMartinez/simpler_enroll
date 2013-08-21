@@ -1,0 +1,5 @@
+FAMMED = {"252":{"department":"FAMMED","number":"252","title":"Medicine & Horsemanship: An Outdoor, Equine Assisted Learning Course for Doctor-Patient Relationship","min_units":1,"max_units":1,"autumn_classes":[{"days":[false,false,true,false,false],"start_time":"12:30:00","end_time":"14:30:00"}],"winter_classes":[],"spring_classes":[],"gers":""},
+"219":{"department":"FAMMED","number":"219","title":"Mind-Body Medicine","min_units":1,"max_units":1,"autumn_classes":[],"winter_classes":[{"days":[false,true,false,false,false],"start_time":"18:30:00","end_time":"20:45:00"}],"spring_classes":[],"gers":""},
+"244":{"department":"FAMMED","number":"244","title":"Ethnicity and Medicine (HUMBIO 121E)","min_units":1,"max_units":3,"autumn_classes":[],"winter_classes":[],"spring_classes":[{"days":[false,false,true,false,false],"start_time":"12:00:00","end_time":"14:00:00"}],"gers":""},
+"245":{"department":"FAMMED","number":"245","title":"Women and Health Care","min_units":1,"max_units":1,"autumn_classes":[{"days":[true,false,false,false,false],"start_time":"12:00:00","end_time":"13:00:00"}],"winter_classes":[],"spring_classes":[],"gers":""}
+}

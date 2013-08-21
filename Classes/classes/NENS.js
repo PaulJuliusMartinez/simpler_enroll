@@ -1,0 +1,6 @@
+NENS = {"230":{"department":"NENS","number":"230","title":"Analysis Techniques for the Biosciences Using MATLAB","min_units":2,"max_units":2,"autumn_classes":[{"days":[true,false,false,false,false],"start_time":"09:00:00","end_time":"10:50:00"}],"winter_classes":[],"spring_classes":[],"gers":""},
+"206":{"department":"NENS","number":"206","title":"Introduction to Neurology Seminar","min_units":1,"max_units":1,"autumn_classes":[{"days":[false,false,false,true,false],"start_time":"12:00:00","end_time":"13:00:00"}],"winter_classes":[],"spring_classes":[],"gers":""},
+"202":{"department":"NENS","number":"202","title":"Longevity (HUMBIO 149L, PSYCH 102)","min_units":4,"max_units":4,"autumn_classes":[],"winter_classes":[{"days":[true,false,true,false,false],"start_time":"11:00:00","end_time":"12:15:00"}],"spring_classes":[],"gers":""},
+"67N":{"department":"NENS","number":"67N","title":"Intracellular Trafficking and Neurodegeneration","min_units":3,"max_units":3,"autumn_classes":[],"winter_classes":[],"spring_classes":[{"days":[false,true,false,true,false],"start_time":"17:30:00","end_time":"19:00:00"}],"gers":""},
+"204":{"department":"NENS","number":"204","title":"Stroke Seminar","min_units":1,"max_units":1,"autumn_classes":[],"winter_classes":[{"days":[false,true,false,false,false],"start_time":"12:00:00","end_time":"13:05:00"}],"spring_classes":[],"gers":""}
+}

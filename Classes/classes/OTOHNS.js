@@ -1,0 +1,2 @@
+OTOHNS = {"200":{"department":"OTOHNS","number":"200","title":"Introduction to Otolaryngology-Head and Neck Surgery","min_units":1,"max_units":1,"autumn_classes":[],"winter_classes":[{"days":[false,false,false,false,true],"start_time":"12:00:00","end_time":"13:00:00"}],"spring_classes":[],"gers":""}
+}

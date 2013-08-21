@@ -1,0 +1,2 @@
+HUMSCI = {"201":{"department":"HUMSCI","number":"201","title":"Graduate Environment of Support","min_units":1,"max_units":1,"autumn_classes":[{"days":[false,false,true,false,false],"start_time":"11:55:00","end_time":"13:10:00"}],"winter_classes":[],"spring_classes":[],"gers":""}
+}

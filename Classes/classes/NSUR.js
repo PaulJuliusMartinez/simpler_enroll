@@ -1,0 +1,2 @@
+NSUR = {"70Q":{"department":"NSUR","number":"70Q","title":"Experimental Stroke","min_units":2,"max_units":2,"autumn_classes":[],"winter_classes":[{"days":[false,true,false,false,false],"start_time":"14:15:00","end_time":"16:04:00"}],"spring_classes":[],"gers":""}
+}

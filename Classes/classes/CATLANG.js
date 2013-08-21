@@ -1,0 +1,3 @@
+CATLANG = {"1A":{"department":"CATLANG","number":"1A","title":"Accelerated First-Year Catalan, Part 1","min_units":5,"max_units":5,"autumn_classes":[{"days":[true,true,true,true,true],"start_time":"09:00:00","end_time":"09:50:00"}],"winter_classes":[],"spring_classes":[],"gers":""},
+"2A":{"department":"CATLANG","number":"2A","title":"Accelerated First-Year Catalan, Part 2","min_units":5,"max_units":5,"autumn_classes":[],"winter_classes":[{"days":[true,true,true,true,true],"start_time":"09:00:00","end_time":"09:50:00"}],"spring_classes":[],"gers":""}
+}

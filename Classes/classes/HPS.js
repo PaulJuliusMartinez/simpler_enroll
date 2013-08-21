@@ -1,0 +1,2 @@
+HPS = {"60":{"department":"HPS","number":"60","title":"Introduction to Philosophy of Science (PHIL 60)","min_units":5,"max_units":5,"autumn_classes":[{"days":[true,false,true,false,false],"start_time":"09:30:00","end_time":"10:45:00"}],"winter_classes":[],"spring_classes":[],"gers":"GER:DBHum"}
+}
