@@ -21,7 +21,7 @@ import edu.stanford.services.explorecourses.Section;
 import edu.stanford.services.explorecourses.ExploreCoursesConnection;
 
 /** Prints a list of all courses offered at Stanford in the current academic year **/
-public class FetchClasses {
+public class FetchCourses {
 	public static void main(String[] args) throws IOException, JDOMException {
 		init();
 		ExploreCoursesConnection connection = new ExploreCoursesConnection();

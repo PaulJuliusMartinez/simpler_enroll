@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">
+    </script>
+    <script src="./Client/Calendar.js">
+    </script>
+    <link rel="stylesheet" type="text/css" href="./Client/Calendar.css"/>
+    <script>
+      $(document).ready(function() {
+        var autumnCalendar = new Calendar();
+        autumnCalendar.render($('#autumn_calendar'));
+      });
+    </script>
+  </head>
+  <body>
+    <div id="autumn_calendar"></div>
+    <div id="winter_calendar"></div>
+    <div id="spring_calendar"></div>
+  </body>
+</html>
