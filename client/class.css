@@ -1,0 +1,23 @@
+/*
+ * Minimal CSS for a Class Object
+ */
+
+.class-box {
+  position: absolute;
+  border: 1px solid black;
+  border-radius: 2px;
+  width: 71px;
+  text-align: center;
+  font-weight: bold;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.class-box.enrolled {
+  background-color: #a9ec6b;
+}
+
+.class-box.planned {
+  background-color: #61c3ef;
+}

@@ -3,13 +3,36 @@
   <head>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">
     </script>
-    <script src="./Client/Calendar.js">
+    <script src="./client/calendar.js">
     </script>
-    <link rel="stylesheet" type="text/css" href="./Client/Calendar.css"/>
+    <script src="./client/class.js">
+    </script>
+    <script src="./courses/courses/CS.js">
+    </script>
+    <link rel="stylesheet" type="text/css" href="./client/calendar.css"/>
+    <link rel="stylesheet" type="text/css" href="./client/class.css"/>
     <script>
       $(document).ready(function() {
         var autumnCalendar = new Calendar();
         autumnCalendar.render($('#autumn_calendar'));
+        var CS144 = new Class('CS 144', [1, 0, 1, 0, 1], "16:15",
+        "17:05", 'enrolled');
+        var CS161 = new Class('CS 161', [0, 1, 0, 1, 0], "11:00",
+        "12:15", 'enrolled');
+        var E40 = new Class('ENGR 40', [1, 0, 1, 0, 1], "11:00",
+        "12:15", 'enrolled');
+        var EE263 = new Class('EE 263', [0, 1, 0, 1, 0], "09:30",
+        "10:45", 'enrolled');
+        var MUSIC19A = new Class('Music 19A', [1, 0, 1, 0, 1], "13:15",
+        "14:05", 'enrolled');
+        var CS242 = new Class('CS 242', [1, 0, 1, 0, 0], "14:15",
+        "15:30", 'planned');
+        CS144.render(autumnCalendar.getContainer());
+        CS161.render(autumnCalendar.getContainer());
+        E40.render(autumnCalendar.getContainer());
+        EE263.render(autumnCalendar.getContainer());
+        MUSIC19A.render(autumnCalendar.getContainer());
+        CS242.render(autumnCalendar.getContainer());
       });
     </script>
   </head>

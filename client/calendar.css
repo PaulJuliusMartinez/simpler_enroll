@@ -2,37 +2,43 @@
  * CSS for a Class Calendar object
  */
 
-::root {
-  var-cardinal: #8c1515;
-}
-
 .calendar-container {
-  height: 300px;
+  height: 275px;
   width: 400px;
-  border: 5px solid var(cardinal);
+  border: 5px solid #8c1515;
   border-radius: 3px;
+  font-family: "HelveticaNeue-Light",
+               "Helvetica Neue Light",
+               "Helvetica Neue",
+                Helvetica, Arial,
+               "Lucida Grande",
+                sans-serif; 
+  font-weight: 300;
+  position: relative;
 }
 
 .calendar-container table {
   border-spacing: 0px;
 }
 
-.calendar-container table th,
-.calendar-container table td {
-  width: 80px;
+.calendar-container th,
+.calendar-container td {
+  text-align: center;
+  width: 74px;
+}
+
+.calendar-container th {
+  height: 24px;
+}
+
+.calendar-container td {
+  height: 22px;
+}
+
+.calendar-container .calendar-hour-num {
+  width: 30px;
 }
 
 .calendar-hour-row td {
-  border: 1px solid #888;
-  height: 20px;
-  width: 60px;
-  background-color: yellow;
-}
-
-.calendar-hour-row td.calendar-first-column {
-  border-left: 0px;
-}
-
-.calendar-hour-row td.calendar-last-column {
-  border-right: 0px;
+  border-top: 1px solid #888;
 }
