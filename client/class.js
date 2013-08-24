@@ -32,24 +32,32 @@ Class = function(name, days, startTime, endTime, state) {
 Class.prototype.render = function(parent, opt_number, opt_total) {
   var startHeight = Class.timeStringToPixelHeight(this.startTime_) + 'px';
   var height = (this.hourLength() * Calendar.ROW_HEIGHT) + 'px';
+  var fraction = (opt_number && opt_total) ? (1 / opt_total) : 1;
+  var width = Class.PIXEL_WIDTH * fraction;
+  var offset = (opt_number && opt_total) ? (opt_number - 1) * (width + 1) : 0;
 
   for (var i = 0; i < 5; i++) {
     if (this.days_[i]) {
+      var x = Calendar.HOUR_WIDTH + i * (Calendar.DAY_WIDTH - 1) + offset;
       parent.append(
           $('<div>').
             addClass('class-box').
             addClass(this.status_).
             text(this.name_).
             css('top', startHeight).
-            css('left',
-              (Calendar.HOUR_WIDTH +
-               i * (Calendar.DAY_WIDTH - 1)) + 'px').
             css('height', height).
-            css('line-height', height)
+            css('line-height', height).
+            css('left', x + 'px').
+            css('width', width + 'px')
       );
     }
   }
 };
+
+/*
+ * The fullsize width of a class box in pixels.
+ */
+Class.PIXEL_WIDTH = 71;
   
 /*
  * Turn a HH:MM:SS time into pixels according to the Calendar constants.
