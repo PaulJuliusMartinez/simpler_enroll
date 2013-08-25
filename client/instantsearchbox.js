@@ -5,22 +5,16 @@
 
 /*
  * Constructor takes:
- * @param Function handleInput A function(string) that is called whenever the
- *     input changes. The argument is the current input.
- * @param Function submitInput A function(string) that is called whenever the
- *     user hits enter.
- * @param string searchClass A CSS class to apply to the search bar.
- * @param string searchID An ID to apply to the search bar.
+ * @param Object searchHandler An object that responds to the methods
+ *     handleInput(string) and submitInput(string);
+ * @param string inputClass A CSS class to apply to the search bar.
  * @param string resultClass A CSS class to apply to the results. These will
  *     be standard <div> elements. The first and last results will also have the
  *     classes 'search-result-first' and 'search-result-last' respectively.
  */
-InstantSearchBox = function(
-    handleInput, submitInput, searchClass, searchID, resultClass) {
-  this.inputCallback_ = handleInput;
-  this.submitCallback_ = submitInput;
-  this.searchClass_ = searchClass;
-  this.searchID_ = searchID;
+InstantSearchBox = function(searchHandler, inputClass, resultClass) {
+  this.searchHandler_ = searchHandler;
+  this.inputClass_ = inputClass;
   this.resultClass_ = resultClass;
 };
 
@@ -65,8 +59,7 @@ InstantSearchBox.SELECTED_ = 'search-result-selected';
 InstantSearchBox.prototype.render = function(parent) {
   // Build DOM
   this.container_ = $('<div>').css('position', 'relative');
-  this.input_ = $('<input>').addClass(this.searchClass_)
-                          .attr('id', this.searchID_);
+  this.input_ = $('<input>').addClass(this.inputClass_);
   this.elements_ = $('<div>').css('position', 'absolute');
   this.container_.append(this.input_).
                   append(this.elements_);
@@ -75,30 +68,31 @@ InstantSearchBox.prototype.render = function(parent) {
   // Add listeners
   var instantSearch = this;
   this.input_.bind('input', function() {
-    instantSearch.handleInput_();
+    instantSearch.searchHandler_.handleInput(instantSearch.input_.val());
   });
 
   this.input_.bind('focus', function() {
     instantSearch.showResults();
   });
 
+  // We need a micro-second timeout to make sure that this isn't hid until after
+  // the click is processed.
   this.input_.bind('blur', function() {
-    instantSearch.hideResults();
+    setTimeout(function() { instantSearch.hideResults(); }, 1);
   });
 
-  this.input_.bind('submit', function() {
-    instantSearch.submit_();
+  this.input_.keydown(function(e) {
+    instantSearch.handleKeyPress_(e);
   });
-
-  this.input_.keydown(instantSearch.selectResult_);
 };
 
 
 /*
- * Called when the input changes. Calls inputCallback.
+ * Sets the placeholder text of the input.
+ * @param string str The place holder text.
  */
-InstantSearchBox.prototype.handleInput_ = function() {
-  this.inputCallback_(this.input_.value);
+InstantSearchBox.prototype.setPlaceholderText = function(str) {
+  this.input_.attr('placeholder', str);
 };
 
 
@@ -123,6 +117,7 @@ InstantSearchBox.prototype.hideResults = function() {
  */
 InstantSearchBox.prototype.clearResults = function() {
   this.elements_.html('');
+  this.currentSelected_ = -1;
 };
 
 
@@ -132,10 +127,18 @@ InstantSearchBox.prototype.clearResults = function() {
  */
 InstantSearchBox.prototype.setResults = function(results) {
   this.clearResults();
+  var instantSearch = this;
   for (var i = 0; i < results.length; i++) {
-    var element = $('<div>').addClass(this.resultClass_);
+    var element = $('<div>').addClass(this.resultClass_).
+                             data('index', i).
+                             data('value', results[i].value).
+                             css('position', 'relative').
+                             text(results[i].text);
     if (i == 0) element.addClass(InstantSearchBox.FIRST_);
     if (i == results.length - 1) element.addClass(InstantSearchBox.LAST_);
+    element.mousedown(function() {
+      instantSearch.submitValue($(this).data('value'));
+    });
     this.elements_.append(element);
   }
 };
@@ -146,7 +149,7 @@ InstantSearchBox.prototype.setResults = function(results) {
  * enter, call the submitInput callback. Otherwise do nothing.
  * @param Event event The keydown event.
  */
-InstantSearchBox.prototype.selectResult_ = function(e) {
+InstantSearchBox.prototype.handleKeyPress_ = function(e) {
   var keyCode = e.keyCode || e.which;
   var arrow = {up: 38, down: 40};
   var enter = 13;
@@ -157,18 +160,31 @@ InstantSearchBox.prototype.selectResult_ = function(e) {
         this.currentSelected_--;
         this.highlightSelected_();
       }
+      e.preventDefault();
       break;
     case arrow.down:
-      if (this.currentSelected_ < this.elements_.children().length) {
+      if (this.currentSelected_ < this.elements_.children().length - 1) {
         this.currentSelected_++;
         this.highlightSelected_();
       }
+      e.preventDefault();
       break;
     case enter:
-      this.submitCallback(this.input_.value);
+      this.submitValue(this.getSelected_());
+      e.preventDefault();
       break;
   }
-  e.preventDefault();
+};
+
+
+/*
+ * Submit a certain value, set the input field and clear the results.
+ * @param string value The value to be submitted.
+ */
+InstantSearchBox.prototype.submitValue = function(value) {
+  this.searchHandler_.submitInput(value);
+  this.input_.val(value);
+  this.clearResults();
 };
 
 
@@ -177,6 +193,20 @@ InstantSearchBox.prototype.selectResult_ = function(e) {
  */
 InstantSearchBox.prototype.highlightSelected_ = function() {
   this.elements_.children().removeClass(InstantSearchBox.SELECTED_);
-  this.elements_.children()[this.currentSelected_].
+  // I'm not sure why .children()[i] returns a DOM element, but I have to wrap
+  // it up in JQuery again.
+  $(this.elements_.children()[this.currentSelected_]).
       addClass(InstantSearchBox.SELECTED_);
+};
+
+
+/*
+ * Gets the currently selected result.
+ */
+InstantSearchBox.prototype.getSelected_ = function() {
+  if (this.currentSelected_ == -1) {
+    return this.input_.val();
+  } else {
+    return $(this.elements_.children()[this.currentSelected_]).data('value');
+  }
 };
