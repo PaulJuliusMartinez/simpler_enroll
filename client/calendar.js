@@ -4,7 +4,7 @@
  */
 
 Calendar = function() {
-  // Nothing here yet!
+  this.classRenderer_ = new ClassRenderer(this);
 };
 
 Calendar.prototype.element_ = null;
@@ -59,4 +59,20 @@ Calendar.prototype.render = function(elem) {
  */
 Calendar.prototype.getContainer = function() {
   return this.element_;
+};
+
+/*
+ * Adds a class to the calendar.
+ * @param Class newClass The class to add.
+ */
+Calendar.prototype.addClass = function(newClass) {
+  this.classRenderer_.addClass(newClass);
+};
+
+/*
+ * Remove a class from the calendar.
+ * @param Class removeClass The class to remove.
+ */
+Calendar.prototype.removeClass = function(removeClass) {
+  this.classRenderer_.removeClass(removeClass);
 };
