@@ -4,6 +4,7 @@
  * meeting of that, which consists of the day and times it meets.
  */
 
+
 /*
  * Constructor takes:
  * @param string name The course name.
@@ -29,11 +30,13 @@ Class = function(name, component, days, startTime, endTime, state, uniqueID) {
   this.uniqueID_ = uniqueID;
 };
 
+
 /*
  * The DOM (Jquery) Elements that the Class is responsible for.
  * @type Array
  */
 Class.prototype.elements_ = [];
+
 
 /*
  * @return string The uniqueID for the class
@@ -42,6 +45,7 @@ Class.prototype.getUniqueID = function() {
   return this.uniqueID_;
 };
 
+
 /*
  * @return number Start time of the class in minutes after midnight.
  */
@@ -49,12 +53,14 @@ Class.prototype.getStartTime = function() {
   return this.startTime_;
 };
 
+
 /*
  * @return number End time of the class in minutes after midnight.
  */
 Class.prototype.getEndTime = function() {
   return this.endTime_;
 };
+
 
 /*
  * @param number day Day of the week between 0 and 4.
@@ -64,6 +70,7 @@ Class.prototype.meetsOn = function(day) {
   assert(0 <= day && day <= 4);
   return this.days_[day];
 };
+
 
 /*
  * Draws the boxes for the classes.
@@ -95,6 +102,7 @@ Class.prototype.render = function(parent, day, opt_number, opt_total) {
   }
 };
 
+
 /*
  * Un-render the class and remove all associated elements from the DOM.
  */
@@ -104,6 +112,7 @@ Class.prototype.unrender = function() {
   };
   this.elements_ = [];
 };
+
 
 /*
  * Returns whether or not a class conflicts with another class.
@@ -117,10 +126,12 @@ Class.prototype.conflictsWithOnDay = function(otherClass, day) {
   return true;
 };
 
+
 /*
  * The fullsize width of a class box in pixels.
  */
 Class.PIXEL_WIDTH = 71;
+
 
 /*
  * Converts HH:MM:SS into minutes
@@ -132,6 +143,7 @@ Class.toMinutes = function(time) {
   return hours * 60 + minutes;
 };
 
+
 /*
  * Turn a HH:MM:SS time into pixels according to the Calendar constants.
  * @param number time The time as minutes from midnight
@@ -141,6 +153,7 @@ Class.timeToPixelHeight = function(time) {
   // +1 for the header row
   return (1 + (minutesOffsetFrom9 / 60)) * Calendar.ROW_HEIGHT;
 };
+
 
 /*
  * Calcuates the length of the class in hours.
