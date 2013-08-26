@@ -25,19 +25,15 @@ public class FetchCourses {
 	public static void main(String[] args) throws IOException, JDOMException {
 		init();
 		ExploreCoursesConnection connection = new ExploreCoursesConnection();
-//		FileInputStream fr = new FileInputStream("database.xml");
-//		Document d = connection.toXmlDocument(fr);
-//		fr.close();
-		
+
 		for(School s : connection.getSchools()) {
 			for(Department d : s.getDepartments()) {
-				//if (!departments.contains(d.getCode())) continue;
         if (d.getCode().equals("ENVRINST")) continue; // This one breaks things.
 				writeDepartmentClassesToFile(d, connection);
 			}
 		}
 	}
-	
+
 	private static void init() {
 		List<String> s = permissibleClassComponents;
 		s.add("LEC"); // Lecture
@@ -52,23 +48,11 @@ public class FetchCourses {
 		s.add("LNG"); // Language
 		s.add("PRA"); // Practicum
 		s.add("PRC"); // Practicum
-		
-		try {
-			BufferedReader rd = new BufferedReader(new FileReader("Notes"));
-			for (int i = 0; i < 38; i++) {
-				String department = rd.readLine();
-				if (department == null) break;
-				departments.add(department);
-			}
-			rd.close();
-		} catch (IOException e) {
-			/* Ignored */
-		}
 	}
-	
+
 	private static List<String> permissibleClassComponents = new ArrayList<String>();
 	private static List<String> departments = new ArrayList<String>();
-	
+
 	private static void writeDepartmentClassesToFile(Department d, ExploreCoursesConnection con) {
 		String filename = d.getCode();
 		filename = filename.replace(' ', '_');
@@ -76,32 +60,34 @@ public class FetchCourses {
 		filename = filename.replace('/', '-');
 		filename = filename.replace(',', '_');
 		filename += ".js";
-//		if (!filename.equals("Computer_Science.js")) return;
-		
+
 		try {
-			File file = new File("./classes/" + filename);
+			File file = new File("./courses/" + filename);
 			file.createNewFile();
 			FileWriter fw = new FileWriter(file.getAbsoluteFile());
 			BufferedWriter bw = new BufferedWriter(fw);
-			bw.write(d.getCode() + " = {");
-			
+			bw.write("{");
+
 			boolean isFirst = true;
 			for (Course c : con.getCoursesByQuery(d.getCode())) {
 				if (tooHighLevelClass(c.getSubjectCodeSuffix())) continue;
-				
+
 				String json = "{";
 				json += "\"department\":\"" + c.getSubjectCodePrefix() + "\",";
 				json += "\"number\":\"" + c.getSubjectCodeSuffix() + "\",";
 				json += "\"title\":\"" + c.getTitle() + "\",";
-				//json += "\"description\":\"" + c.getDescription() + "\",";
+        //json += "\"description\":\"" + c.getDescription() + "\",";
 				json += "\"min_units\":" + c.getMinimumUnits() + ",";
 				json += "\"max_units\":" + c.getMaximumUnits() + ",";
-				
+
 				List<String> autumnClasses = new ArrayList<String>();
 				List<String> winterClasses = new ArrayList<String>();
 				List<String> springClasses = new ArrayList<String>();
-				
+
 				boolean shouldContinue = false;
+
+        // TODO: I need to more much more intelligent about how I collect
+        // Section and Meeting info. (See CHEM 31A for a good example of a mess)
 				for (Section s : c.getSections()) {
 					if (!permissibleClassComponents.contains(s.getComponent())) continue;
 					if (d.getCode().equals("CS") && s.getComponent().equals("DIS")) continue; // Ignore CS discussions
@@ -118,7 +104,7 @@ public class FetchCourses {
 						meeting += "}";
 						if (m.getStartTime().equals(m.getEndTime()) && !m.getStartTime().equals("00:00:00")) shouldContinue = true;
 					}
-					
+
 					if (!meeting.isEmpty()) {
 						if (term.contains("Autumn")) {
 							autumnClasses.add(meeting);
@@ -138,8 +124,8 @@ public class FetchCourses {
 				json += "\"autumn_classes\":" + convertListToJSONArray(autumnClasses) + ",";
 				json += "\"winter_classes\":" + convertListToJSONArray(winterClasses) + ",";
 				json += "\"spring_classes\":" + convertListToJSONArray(springClasses) + ",";
-				
-				
+
+
 				json += "\"gers\":\"" + c.getGeneralEducationRequirementsSatisfied() + "\""; 
 				json += "}";
 				if (!isFirst) {
@@ -159,9 +145,9 @@ public class FetchCourses {
       e.printStackTrace();
 			System.out.println("Fuck JDOMException (What the hell is that!?!) " + d.getCode());
 		}
-		
+
 	}
-	
+
 	private static String convertDaysToBoolArray(String days) {
 		String str = "[";
 		str += days.contains("Monday") ? "true" : "false";
@@ -176,7 +162,7 @@ public class FetchCourses {
 		str += "]";
 		return str;
 	}
-	
+
 	private static String convertListToJSONArray(List<String> list) {
 		String str = "[";
 		for (int i = 0; i < list.size(); i++) {
@@ -186,7 +172,9 @@ public class FetchCourses {
 		str += "]";
 		return str;
 	}
-	
+
+  // TODO: Decide if I need this. *Shouldn't* be a problem after I am more
+  // intelligent about gathering section/meeting info.
 	private static boolean tooHighLevelClass(String className) {
 		//System.out.print(className);
 		if (className.length() < 3) return false;

@@ -1,0 +1,4 @@
+NOTE: To build and run the FetchCourses program, run the follwoing two commands:
+
+javac -cp "jdom-2.0.1.jar:explorecourses.jar:." FetchCourses.java #build
+java -cp "jdom-2.0.1.jar:explorecourses.jar:." FetchCourses #run
