@@ -18,8 +18,7 @@
     <link rel="stylesheet" type="text/css" href="./client/searchbox.css"/>
     <script>
       $(document).ready(function() {
-        var cache = new CourseDataCache();
-        var cs = cache.getCourses("CS");
+        CourseData.init();
         var searchBar = new CourseSearchBox();
         var autumnCalendar = new Calendar();
         searchBar.render($('#search_bar'));

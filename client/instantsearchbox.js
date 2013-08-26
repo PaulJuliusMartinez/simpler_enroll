@@ -113,6 +113,14 @@ InstantSearchBox.prototype.hideResults = function() {
 
 
 /*
+ * Clears the input.
+ */
+InstantSearchBox.prototype.clearInput = function() {
+  this.input_.val('');
+};
+
+
+/*
  * Clears the results.
  */
 InstantSearchBox.prototype.clearResults = function() {
@@ -127,6 +135,7 @@ InstantSearchBox.prototype.clearResults = function() {
  */
 InstantSearchBox.prototype.setResults = function(results) {
   this.clearResults();
+  if (results.length == 0) return; // Don't show a single result.
   var instantSearch = this;
   for (var i = 0; i < results.length; i++) {
     var element = $('<div>').addClass(this.resultClass_).
@@ -153,6 +162,7 @@ InstantSearchBox.prototype.handleKeyPress_ = function(e) {
   var keyCode = e.keyCode || e.which;
   var arrow = {up: 38, down: 40};
   var enter = 13;
+  var tab = 9;
 
   switch (keyCode) {
     case arrow.up:
@@ -169,6 +179,7 @@ InstantSearchBox.prototype.handleKeyPress_ = function(e) {
       }
       e.preventDefault();
       break;
+    case tab:
     case enter:
       this.submitValue(this.getSelected_());
       e.preventDefault();
@@ -182,8 +193,8 @@ InstantSearchBox.prototype.handleKeyPress_ = function(e) {
  * @param string value The value to be submitted.
  */
 InstantSearchBox.prototype.submitValue = function(value) {
-  this.searchHandler_.submitInput(value);
   this.input_.val(value);
+  this.searchHandler_.submitInput(value);
   this.clearResults();
 };
 

@@ -41,10 +41,33 @@ CourseSearchBox.prototype.handleInput = function(input) {
     this.instantSearchBox_.clearResults();
     return;
   }
-  var ch = input;
-  this.instantSearchBox_.setResults([{text: ch + '161', value: 'CS161'},
-                                     {text: ch + '140', value: 'CS140'},
-                                     {text: ch + '144', value: 'CS144'}]);
+  var noNumbers = /^\D+$/;
+  if (new RegExp(noNumbers).test(input)) {
+    // They haven't typed numbers yet, we're checking departments.
+    var deps = Department.thatStartWith(input);
+    var results = [];
+    for (var i = 0; i < deps.length; i++) {
+      results.push({text: deps[i].short + ': ' + deps[i].long,
+                    value: deps[i].short});
+    }
+    this.instantSearchBox_.setResults(results);
+  } else {
+    // They've started typing numbers, look for courses in that department.
+    var letters = /^\D+/;
+    var afterLetters = /\d.*$/;
+    var dep = new RegExp(letters).exec(input)[0].trim().toUpperCase();
+    var courseNumber = new RegExp(afterLetters).
+                           exec(input)[0].trim().toUpperCase();
+    var courses = CourseData.getCourseNamesForDepartmentByPrefix(dep,
+                                                                 courseNumber);
+    var results = [];
+    for (var i = 0; i < courses.length; i++) {
+      results.push({text: dep + ' ' + courses[i] + ': ' +
+                           CourseData.getCourseName(dep, courses[i]),
+                    value: dep + courses[i]});
+    }
+    this.instantSearchBox_.setResults(results);
+  }
 };
 
 
@@ -53,5 +76,13 @@ CourseSearchBox.prototype.handleInput = function(input) {
  * @param string input The current input.
  */
 CourseSearchBox.prototype.submitInput = function(input) {
-  window.console.los('Submitted: ' + input);
+  // TODO: Send out event or let some other thing know that a class has been
+  // selected. (But only when it's a class, not just a department.)
+  var noNumbers = /^\D+$/;
+  if (new RegExp(noNumbers).test(input)) {
+    // Do nothing (for now). They've just autocompleted the department.
+  } else {
+    alert("You've selected the class " + input);
+    this.instantSearchBox_.clearInput();
+  }
 };

@@ -23,14 +23,17 @@
   border-top: 0px;
   border-style: solid;
   border-color: #8c1515;
+  background-color: white;
   height: 20px;
-  width: 190px;
-  font-size: 22px;
+  width: 250px;
+  font-size: 20px;
   padding: 3px;
   padding-bottom: 8px;
   left: 5px;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
+  z-index: 1;
 }
 
 .course-search-result.search-result-selected {

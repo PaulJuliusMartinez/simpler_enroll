@@ -3,17 +3,20 @@
  * class.
  */
 
+var Department = {};
+
 /*
- * Checks if a string is a valid prefix. Returns an array of objects with
- * two fields, 'short' and 'long', that are the short and long names of the
+ * Finds the departments this is a valid prefix of. Returns an array of objects
+ * with two fields, 'short' and 'long', that are the short and long names of the
  * departments that the string is a valid prefix of.
  * @param string prefix The prefix.
  */
-Department.isPrefix = function(prefix) {
-  var re = new RegExp('^' + prefix + '.*$');
+Department.thatStartWith = function(prefix) {
+  var re = new RegExp('^' + prefix.toUpperCase() + '.*$');
   var list = [];
   for (var i = 0; i < Department.ALL_.length; i += 2) {
-    if (re.test(Department.ALL_[i]) || re.test(Department.ALL_[i + 1])) {
+    if (re.test(Department.ALL_[i].toUpperCase()) ||
+        re.test(Department.ALL_[i + 1].toUpperCase())) {
       list.push({short: Department.ALL_[i], long: Department.ALL_[i + 1]});
     }
   }
@@ -23,12 +26,14 @@ Department.isPrefix = function(prefix) {
 
 /*
  * Gets the department with the given name (short or long). Returns an object
- * with 'short' and 'long' fields.
+ * with 'short' and 'long' fields. Comparison is case insensitive.
  * @param string dep The department name.
  */
 Department.getDepartmentNames = function(dep) {
+  dep = dep.toUpperCase();
   for (var i = 0; i < Department.ALL_.length; i += 2) {
-    if (Department.ALL_[i] == dep || Department.ALL_[i + 1] == dep) {
+    if (Department.ALL_[i].toUpperCase() == dep ||
+        Department.ALL_[i + 1].toUpperCase() == dep) {
       return {short: Department.ALL_[i], long: Department.ALL_[i + 1]};
     }
   }

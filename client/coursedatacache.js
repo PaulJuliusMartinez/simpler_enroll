@@ -28,9 +28,39 @@ CourseDataCache.prototype.getCourses = function(dep) {
         url: filename,
         async: false,
         success: function(data) {
-          cache.storedCourses_[dep] = data;
+          cache.storedCourses_[dep] =
+              CourseDataCache.createSortedCourseNameObject(data);
+        /* error: Do nothing */
         }
     });
     return this.storedCourses_[dep];
   }
 };
+
+
+/*
+ * Takes a object containing courses that has every class as a key and creates
+ * another object that has two fields: 'coursenames' and 'courses'. The first is
+ * a sorted list of the course names, the second is the original object
+ * containing all the courses.
+ * @param Object courses The courses object.
+ */
+CourseDataCache.createSortedCourseNameObject = function(data) {
+  var sortedNames = [];
+  for (key in data) sortedNames.push(key);
+  sortedNames.sort(function(a, b) {
+    return (parseInt(a) - parseInt(b));
+  });
+  var obj = {};
+  obj[this.SORTED_COURSE_LIST] = sortedNames;
+  obj[this.COURSE_DATA] = data;
+  return obj;
+};
+
+
+/*
+ * Constants for those two field names above.
+ * @type string
+ */
+CourseDataCache.SORTED_COURSE_LIST = 'sorted-names';
+CourseDataCache.COURSE_DATA = 'course-data';

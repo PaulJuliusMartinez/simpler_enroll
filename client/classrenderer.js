@@ -82,7 +82,6 @@ ClassRenderer.prototype.renderOnDay_ = function(day) {
   for (var i = 0; i < numClasses; i++) {
     var className = this.classes_[classKeys[i]].name_;
     var cliqueSize = ClassRenderer.findLargestCliqueWith(conflictMatrix, i);
-    window.console.log(className + ' has a clique of size ' + cliqueSize);
     var position = ClassRenderer.calculateNextPosition(conflictMatrix,
                                                        previousPositions,
                                                        cliqueSize);
