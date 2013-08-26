@@ -1,4 +1,4 @@
-LAWGEN = {"105Q":{"department":"LAWGEN","number":"105Q","title":"Law and Popular Culture","min_units":3,"max_units":3,"autumn_classes":[],"winter_classes":[{"days":[false,true,false,true,false],"start_time":"15:15:00","end_time":"16:30:00"}],"spring_classes":[],"gers":""},
-"112Q":{"department":"LAWGEN","number":"112Q","title":"Law and Inequality","min_units":3,"max_units":3,"autumn_classes":[],"winter_classes":[{"days":[true,false,true,false,false],"start_time":"11:10:00","end_time":"12:25:00"}],"spring_classes":[],"gers":""},
+{"112Q":{"department":"LAWGEN","number":"112Q","title":"Law and Inequality","min_units":3,"max_units":3,"autumn_classes":[],"winter_classes":[{"days":[true,false,true,false,false],"start_time":"11:10:00","end_time":"12:25:00"}],"spring_classes":[],"gers":""},
+"105Q":{"department":"LAWGEN","number":"105Q","title":"Law and Popular Culture","min_units":3,"max_units":3,"autumn_classes":[],"winter_classes":[{"days":[false,true,false,true,false],"start_time":"15:15:00","end_time":"16:30:00"}],"spring_classes":[],"gers":""},
 "103Q":{"department":"LAWGEN","number":"103Q","title":"Depth Psychology","min_units":3,"max_units":3,"autumn_classes":[{"days":[false,true,false,true,false],"start_time":"19:15:00","end_time":"21:15:00"}],"winter_classes":[],"spring_classes":[],"gers":""}
 }
