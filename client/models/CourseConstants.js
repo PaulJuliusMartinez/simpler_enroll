@@ -26,10 +26,10 @@ CourseConstants.DEPARTMENT = 'department';
 CourseConstants.NUMBER = 'number';
 
 /*
- * The name of the class.
+ * The title of the class.
  * TYPE: string
  */
-CourseConstants.NAME = 'name';
+CourseConstants.TITLE = 'title';
 
 /*
  * The description for the class on ExploreCourses. May not be included due
@@ -47,10 +47,8 @@ CourseConstants.MIN_UNITS = 'min_units';
 CourseConstants.MAX_UNITS = 'max_units';
 
 /*
- * The GERs satisfied by the class, globbed together in a single string.
- * This may change to an array of strings, depending on the format it's retrived
- * from ExploreCourses.
- * TYPE: string
+ * The GERs satisfied by the class.
+ * TYPE: string[]
  */
 CourseConstants.GERS = 'gers';
 
