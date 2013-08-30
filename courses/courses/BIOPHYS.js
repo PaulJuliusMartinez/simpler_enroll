@@ -1,5 +1,0 @@
-{"250":{"department":"BIOPHYS","number":"250","title":"Seminar in Biophysics","min_units":1,"max_units":1,"autumn_classes":[{"days":[false,true,false,true,false],"start_time":"17:30:00","end_time":"19:00:00"}],"winter_classes":[],"spring_classes":[],"gers":""},
-"227":{"department":"BIOPHYS","number":"227","title":"Functional MRI Methods (RAD 227)","min_units":3,"max_units":3,"autumn_classes":[],"winter_classes":[{"days":[false,true,false,true,false],"start_time":"13:30:00","end_time":"15:30:00"}],"spring_classes":[],"gers":""},
-"241":{"department":"BIOPHYS","number":"241","title":"Biological Macromolecules (BIOC 241, SBIO 241)","min_units":3,"max_units":5,"autumn_classes":[],"winter_classes":[],"spring_classes":[{"days":[true,false,true,false,true],"start_time":"13:15:00","end_time":"15:15:00"}],"gers":""},
-"232":{"department":"BIOPHYS","number":"232","title":"Advanced Imaging Lab in Biophysics (APPPHYS 232, BIO 132, BIO 232, MCP 232)","min_units":4,"max_units":4,"autumn_classes":[],"winter_classes":[],"spring_classes":[{"days":[true,false,true,false,false],"start_time":"13:15:00","end_time":"15:05:00"}],"gers":""}
-}
