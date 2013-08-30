@@ -1,6 +1,0 @@
-{"13":{"department":"ROTCARMY","number":"13","title":"Foundations in Leadership II","min_units":1,"max_units":1,"autumn_classes":[],"winter_classes":[],"spring_classes":[{"days":[true,false,true,false,false],"start_time":"08:00:00","end_time":"09:05:00"}],"gers":""},
-"133":{"department":"ROTCARMY","number":"133","title":"Situational Leadership II","min_units":2,"max_units":2,"autumn_classes":[],"winter_classes":[],"spring_classes":[{"days":[false,true,false,true,false],"start_time":"08:00:00","end_time":"09:45:00"}],"gers":""},
-"1":{"department":"ROTCARMY","number":"1","title":"ARMY ROTC LAB","min_units":1,"max_units":1,"autumn_classes":[],"winter_classes":[],"spring_classes":[{"days":[false,false,true,false,false],"start_time":"14:15:00","end_time":"17:00:00"}],"gers":""},
-"23":{"department":"ROTCARMY","number":"23","title":"Leadership in Changing Environments II","min_units":2,"max_units":2,"autumn_classes":[],"winter_classes":[],"spring_classes":[{"days":[true,false,true,false,false],"start_time":"08:00:00","end_time":"09:05:00"}],"gers":""},
-"143":{"department":"ROTCARMY","number":"143","title":"Leadership in a Complex World II","min_units":2,"max_units":2,"autumn_classes":[],"winter_classes":[],"spring_classes":[{"days":[false,false,true,false,false],"start_time":"18:00:00","end_time":"21:00:00"}],"gers":""}
-}

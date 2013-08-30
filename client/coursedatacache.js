@@ -19,7 +19,7 @@ CourseDataCache.prototype.getCourses = function(dep) {
   if (this.storedCourses_[dep]) {
     return this.storedCourses_[dep];
   } else {
-    var filename = './courses/courses/' + dep + '.js';
+    var filename = './client/models/data/' + dep + '.js';
     var cache = this;
 
     // Load data NOT asynchronously

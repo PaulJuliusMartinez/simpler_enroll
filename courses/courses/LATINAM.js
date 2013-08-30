@@ -1,2 +1,0 @@
-{"200":{"department":"LATINAM","number":"200","title":"Seminar on Contemporary Issues in Latin American Studies","min_units":1,"max_units":1,"autumn_classes":[{"days":[false,true,false,false,false],"start_time":"12:15:00","end_time":"13:05:00"}],"winter_classes":[{"days":[false,false,false,false,true],"start_time":"13:15:00","end_time":"14:05:00"}],"spring_classes":[{"days":[false,false,false,false,true],"start_time":"13:15:00","end_time":"14:05:00"}],"gers":""}
-}
