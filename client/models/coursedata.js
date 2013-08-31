@@ -19,7 +19,7 @@ CourseData.init = function() {
 
 /*
  * Gets lists of course names for a department.
- * @param string dep The department name.
+ * PARAM-TYPE: string dep The department name.
  */
 CourseData.getCourseNamesForDepartment = function(dep) {
   var courses = this.cache_.getCourses(dep);
@@ -27,12 +27,11 @@ CourseData.getCourseNamesForDepartment = function(dep) {
   return null;
 };
 
-
 /*
  * Given a department and a string, returns the courses that have the string as
  * a prefix in that particular department.
- * @param string dep The department.
- * @param string prefix The prefix.
+ * PARAM-TYPE: string dep The department.
+ * PARAM-TYPE: string prefix The prefix.
  */
 CourseData.getCourseNamesForDepartmentByPrefix = function(dep, prefix) {
   var courses = this.cache_.getCourses(dep);
@@ -47,17 +46,18 @@ CourseData.getCourseNamesForDepartmentByPrefix = function(dep, prefix) {
   return results;
 };
 
-
 /*
- * Returns the name a course given the department and course number.
- * @param string dep The department.
- * @param string number The course number.
- * @return string The name of the class.
+ * Returns a course given the department and course number.
+ * PARAM-TYPE: string dep The department.
+ * PARAM-TYPE: string number The course number.
+ * RETURN-TYPE: Course
  */
-CourseData.getCourseName = function(dep, number) {
+CourseData.getCourse = function(dep, number) {
   var courses = this.cache_.getCourses(dep);
   if (!courses) return "";
   var course = courses[CourseDataCache.COURSE_DATA][number];
-  if (!course) return "";
-  return course.title;
+  return course;
 };
+
+CourseData.COURSE_REGEX_ = /^(\D+)(\d*.*)$/;
+CourseData.REGEXP = new RegExp(CourseData.COURSE_REGEX_);

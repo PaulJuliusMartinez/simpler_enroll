@@ -1,5 +1,8 @@
 *.class
 
+# vim temp files #
+.*.swp
+
 # Package Files #
 *.jar
 *.war

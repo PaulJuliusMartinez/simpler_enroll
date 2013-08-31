@@ -13,7 +13,7 @@ CourseDataCache = function() {
 
 /*
  * Get the course data for a department.
- * @param string dep The short name of the department.
+ * PARAM-TYPE: string dep The short name of the department.
  */
 CourseDataCache.prototype.getCourses = function(dep) {
   if (this.storedCourses_[dep]) {
@@ -43,13 +43,18 @@ CourseDataCache.prototype.getCourses = function(dep) {
  * another object that has two fields: 'coursenames' and 'courses'. The first is
  * a sorted list of the course names, the second is the original object
  * containing all the courses.
- * @param Object courses The courses object.
+ * PARAM-TYPE: Object courses The courses object.
  */
 CourseDataCache.createSortedCourseNameObject = function(data) {
   var sortedNames = [];
-  for (key in data) sortedNames.push(key);
+  for (key in data) {
+    sortedNames.push(key);
+    data[key] = new Course(data[key]);
+  }
   sortedNames.sort(function(a, b) {
-    return (parseInt(a) - parseInt(b));
+    var courseDiff = parseInt(a) - parseInt(b);
+    if (courseDiff != 0) return courseDiff;
+    return (a < b) ? -1 : 1;
   });
   var obj = {};
   obj[this.SORTED_COURSE_LIST] = sortedNames;
@@ -60,7 +65,7 @@ CourseDataCache.createSortedCourseNameObject = function(data) {
 
 /*
  * Constants for those two field names above.
- * @type string
+ * TYPE: string
  */
 CourseDataCache.SORTED_COURSE_LIST = 'sorted-names';
 CourseDataCache.COURSE_DATA = 'course-data';
