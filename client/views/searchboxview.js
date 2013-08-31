@@ -38,7 +38,7 @@ SearchBoxView.prototype.currentSelected_ = -1;
 SearchBoxView.prototype.render = function() {
   this.parent_.addClass(SearchBoxView.CONTAINER);
   this.input_ = $('<input>').addClass(SearchBoxView.INPUT_CLASS);
-  this.input_.attr('Search for a class...');
+  this.input_.attr('placeholder', 'Search for a class...');
   this.elements_ = $('<div>').addClass(SearchBoxView.ELEMENTS);
   this.parent_.append(this.input_).
                   append(this.elements_);

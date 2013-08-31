@@ -22,6 +22,10 @@
   font-weight: normal;
 }
 
+.search-box-elements {
+  position: absolute;
+}
+
 .search-box-result {
   border: 1px;
   border-top: 0px;
