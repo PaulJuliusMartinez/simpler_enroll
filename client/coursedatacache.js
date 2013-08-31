@@ -47,9 +47,14 @@ CourseDataCache.prototype.getCourses = function(dep) {
  */
 CourseDataCache.createSortedCourseNameObject = function(data) {
   var sortedNames = [];
-  for (key in data) sortedNames.push(key);
+  for (key in data) {
+    sortedNames.push(key);
+    data[key] = new Course(data[key]);
+  }
   sortedNames.sort(function(a, b) {
-    return (parseInt(a) - parseInt(b));
+    var courseDiff = parseInt(a) - parseInt(b);
+    if (courseDiff != 0) return courseDiff;
+    return (a < b) ? -1 : 1;
   });
   var obj = {};
   obj[this.SORTED_COURSE_LIST] = sortedNames;

@@ -7,10 +7,14 @@
 /*
  * Constructor takes the parent element of the view.
  * PARAM-TYPE: jQuery parent The parent element for the SearchBoxView.
+ * PARAM-TYPE: MainController manager The controller that manages this one.
  */
-SearchBoxController = function(parent) {
-  this.instantSearchBox_ = new SearchBoxView(parent, this);
-  this.instantSearchBox_.render();
+SearchBoxController = function(parent, manager) {
+  // TYPE: SearchBoxView
+  this.view_ = new SearchBoxView(parent, this);
+  this.view_.render();
+  // TYPE: MainController
+  this.manager_ = manager;
 };
 
 
@@ -20,11 +24,13 @@ SearchBoxController = function(parent) {
  */
 SearchBoxController.prototype.handleInput = function(input) {
   if (input.length == 0) {
-    this.instantSearchBox_.clearResults();
+    this.view_.clearResults();
     return;
   }
-  var noNumbers = /^\D+$/;
-  if (new RegExp(noNumbers).test(input)) {
+  var match = CourseData.REGEXP.exec(input);
+  var dep = match[1].trim().toUpperCase();
+  var num = match[2].trim().toUpperCase();
+  if (num == '') {
     // They haven't typed numbers yet, we're checking departments.
     var deps = Department.thatStartWith(input);
     var results = [];
@@ -32,39 +38,35 @@ SearchBoxController.prototype.handleInput = function(input) {
       results.push({text: deps[i].short + ': ' + deps[i].long,
                     value: deps[i].short});
     }
-    this.instantSearchBox_.setResults(results);
+    this.view_.setResults(results);
   } else {
     // They've started typing numbers, look for courses in that department.
-    var letters = /^\D+/;
-    var afterLetters = /\d.*$/;
-    var dep = new RegExp(letters).exec(input)[0].trim().toUpperCase();
-    var courseNumber = new RegExp(afterLetters).
-                           exec(input)[0].trim().toUpperCase();
-    var courses = CourseData.getCourseNamesForDepartmentByPrefix(dep,
-                                                                 courseNumber);
+    var courses = CourseData.getCourseNamesForDepartmentByPrefix(dep, num);
     var results = [];
     for (var i = 0; i < courses.length; i++) {
       results.push({text: dep + ' ' + courses[i] + ': ' +
-                           CourseData.getCourseName(dep, courses[i]),
+                           CourseData.getCourse(dep, courses[i]).getTitle(),
                     value: dep + courses[i]});
     }
-    this.instantSearchBox_.setResults(results);
+    this.view_.setResults(results);
   }
 };
-
 
 /*
  * The callback for handling a submit.
  * PARAM-TYPE: string input The current input.
  */
 SearchBoxController.prototype.submitInput = function(input) {
-  // TODO: Send out event or let some other thing know that a class has been
-  // selected. (But only when it's a class, not just a department.)
-  var noNumbers = /^\D+$/;
-  if (new RegExp(noNumbers).test(input)) {
+  var match = CourseData.REGEXP.exec(input);
+  var dep = match[1].trim().toUpperCase();
+  var num = match[2].trim().toUpperCase();
+  if (num == '') {
     // Do nothing (for now). They've just autocompleted the department.
   } else {
-    alert("You've selected the class " + input);
-    this.instantSearchBox_.clearInput();
+    var course = CourseData.getCourse(dep, num);
+    if (course) {
+      this.manager_.notifyCourseAdded(course);
+      this.view_.clearInput();
+    }
   }
 };

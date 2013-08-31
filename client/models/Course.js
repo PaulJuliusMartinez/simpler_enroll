@@ -40,7 +40,7 @@ Course = function(obj) {
  * PARAM-TYPE: string key The key of the relevant field.
  * RETURN-TYPE: Section[][]
  */
-Course.prototype.convertJSONSectionsToSectionArray = function(obj, key) {
+Course.convertJSONSectionsToSectionArray = function(obj, key) {
   if (!obj[key]) return null;
   var arr = [[], [], []];
   for (var i = 0; i < 3; i++) {
@@ -59,11 +59,11 @@ Course.prototype.getShortName = function() {
   return this.department_ + ' ' + this.number_;
 };
 Course.prototype.getTitle = function() { return this.title_; };
-Course.prototype.getDescription = function() return this.description_; };
-Course.prototype.getMinUnits = function() return this.minUnits_; };
-Course.prototype.getMaxUnits = function() return this.maxUnits_; };
+Course.prototype.getDescription = function() { return this.description_; };
+Course.prototype.getMinUnits = function() { return this.minUnits_; };
+Course.prototype.getMaxUnits = function() { return this.maxUnits_; };
 // Return a shallow copy.
-Course.prototype.getGERs = function() return this.gers_.slice(); };
+Course.prototype.getGERs = function() { return this.gers_.slice(); };
 
 // Some basic util methods.
 /*
@@ -71,11 +71,11 @@ Course.prototype.getGERs = function() return this.gers_.slice(); };
  * PARAM-TYPE: enum
  * RETURN-TYPE: Section[]
  */
-Course.prototype.getPrimarySectionsForQuarter(quarter) {
+Course.prototype.getPrimarySectionsForQuarter = function(quarter) {
   return this.primaryComponent_[quarter].slice();
 };
 
-Course.prototype.getSecondarySectionsForQuarter(quarter) {
+Course.prototype.getSecondarySectionsForQuarter = function(quarter) {
   if (!this.secondaryComponent_) return [];
   return this.secondaryComponent_[quarter].slice();
 };
