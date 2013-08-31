@@ -5,38 +5,20 @@
  */
 
 /*
- * Nothing here yet!
+ * Constructor takes the parent element of the view.
+ * PARAM-TYPE: jQuery parent The parent element for the SearchBoxView.
  */
-CourseSearchBox = function() {
-  this.instantSearchBox_ = new InstantSearchBox(this,
-                                                CourseSearchBox.INPUT_CLASS_,
-                                                CourseSearchBox.RESULT_CLASS_);
-};
-
-
-/*
- * CSS Constants for styling.
- * @type string
- */
-CourseSearchBox.INPUT_CLASS_ = 'course-search-input';
-CourseSearchBox.RESULT_CLASS_ = 'course-search-result';
-
-
-/*
- * Renders the internal search box.
- * @param Jquery parent The parent element of the search box.
- */
-CourseSearchBox.prototype.render = function(parent) {
-  this.instantSearchBox_.render(parent);
-  this.instantSearchBox_.setPlaceholderText("Search for a class...");
+SearchBoxController = function(parent) {
+  this.instantSearchBox_ = new SearchBoxView(parent, this);
+  this.instantSearchBox_.render();
 };
 
 
 /*
  * The callback for handling input.
- * @param string input The current input.
+ * PARAM-TYPE: string input The current input.
  */
-CourseSearchBox.prototype.handleInput = function(input) {
+SearchBoxController.prototype.handleInput = function(input) {
   if (input.length == 0) {
     this.instantSearchBox_.clearResults();
     return;
@@ -73,9 +55,9 @@ CourseSearchBox.prototype.handleInput = function(input) {
 
 /*
  * The callback for handling a submit.
- * @param string input The current input.
+ * PARAM-TYPE: string input The current input.
  */
-CourseSearchBox.prototype.submitInput = function(input) {
+SearchBoxController.prototype.submitInput = function(input) {
   // TODO: Send out event or let some other thing know that a class has been
   // selected. (But only when it's a class, not just a department.)
   var noNumbers = /^\D+$/;

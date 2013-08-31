@@ -3,25 +3,32 @@
   <head>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">
     </script>
+    <script src="./client/controllers/maincontroller.js"></script>
+    <script src="./client/views/mainview.js"></script>
+    <script src="./client/controllers/searchboxcontroller.js"></script>
+    <script src="./client/views/searchboxview.js"></script>
+
     <script src="./client/assert.js"></script>
     <script src="./client/calendar.js"></script>
     <script src="./client/class.js"></script>
     <script src="./client/classrenderer.js"></script>
-    <script src="./client/instantsearchbox.js"></script>
-    <script src="./client/coursesearchbox.js"></script>
     <script src="./client/coursedata.js"></script>
     <script src="./client/coursedatacache.js"></script>
     <script src="./client/department.js"></script>
+
+    <!--Stylesheets-->
+    <link rel="stylesheet" type="text/css" href="./client/stylesheets/searchbox.css"/>
+
     <link rel="stylesheet" type="text/css" href="./client/general.css"/>
     <link rel="stylesheet" type="text/css" href="./client/calendar.css"/>
     <link rel="stylesheet" type="text/css" href="./client/class.css"/>
-    <link rel="stylesheet" type="text/css" href="./client/searchbox.css"/>
     <script>
       $(document).ready(function() {
         CourseData.init();
-        var searchBar = new CourseSearchBox();
+        var mainController = new MainController($('#main'));
+        //var searchBar = new CourseSearchBox();
         var autumnCalendar = new Calendar();
-        searchBar.render($('#search_bar'));
+        //searchBar.render($('#search_bar'));
         autumnCalendar.render($('#autumn_calendar'));
         var MWF = [1, 0, 1, 0, 1];
         var TT = [0, 1, 0, 1, 0];
@@ -50,6 +57,10 @@
     </script>
   </head>
   <body>
+    <div id="main"></div>
+
+    <!--Below here is simply remnants of the initial mockup demo.-->
+
     <div id="search_bar"></div>
     <br/><br/><br/><br/><br/><br/>
     <div id="autumn_calendar"></div>

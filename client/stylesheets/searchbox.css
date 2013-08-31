@@ -2,7 +2,11 @@
  * Style for the instant search box.
  */
 
-.course-search-input {
+.search-box-container {
+  position: relative;
+}
+
+.search-box-input {
   color: black;
   font-size: 24px;
   font-weight: bold;
@@ -14,21 +18,22 @@
   outline: 0;
 }
 
-.course-search-input::-webkit-input-placeholder {
+.search-box-input::-webkit-input-placeholder {
   font-weight: normal;
 }
 
-.course-search-result {
+.search-box-result {
   border: 1px;
   border-top: 0px;
   border-style: solid;
   border-color: #8c1515;
   background-color: white;
   height: 20px;
-  width: 250px;
+  width: 280px;
   font-size: 20px;
   padding: 3px;
   padding-bottom: 8px;
+  position: relative;
   left: 5px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -36,14 +41,14 @@
   z-index: 1;
 }
 
-.course-search-result.search-result-selected {
+.search-box-result.search-box-result-selected {
   background: #f2a6a6;
 }
 
-.course-search-result.search-result-selected:hover {
+.search-box-result.search-box-result-selected:hover {
   background: #f2a6a6;
 }
 
-.course-search-result:hover {
+.search-box-result:hover {
   background: #ddd;
 }
