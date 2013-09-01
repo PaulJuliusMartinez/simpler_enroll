@@ -9,15 +9,23 @@
  * PARAM-TYPE: Object obj The JSON object with the Meeting data.
  */
 Meeting = function(section, obj) {
-  /* TYPE: Section */
+  // TYPE: Section
   this.section_ = section;
-  /* TYPE: boolean[] */
+  // TYPE: boolean[]
   this.days_ = obj[CourseConstants.DAYS];
-  /* TYPE: number */
+  // TYPE: number
   this.startTime_ = Meeting.parseTimeString(obj[CourseConstants.START_TIME]);
-  /* TYPE: number */
+  // TYPE: number
   this.endTime_ = Meeting.parseTimeString(obj[CourseConstants.END_TIME]);
+  // TYPE: number
+  this.id_ = UniqueID.newID();
 };
+
+
+// First some simple getters.
+Meeting.prototype.getStartTime = function() { return this.startTime_; };
+Meeting.prototype.getEndTime = function() { return this.endTime_; };
+Meeting.prototype.getID = function() { return this.id_; };
 
 /*
  * Helper function for parsing the "HH:MM:SS" time string into number of
