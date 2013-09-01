@@ -47,9 +47,10 @@ Course.convertJSONSectionsToSectionArray = function(obj, key) {
   var arr = [[], [], []];
   for (var i = 0; i < 3; i++) {
     for (var j = 0; j < obj[key][i].length; j++) {
-      arr[i].push(new Section(this, obj[key][i]));
+      arr[i].push(new Section(this, obj[key][i][j]));
     }
   }
+  return arr;
 };
 
 /*

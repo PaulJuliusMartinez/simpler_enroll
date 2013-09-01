@@ -21,6 +21,9 @@ CourseListView = function(parent, controller) {
 // TYPE: jQuery The list of courses.
 this.table_;
 
+// TYPE: jQuery The 'No classes selected' row.
+this.noClasses_;
+
 /*
  * Renders the view.
  */
@@ -43,12 +46,14 @@ CourseListView.prototype.render = function() {
 
   body.append(this.table_);
   this.table_.append(this.tableHeader_);
-  this.table_.append($('<tr>').addClass(CourseListView.NO_COURSES_ROW).
-                         append($('<td>').text(CourseListView.NO_COURSES_TEXT),
-                                $('<td>'), $('<td>'), $('<td>'),
-                                $('<td>'), $('<td>'), $('<td>')
-                         )
-                    );
+  this.noClasses_ = $('<tr>').
+                        addClass(CourseListView.NO_COURSES_ROW).
+                        append($('<td>').text(CourseListView.NO_COURSES_TEXT),
+                               $('<td>'), $('<td>'), $('<td>'),
+                               $('<td>'), $('<td>'), $('<td>')
+                        );
+  this.table_.append(this.noClasses_);
+
   // A tbody element is added after adding a row. In the future, that's what we
   // want to append stuff to.
   this.table_ = this.table_.children('tbody');
@@ -70,6 +75,9 @@ CourseListView.prototype.addCourse = function(course) {
     var row = this.createCourseRow(course);
     this.table_.append(row);
     this.courses_[course.getID()] = row;
+    // Since we added a row, remove the 'No classes selected' message.
+    // jQuery remove is idempotent, so we can do this every time.
+    this.noClasses_.remove();
   }
 };
 
@@ -81,13 +89,41 @@ CourseListView.prototype.addCourse = function(course) {
 CourseListView.prototype.createCourseRow = function(course) {
   var row = $('<tr>').addClass(CourseListView.COURSE_ROW);
 
+  // Name
   row.append($('<td>').addClass(CourseListView.NAME_COLUMN).
                        text(course.getShortName() + ': ' + course.getTitle()));
-  row.append($('<td>').addClass(CourseListView.AUTUMN_COLUMN).
-                       append($('<input>').attr('type', 'checkbox')));
-  row.append($('<td>'), $('<td>'), $('<td>'), $('<td>'), $('<td>'));
 
+  // Quarters offered in.
+  row.append(this.createCheckBox(course, 0));
+  row.append(this.createCheckBox(course, 1));
+  row.append(this.createCheckBox(course, 2));
+
+  // Discussion sections?
+  row.append($('<td>').text((course.hasSecondaryComponent() ? 'Yes' : 'No')));
+
+  // Yes/maybe/no
+
+  // Move up/down, remove
+
+  row.append($('<td>'), $('<td>'));
   return row;
+};
+
+/*
+ * Creates a checkbox in a td element and returns it.
+ * PARAM-TYPE: Course course The course it is for.
+ * PARAM-TYPE: number quarter Which quarter it is for (0-2).
+ * RETURN-TYPE: jQuery The new checkbox, embedded in a td element.
+ */
+CourseListView.prototype.createCheckBox = function(course, quarter) {
+  var cssClass = CourseListView.QUARTER_COLUMNS[quarter];
+  var td = $('<td>').addClass(cssClass);
+  var isOffered = course.isOfferedIn(quarter);
+  var checkbox = $('<input>').attr('type', 'checkbox').
+                              prop('checked', isOffered).
+                              attr('disabled', isOffered);
+  td.append(checkbox);
+  return td;
 };
 
 /*
@@ -106,6 +142,9 @@ CourseListView.NAME_COLUMN = 'course-list-name-column';
 CourseListView.AUTUMN_COLUMN = 'course-list-autumn-column';
 CourseListView.WINTER_COLUMN = 'course-list-winter-column';
 CourseListView.SPRING_COLUMN = 'course-list-spring-column';
+CourseListView.QUARTER_COLUMNS = [CourseListView.AUTUMN_COLUMN,
+                                  CourseListView.WINTER_COLUMN,
+                                  CourseListView.SPRING_COLUMN];
 CourseListView.SECTION_COLUMN = 'course-list-section-column';
 CourseListView.CERTAINTY_COLUMN = 'course-list-certainty-column';
 CourseListView.EDIT_COLUMN = 'course-list-edit-column';

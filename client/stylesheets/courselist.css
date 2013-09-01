@@ -41,6 +41,11 @@ table.course-list-table tbody {
   overflow: auto;
 }
 
+/*
+ * All that shit above is to get the effing table to work.
+ * I can't figure out how to get it to work with percentages.
+ */
+
 .course-list-table th,
 .course-list-table td {
   border-bottom: 1px solid black;
@@ -48,12 +53,15 @@ table.course-list-table tbody {
 
 .course-list-table tr th:nth-child(1),
 .course-list-table tr td:nth-child(1) {
-  width: 280px;
+  padding-left: 5px;
+  box-sizing: border-box;
+  width: 40%;
   max-width: 280px;
 }
 
-.course-list-table tr td:nth-child(2),
+/* Quarter columns */
 .course-list-table tr th:nth-child(2),
+.course-list-table tr td:nth-child(2),
 .course-list-table tr th:nth-child(3),
 .course-list-table tr td:nth-child(3),
 .course-list-table tr th:nth-child(4),
@@ -62,18 +70,22 @@ table.course-list-table tbody {
   max-width: 40px;
 }
 
+/* Section column */
 .course-list-table tr td:nth-child(5),
 .course-list-table tr th:nth-child(5) {
+  text-align: center;
   width: 90px;
   max-width: 90px;
 }
 
+/* Yes/Maybe/No column */
 .course-list-table tr td:nth-child(6),
 .course-list-table tr th:nth-child(6) {
   width: 140px;
   max-width: 140px;
 }
 
+/* Edit column */
 .course-list-table tr td:nth-child(7),
 .course-list-table tr th:nth-child(7) {
   width: 70px;
@@ -85,11 +97,15 @@ table.course-list-table tbody {
  */
 
 .course-list-no-courses-row {
-  height: 30px;
-  padding: 3px;
   font-style: italic;
 }
 
+.course-list-no-courses-row,
+.course-list-course-row {
+  height: 30px;
+}
+
+/* Get name column to overflow properly. */
 .course-list-course-row
 td.course-list-name-column {
   white-space: nowrap;
@@ -97,12 +113,33 @@ td.course-list-name-column {
   text-overflow: ellipsis;
 }
 
+/* Center check boxes */
+tbody .course-list-autumn-column,
+tbody .course-list-winter-column,
+tbody .course-list-spring-column {
+  padding-top: 2px;
+  text-align: center;
+  vertical-align: middle;
+}
+
 .course-list-autumn-column input[type=checkbox],
 .course-list-winter-column input[type=checkbox],
 .course-list-spring-column input[type=checkbox] {
-  /*-webkit-appearance: none;*/
-  /*width: 10px;*/
-  /*height: 10px;*/
-  /*outline: 1px solid red;*/
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  background-color: #f2a6a6; /* Light red color */
+  outline: 1px solid black;
 }
 
+.course-list-autumn-column input[type=checkbox]:checked,
+.course-list-winter-column input[type=checkbox]:checked,
+.course-list-spring-column input[type=checkbox]:checked {
+  background-color: #a9ec6b; /* 'Enrolled' color */
+}
+
+.course-list-autumn-column input[type=checkbox]:disabled,
+.course-list-winter-column input[type=checkbox]:disabled,
+.course-list-spring-column input[type=checkbox]:disabled {
+  background-color: #ddd; /* Grayed out color */
+}

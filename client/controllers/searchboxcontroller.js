@@ -53,11 +53,14 @@ SearchBoxController.prototype.handleInput = function(input) {
 };
 
 /*
- * The callback for handling a submit.
+ * The callback for handling a submit. Returns true if the submit was
+ * successful.
  * PARAM-TYPE: string input The current input.
+ * RETURN-TYPE: boolean
  */
 SearchBoxController.prototype.submitInput = function(input) {
   var match = CourseData.REGEXP.exec(input);
+  if (!match) return false;
   var dep = match[1].trim().toUpperCase();
   var num = match[2].trim().toUpperCase();
   if (num == '') {
@@ -67,6 +70,8 @@ SearchBoxController.prototype.submitInput = function(input) {
     if (course) {
       this.manager_.notifyCourseAdded(course);
       this.view_.clearInput();
+      return true;
     }
   }
+  return false;
 };
