@@ -1,0 +1,108 @@
+/*
+ * Style for the course list view.
+ */
+
+.main-course-list-container h1 {
+  font-size: 24px;
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
+
+.course-list-body {
+  width: 700px;
+  max-width: 700px;
+  min-height: 340px;
+  max-height: 340px;
+  border: 5px solid #8c1515;
+  border-radius: 3px;
+}
+
+table.course-list-table {
+  border-spacing: 0px;
+  border-collapse: collapse;
+  table-layout: fixed;
+  width: 700px;
+}
+
+table.course-list-table thead {
+  display: table-header-group;
+  height: 30px;
+  width: 700px;
+  padding: 0px;
+  font-size: 18px;
+  font-weight: bold;
+  border-bottom: 1px solid black;
+}
+
+table.course-list-table tbody {
+  display: block;
+  height: 100%;
+  width: 700px;
+  overflow: auto;
+}
+
+.course-list-table th,
+.course-list-table td {
+  border-bottom: 1px solid black;
+}
+
+.course-list-table tr th:nth-child(1),
+.course-list-table tr td:nth-child(1) {
+  width: 280px;
+  max-width: 280px;
+}
+
+.course-list-table tr td:nth-child(2),
+.course-list-table tr th:nth-child(2),
+.course-list-table tr th:nth-child(3),
+.course-list-table tr td:nth-child(3),
+.course-list-table tr th:nth-child(4),
+.course-list-table tr td:nth-child(4) {
+  width: 40px;
+  max-width: 40px;
+}
+
+.course-list-table tr td:nth-child(5),
+.course-list-table tr th:nth-child(5) {
+  width: 90px;
+  max-width: 90px;
+}
+
+.course-list-table tr td:nth-child(6),
+.course-list-table tr th:nth-child(6) {
+  width: 140px;
+  max-width: 140px;
+}
+
+.course-list-table tr td:nth-child(7),
+.course-list-table tr th:nth-child(7) {
+  width: 70px;
+  max-width: 70px;
+}
+
+/*
+ * Layout for the individual class rows.
+ */
+
+.course-list-no-courses-row {
+  height: 30px;
+  padding: 3px;
+  font-style: italic;
+}
+
+.course-list-course-row
+td.course-list-name-column {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.course-list-autumn-column input[type=checkbox],
+.course-list-winter-column input[type=checkbox],
+.course-list-spring-column input[type=checkbox] {
+  /*-webkit-appearance: none;*/
+  /*width: 10px;*/
+  /*height: 10px;*/
+  /*outline: 1px solid red;*/
+}
+

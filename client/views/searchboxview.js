@@ -1,6 +1,5 @@
 /*
- * A file for an instant search box. This is implmented via an input handler and
- * a callback that is called on every input.
+ * A file for an instant search box.
  */
 
 /*
@@ -16,19 +15,14 @@ SearchBoxView = function(parent, controller) {
 };
 
 
-/*
- * TYPE: Jquery The input box for the search box.
- */
+
+// TYPE: Jquery The input box for the search box.
 SearchBoxView.prototype.input_ = null;
 
-/*
- * TYPE: Jquery The div that will contain the result elements.
- */
+// TYPE: Jquery The div that will contain the result elements.
 SearchBoxView.prototype.elements_ = null;
 
-/*
- * TYPE: number The currently selected element;
- */
+// TYPE: number The currently selected element;
 SearchBoxView.prototype.currentSelected_ = -1;
 
 /*
