@@ -121,7 +121,7 @@ CourseListView.prototype.createCheckBox = function(course, quarter) {
   var isOffered = course.isOfferedIn(quarter);
   var checkbox = $('<input>').attr('type', 'checkbox').
                               prop('checked', isOffered).
-                              attr('disabled', isOffered);
+                              attr('disabled', !isOffered);
   td.append(checkbox);
   return td;
 };
