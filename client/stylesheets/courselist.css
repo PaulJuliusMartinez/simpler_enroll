@@ -122,6 +122,7 @@ tbody .course-list-spring-column {
   vertical-align: middle;
 }
 
+/* These checkboxes are gonna look like shit on Firefox... */
 .course-list-autumn-column input[type=checkbox],
 .course-list-winter-column input[type=checkbox],
 .course-list-spring-column input[type=checkbox] {

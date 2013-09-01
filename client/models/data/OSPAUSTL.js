@@ -1,2 +1,0 @@
-{"40":{"department":"OSPAUSTL","number":"40","title":"Australian Studies","min_units":3,"max_units":3,"autumn_classes":[{"days":[false,false,false,false,false],"start_time":"00:00:00","end_time":"00:00:00"}],"winter_classes":[],"spring_classes":[],"gers":"GER:DB-SocSci, GER:EC-GlobalCom"}
-}
