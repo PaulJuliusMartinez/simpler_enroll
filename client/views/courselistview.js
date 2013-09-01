@@ -15,6 +15,8 @@ CourseListView = function(parent, controller) {
   this.controller_ = controller;
   // Type: Object.jQuery
   this.courses_ = {};
+  // TYPE: number
+  this.numClasses_ = 0;
 };
 
 
@@ -22,7 +24,7 @@ CourseListView = function(parent, controller) {
 this.table_;
 
 // TYPE: jQuery The 'No classes selected' row.
-this.noClasses_;
+this.noClasses_ = 0;
 
 /*
  * Renders the view.
@@ -68,16 +70,33 @@ CourseListView.prototype.render = function() {
 CourseListView.prototype.addCourse = function(course) {
   if (this.courses_[course.getID()]) {
     // If course is already added, put it at the top.
-    this.tableHeader_.preent
     this.courses_[course.getID()].insertAfter(this.tableHeader_);
   } else {
     // Create new course list and add it.
     var row = this.createCourseRow(course);
     this.table_.append(row);
     this.courses_[course.getID()] = row;
+    this.numClasses_++;
     // Since we added a row, remove the 'No classes selected' message.
     // jQuery remove is idempotent, so we can do this every time.
     this.noClasses_.remove();
+  }
+};
+
+/*
+ * Removes a course from the list.
+ * PARAM-TYPE: Course course The course to remove.
+ */
+CourseListView.prototype.removeCourse = function(course) {
+  if (this.courses_[course.getID()]) {
+    this.courses_[course.getID()].remove();
+    this.courses_[course.getID()] = null;
+    this.numClasses_--;
+
+    // Add back the no classes label if needed.
+    if (this.numClasses_ == 0) {
+      this.table_.append(this.noClasses_);
+    }
   }
 };
 
@@ -102,10 +121,11 @@ CourseListView.prototype.createCourseRow = function(course) {
   row.append($('<td>').text((course.hasSecondaryComponent() ? 'Yes' : 'No')));
 
   // Yes/maybe/no
+  row.append($('<td>'));
 
   // Move up/down, remove
+  row.append(this.createRemoveButton(course));
 
-  row.append($('<td>'), $('<td>'));
   return row;
 };
 
@@ -122,7 +142,26 @@ CourseListView.prototype.createCheckBox = function(course, quarter) {
   var checkbox = $('<input>').attr('type', 'checkbox').
                               prop('checked', isOffered).
                               attr('disabled', !isOffered);
+  var controller = this.controller_;
+  td.click(function() {
+    controller.willTakeClassInQuarter(course, quarter, checkbox.is(':checked'));
+  });
   td.append(checkbox);
+  return td;
+};
+
+/*
+ * Creates a remove button that removes the class from the list.
+ * PARAM-TYPE: Course course The course that's getting removed.
+ */
+CourseListView.prototype.createRemoveButton = function(course) {
+  var cssClass = CourseListView.EDIT_COLUMN;
+  var td = $('<td>').addClass(cssClass).
+                     append($('<a>').text('X'));
+  var controller = this.controller_;
+  $(td.children()[0]).click(function() {
+    controller.removeCourse(course);
+  });
   return td;
 };
 

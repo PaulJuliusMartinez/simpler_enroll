@@ -29,3 +29,28 @@ CourseListController.prototype.addCourse = function(course) {
     this.view_.addCourse(course);
   }
 };
+
+/*
+ * Removes a course from the list.
+ * PARAM-TYPE: Course course The course to remove.
+ */
+CourseListController.prototype.removeCourse = function(course) {
+  if (this.courses_[course.getID()]) {
+    this.courses_[course.getID()] = null;
+    this.view_.removeCourse(course);
+    this.manager_.notifyCourseListChange();
+  }
+};
+
+/*
+ * Mark whether or not a course should be considered to be taken in this quarter.
+ * PARAM-TYPE: Course course What course.
+ * PARAM-TYPE: number quarter What quarter the course will/won't be considered
+ *     in. This number should be in the range [0, 2].
+ * PARAM-TYPE: boolean considered If the class should be considered.
+ */
+CourseListController.prototype.willTakeClassInQuarter = function(
+    course, quarter, considered) {
+  // Alert the main controller!
+  window.console.log(course.getShortName() + (considered ? ' will ' : "won't ") + 'be considered for the ' + (quarter + 1) + ' quarter.');
+};

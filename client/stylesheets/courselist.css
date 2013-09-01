@@ -144,3 +144,7 @@ tbody .course-list-spring-column {
 .course-list-spring-column input[type=checkbox]:disabled {
   background-color: #ddd; /* Grayed out color */
 }
+
+.course-list-edit-column {
+  text-align: center;
+}
