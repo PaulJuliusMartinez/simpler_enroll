@@ -9,23 +9,30 @@
  * PARAM-TYPE: Object obj The JSON object.
  */
 Section = function(course, obj) {
-  /* TYPE: Course */
+  // TYPE: Course
   this.course_ = course;
-  /* TYPE: string[] */
+  // TYPE: string[]
   this.instructors_ = obj[CourseConstants.INSTRUCTORS];
-  /* TYPE: Meeting[] */
+  // TYPE: Meeting[]
   this.meetings_ = [];
   if (obj[CourseConstants.MEETINGS]) {
     for (var i = 0; i < obj[CourseConstants.MEETINGS].length; i++) {
       this.meetings_.push(new Meeting(this, obj[CourseConstants.MEETINGS][i]));
     }
   }
+  // TYPE: number
+  this.id_ = UniqueID.newID();
 };
 
 /* Simple getters */
 Section.prototype.getCourse = function() { return this.course_; };
-Section.prototype.getInstructors = function() { return this.instructors_.slice(); };
-Section.prototype.getMeetings = function() { return this.meetings_.slice(); };
+Section.prototype.getInstructors = function() {
+  return this.instructors_.slice();
+};
+Section.prototype.getMeetings = function() {
+  return this.meetings_.slice();
+};
+Section.prototype.getID = function() { return this.id_; };
 
 /*
  * Check if a section conflicts with another section of a different class.

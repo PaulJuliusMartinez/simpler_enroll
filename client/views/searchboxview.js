@@ -1,6 +1,5 @@
 /*
- * A file for an instant search box. This is implmented via an input handler and
- * a callback that is called on every input.
+ * A file for an instant search box.
  */
 
 /*
@@ -16,19 +15,14 @@ SearchBoxView = function(parent, controller) {
 };
 
 
-/*
- * TYPE: Jquery The input box for the search box.
- */
+
+// TYPE: Jquery The input box for the search box.
 SearchBoxView.prototype.input_ = null;
 
-/*
- * TYPE: Jquery The div that will contain the result elements.
- */
+// TYPE: Jquery The div that will contain the result elements.
 SearchBoxView.prototype.elements_ = null;
 
-/*
- * TYPE: number The currently selected element;
- */
+// TYPE: number The currently selected element;
 SearchBoxView.prototype.currentSelected_ = -1;
 
 /*
@@ -40,8 +34,10 @@ SearchBoxView.prototype.render = function() {
   this.input_ = $('<input>').addClass(SearchBoxView.INPUT_CLASS);
   this.input_.attr('placeholder', 'Search for a class...');
   this.elements_ = $('<div>').addClass(SearchBoxView.ELEMENTS);
-  this.parent_.append(this.input_).
-                  append(this.elements_);
+  this.parent_.append(this.input_).append(this.elements_);
+
+  // Focus the search box.
+  this.input_.focus();
 
   // Add listeners
   var view = this;
@@ -158,8 +154,8 @@ SearchBoxView.prototype.handleKeyPress_ = function(e) {
  */
 SearchBoxView.prototype.submitValue = function(value) {
   this.input_.val(value);
-  this.controller_.submitInput(value);
-  this.clearResults();
+  var worked = this.controller_.submitInput(value);
+  if (worked) this.clearResults();
 };
 
 

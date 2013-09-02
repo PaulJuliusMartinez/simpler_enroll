@@ -8,12 +8,17 @@
  * PARAM-TYPE: jQuery parent The parent element for the MainView.
  */
 MainController = function(parent) {
+  // TYPE: MainViewController
   this.view_ = new MainView(parent, this);
   this.view_.render();
 
   var containers = this.view_.getContainers();
+  // TYPE: SearchBoxController
   this.searchBox_ = new SearchBoxController(
       containers[MainView.SEARCH_BOX], this);
+  // TYPE: CourseListController
+  this.courseList_ = new CourseListController(
+      containers[MainView.COURSE_LIST], this);
 };
 
 
@@ -22,5 +27,14 @@ MainController = function(parent) {
  * PARAM-TYPE: Course course The course added.
  */
 MainController.prototype.notifyCourseAdded = function(course) {
-  alert('You added ' + course.getShortName());
+  this.courseList_.addCourse(course);
+};
+
+/*
+ * Called when something in the course list changes.
+ */
+MainController.prototype.notifyCourseListChange = function() {
+  // When this happens we'll have to collect the data again from the course list
+  // and send it out to the schedule preview to rerender.
+  window.console.log('Something changed!');
 };

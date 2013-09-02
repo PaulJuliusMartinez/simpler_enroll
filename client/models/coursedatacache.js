@@ -30,7 +30,9 @@ CourseDataCache.prototype.getCourses = function(dep) {
         success: function(data) {
           cache.storedCourses_[dep] =
               CourseDataCache.createSortedCourseNameObject(data);
-        /* error: Do nothing */
+        },
+        error: function() {
+          window.console.log('Error in downloading ' + dep);
         }
     });
     return this.storedCourses_[dep];

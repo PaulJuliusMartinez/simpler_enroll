@@ -1,0 +1,159 @@
+/*
+ * Style for the course list view.
+ */
+
+.main-course-list-container h1 {
+  font-size: 24px;
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
+
+.course-list-body {
+  width: 700px;
+  max-width: 700px;
+  min-height: 340px;
+  max-height: 340px;
+  border: 5px solid #8c1515;
+  border-radius: 3px;
+}
+
+table.course-list-table {
+  border-spacing: 0px;
+  border-collapse: collapse;
+  table-layout: fixed;
+  width: 700px;
+}
+
+table.course-list-table thead {
+  display: table-header-group;
+  height: 30px;
+  width: 700px;
+  padding: 0px;
+  font-size: 18px;
+  font-weight: bold;
+  border-bottom: 1px solid black;
+}
+
+table.course-list-table tbody {
+  display: block;
+  height: 316px;
+  width: 700px;
+  overflow: auto;
+}
+
+/*
+ * All that shit above is to get the effing table to work.
+ * I can't figure out how to get it to work with percentages.
+ */
+
+.course-list-table th {
+  border-bottom: 1px solid black;
+}
+
+.course-list-table td {
+  background-color: white;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+}
+
+.course-list-table tr th:nth-child(1),
+.course-list-table tr td:nth-child(1) {
+  padding-left: 5px;
+  box-sizing: border-box;
+  width: 390px;
+  max-width: 390px;
+}
+
+/* Quarter columns */
+.course-list-table tr th:nth-child(2),
+.course-list-table tr td:nth-child(2),
+.course-list-table tr th:nth-child(3),
+.course-list-table tr td:nth-child(3),
+.course-list-table tr th:nth-child(4),
+.course-list-table tr td:nth-child(4) {
+  width: 40px;
+  max-width: 40px;
+}
+
+/* Section column */
+.course-list-table tr td:nth-child(5),
+.course-list-table tr th:nth-child(5) {
+  text-align: center;
+  width: 90px;
+  max-width: 90px;
+}
+
+/* Yes/Maybe/No column */
+.course-list-table tr td:nth-child(6),
+.course-list-table tr th:nth-child(6) {
+  width: 70px;
+  max-width: 70px;
+}
+
+/* Edit column */
+.course-list-table tr td:nth-child(7),
+.course-list-table tr th:nth-child(7) {
+  width: 30px;
+  max-width: 30px;
+}
+
+/*
+ * Layout for the individual class rows.
+ */
+
+.course-list-no-courses-row {
+  font-style: italic;
+}
+
+.course-list-no-courses-row,
+.course-list-course-row {
+  height: 30px;
+}
+
+/* Get name column to overflow properly. */
+.course-list-course-row
+td.course-list-name-column {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Center check boxes */
+tbody .course-list-autumn-column,
+tbody .course-list-winter-column,
+tbody .course-list-spring-column {
+  padding-top: 2px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.course-list-certainty-column {
+  text-align: center;
+}
+
+/* These checkboxes are gonna look like shit on Firefox... */
+.course-list-autumn-column input[type=checkbox],
+.course-list-winter-column input[type=checkbox],
+.course-list-spring-column input[type=checkbox] {
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  background-color: #f2a6a6; /* Light red color */
+  outline: 1px solid black;
+}
+
+.course-list-autumn-column input[type=checkbox]:checked,
+.course-list-winter-column input[type=checkbox]:checked,
+.course-list-spring-column input[type=checkbox]:checked {
+  background-color: #a9ec6b; /* 'Enrolled' color */
+}
+
+.course-list-autumn-column input[type=checkbox]:disabled,
+.course-list-winter-column input[type=checkbox]:disabled,
+.course-list-spring-column input[type=checkbox]:disabled {
+  background-color: #ddd; /* Grayed out color */
+}
+
+.course-list-edit-column {
+  text-align: center;
+}

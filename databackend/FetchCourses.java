@@ -76,7 +76,7 @@ public class FetchCourses {
 
       if (courses.size() == 0) return;
 
-      File file = new File("./courses/" + filename);
+      File file = new File("../client/models/data/" + filename);
       file.createNewFile();
       FileWriter fw = new FileWriter(file.getAbsoluteFile());
       BufferedWriter bw = new BufferedWriter(fw);
@@ -131,8 +131,10 @@ public class FetchCourses {
     }
     String s = "[";
     for (int i = 0; i < split.length; i++) {
-      if (i != 0) s += ",";
-      s += "\"" + split[i] + "\"";
+      if (split[i].length() != 0) {
+        if (i != 0) s += ",";
+        s += "\"" + split[i] + "\"";
+      }
     }
     s += "]";
     return s;
@@ -148,9 +150,11 @@ public class FetchCourses {
 
     for (Section s : c.getSections()) {
       String term = s.getTerm();
+      // Ignore summer classes.
+      if (term.contains("Summer")) continue;
       String component = s.getComponent();
-      // Ignore CS discussions.
-      if (dep.equals("CS") && s.getComponent().equals("DIS")) continue;
+      // Ignore CS discussions. (Maybe not.)
+      //if (dep.equals("CS") && s.getComponent().equals("DIS")) continue;
       String JSON = convertSectionToJSONObject(s);
       // Sections that have 'empty' meetings will return null;
       if (JSON == null) continue;
@@ -178,12 +182,12 @@ public class FetchCourses {
     Map<String, String> whichComponent = decideWhichComponentIsPrimary(components);
     String pAutumn = convertListToJSONArray(autumnClasses.get(whichComponent.get("PRIMARY")));
     String pWinter = convertListToJSONArray(winterClasses.get(whichComponent.get("PRIMARY")));
-    String pSpring = convertListToJSONArray(autumnClasses.get(whichComponent.get("PRIMARY")));
+    String pSpring = convertListToJSONArray(springClasses.get(whichComponent.get("PRIMARY")));
     sectionMap.put("PRIMARY", "[" + pAutumn + "," + pWinter + "," + pSpring + "]");
     if (whichComponent.containsKey("SECONDARY")) {
       String sAutumn = convertListToJSONArray(autumnClasses.get(whichComponent.get("SECONDARY")));
       String sWinter = convertListToJSONArray(winterClasses.get(whichComponent.get("SECONDARY")));
-      String sSpring = convertListToJSONArray(autumnClasses.get(whichComponent.get("SECONDARY")));
+      String sSpring = convertListToJSONArray(springClasses.get(whichComponent.get("SECONDARY")));
       sectionMap.put("SECONDARY", "[" + sAutumn + "," + sWinter + "," + sSpring + "]");
     }
     return sectionMap;
@@ -359,7 +363,7 @@ public class FetchCourses {
     char second = className.charAt(1);
     char third = className.charAt(2);
     if (Character.isDigit(first) && Character.isDigit(second) && Character.isDigit(third)) {
-      if (Integer.parseInt(className.substring(0, 3)) > 299) {
+      if (Integer.parseInt(className.substring(0, 3)) > 399) {
         //System.out.println(": Too high!");
         return true;
       }

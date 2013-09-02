@@ -1,0 +1,31 @@
+/*
+ * Style for the enrollplandrop widgit.
+ */
+
+.enroll-plan-drop-arrow {
+  /*font-weight: bold;*/
+}
+
+.enroll-plan-drop-left-arrow {
+  float: left;
+}
+
+.enroll-plan-drop-right-arrow {
+  float: right;
+}
+
+.enroll-plan-drop-arrow:hover {
+  text-shadow: 1px 1px 1px #ddd,
+               -1px -1px 1px #ddd,
+               1px -1px 1px #ddd,
+               -1px 1px 1px #ddd;
+}
+
+.enroll-plan-drop-disabled {
+  color: #ddd;
+}
+
+.enroll-plan-drop-disabled:hover {
+  text-shadow: 0 0 0 white;
+}
+

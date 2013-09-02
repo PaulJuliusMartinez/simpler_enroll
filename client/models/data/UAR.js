@@ -1,4 +1,0 @@
-{"42A":{"department":"UAR","number":"42A","title":"LSP First Year Seminar","min_units":1,"max_units":1,"autumn_classes":[{"days":[false,false,false,false,false],"start_time":"00:00:00","end_time":"00:00:00"}],"winter_classes":[],"spring_classes":[],"gers":""},
-"42B":{"department":"UAR","number":"42B","title":"LSP First Year Seminar B","min_units":1,"max_units":1,"autumn_classes":[],"winter_classes":[{"days":[false,false,false,false,false],"start_time":"00:00:00","end_time":"00:00:00"}],"spring_classes":[],"gers":""},
-"60":{"department":"UAR","number":"60","title":"Engaging, Exploring, and Reflecting on Alumni Career Worlds","min_units":1,"max_units":1,"autumn_classes":[],"winter_classes":[],"spring_classes":[{"days":[false,false,false,false,false],"start_time":"00:00:00","end_time":"00:00:00"}],"gers":""}
-}

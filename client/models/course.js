@@ -9,29 +9,31 @@
  * TYPE: Object obj A JSON object containing the course data.
  */
 Course = function(obj) {
-  /* TYPE: string */
+  // TYPE: string
   this.department_ = obj[CourseConstants.DEPARTMENT] || '';
-  /* TYPE: string */
+  // TYPE: string
   this.number_ = obj[CourseConstants.NUMBER] || '';
-  /* TYPE: string */
+  // TYPE: string
   this.title_ = obj[CourseConstants.TITLE] || '';
-  /* TYPE: string */
+  // TYPE: string
   this.description_ = obj[CourseConstants.DESCRIPTION] || '';
-  /* TYPE: number */
+  // TYPE: number
   this.minUnits_ = obj[CourseConstants.MIN_UNITS] || 0;
-  /* TYPE: number */
+  // TYPE: number
   this.maxUnits_ = obj[CourseConstants.MAX_UNITS] || 0;
-  /* Type: string[] */
+  // Type: string[]
   this.gers_ = obj[CourseConstants.GERS] || [];
   // We have a problem if there's no primary component...
   assert(obj[CourseConstants.PRIMARY_COMPONENT],
       'This course object had no primary component!');
-  /* Type: Section[][] */
+  // Type: Section[][]
   this.primaryComponent_ = Course.convertJSONSectionsToSectionArray(
       obj, CourseConstants.PRIMARY_COMPONENT);
-  /* Type: Section[][] */
+  // Type: Section[][]
   this.secondaryComponent_ = Course.convertJSONSectionsToSectionArray(
       obj, CourseConstants.SECONDARY_COMPONENT);
+  // TYPE: number
+  this.id_ = UniqueID.newID();
 };
 
 /*
@@ -45,9 +47,10 @@ Course.convertJSONSectionsToSectionArray = function(obj, key) {
   var arr = [[], [], []];
   for (var i = 0; i < 3; i++) {
     for (var j = 0; j < obj[key][i].length; j++) {
-      arr[i].push(new Section(this, obj[key][i]));
+      arr[i].push(new Section(this, obj[key][i][j]));
     }
   }
+  return arr;
 };
 
 /*
@@ -64,6 +67,7 @@ Course.prototype.getMinUnits = function() { return this.minUnits_; };
 Course.prototype.getMaxUnits = function() { return this.maxUnits_; };
 // Return a shallow copy.
 Course.prototype.getGERs = function() { return this.gers_.slice(); };
+Course.prototype.getID = function() { return this.id_; };
 
 // Some basic util methods.
 /*
