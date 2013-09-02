@@ -20,14 +20,12 @@ CourseListController = function(parent, manager) {
 
 
 /*
- * Adds a course to the list. Will not add duplicates.
+ * Adds a course to the list.
  * PARAM-TYPE: Course course The course added.
  */
 CourseListController.prototype.addCourse = function(course) {
-  if (!this.courses_[course.getID()]) {
-    this.courses_[course.getID()] = course;
-    this.view_.addCourse(course);
-  }
+  this.courses_[course.getID()] = course;
+  this.view_.addCourse(course);
 };
 
 /*
@@ -43,7 +41,8 @@ CourseListController.prototype.removeCourse = function(course) {
 };
 
 /*
- * Mark whether or not a course should be considered to be taken in this quarter.
+ * Mark whether or not a course should be considered to be taken in this
+ * quarter.
  * PARAM-TYPE: Course course What course.
  * PARAM-TYPE: number quarter What quarter the course will/won't be considered
  *     in. This number should be in the range [0, 2].
@@ -53,4 +52,15 @@ CourseListController.prototype.willTakeClassInQuarter = function(
     course, quarter, considered) {
   // Alert the main controller!
   window.console.log(course.getShortName() + (considered ? ' will ' : "won't ") + 'be considered for the ' + (quarter + 1) + ' quarter.');
+};
+
+/*
+ * Sets a course status as either enrolled, planned, or dropped.
+ * PARAM-TYPE: Course course Which course.
+ * PARAM-TYPE: number status Status, E/P/D <=> 0-2.
+ */
+CourseListController.prototype.setCourseStatus = function(course, status) {
+  // Alert the main controller!
+  // Update internal status list!
+  window.console.log(course.getShortName() + ' will have status ' + status);
 };

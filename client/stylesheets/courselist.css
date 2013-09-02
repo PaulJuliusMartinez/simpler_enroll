@@ -46,8 +46,13 @@ table.course-list-table tbody {
  * I can't figure out how to get it to work with percentages.
  */
 
-.course-list-table th,
+.course-list-table th {
+  border-bottom: 1px solid black;
+}
+
 .course-list-table td {
+  background-color: white;
+  border-top: 1px solid black;
   border-bottom: 1px solid black;
 }
 
@@ -55,8 +60,8 @@ table.course-list-table tbody {
 .course-list-table tr td:nth-child(1) {
   padding-left: 5px;
   box-sizing: border-box;
-  width: 40%;
-  max-width: 280px;
+  width: 390px;
+  max-width: 390px;
 }
 
 /* Quarter columns */
@@ -81,15 +86,15 @@ table.course-list-table tbody {
 /* Yes/Maybe/No column */
 .course-list-table tr td:nth-child(6),
 .course-list-table tr th:nth-child(6) {
-  width: 140px;
-  max-width: 140px;
+  width: 70px;
+  max-width: 70px;
 }
 
 /* Edit column */
 .course-list-table tr td:nth-child(7),
 .course-list-table tr th:nth-child(7) {
-  width: 70px;
-  max-width: 70px;
+  width: 30px;
+  max-width: 30px;
 }
 
 /*
@@ -120,6 +125,10 @@ tbody .course-list-spring-column {
   padding-top: 2px;
   text-align: center;
   vertical-align: middle;
+}
+
+.course-list-certainty-column {
+  text-align: center;
 }
 
 /* These checkboxes are gonna look like shit on Firefox... */

@@ -35,19 +35,20 @@ CourseListView.prototype.render = function() {
   this.table_ = $('<table>').addClass(CourseListView.TABLE).
                              attr('cellspacing', 0).
                              attr('cellpadding', 0);
-  this.tableHeader_ = $('<thead>').addClass(CourseListView.HEADER_BAR);
-  this.tableHeader_.append($('<tr>').append(
+  var header = $('<thead>').addClass(CourseListView.HEADER_BAR);
+  header.append($('<tr>').append(
       $('<th>').addClass(CourseListView.NAME_COLUMN).text('Class:'),
       $('<th>').addClass(CourseListView.AUTUMN_COLUMN).text('A'),
       $('<th>').addClass(CourseListView.WINTER_COLUMN).text('W'),
       $('<th>').addClass(CourseListView.SPRING_COLUMN).text('S'),
-      $('<th>').addClass(CourseListView.SECTION_COLUMN).text('Section?'),
-      $('<th>').addClass(CourseListView.CERTAINTY_COLUMN).text('Yes/Maybe/No'),
+      $('<th>').addClass(CourseListView.SECTION_COLUMN).text('Section'),
+      $('<th>').addClass(CourseListView.CERTAINTY_COLUMN).
+                text('Status'),
       $('<th>').addClass(CourseListView.EDIT_COLUMN)
   ));
 
   body.append(this.table_);
-  this.table_.append(this.tableHeader_);
+  this.table_.append(header);
   this.noClasses_ = $('<tr>').
                         addClass(CourseListView.NO_COURSES_ROW).
                         append($('<td>').text(CourseListView.NO_COURSES_TEXT),
@@ -70,16 +71,17 @@ CourseListView.prototype.render = function() {
 CourseListView.prototype.addCourse = function(course) {
   if (this.courses_[course.getID()]) {
     // If course is already added, put it at the top.
-    this.courses_[course.getID()].insertAfter(this.tableHeader_);
+    this.table_.prepend(this.courses_[course.getID()]);
   } else {
     // Create new course list and add it.
     var row = this.createCourseRow(course);
-    this.table_.append(row);
+    this.table_.prepend(row);
     this.courses_[course.getID()] = row;
     this.numClasses_++;
     // Since we added a row, remove the 'No classes selected' message.
     // jQuery remove is idempotent, so we can do this every time.
     this.noClasses_.remove();
+    this.table_.sortable({ axis: 'y' });
   }
 };
 
@@ -120,11 +122,14 @@ CourseListView.prototype.createCourseRow = function(course) {
   // Discussion sections?
   row.append($('<td>').text((course.hasSecondaryComponent() ? 'Yes' : 'No')));
 
-  // Yes/maybe/no
-  row.append($('<td>'));
+  // Enroll/Plan/Drop
+  var td = $('<td>').addClass(CourseListView.CERTAINTY_COLUMN);
+  var widgit = new EnrollPlanDrop(td, this.controller_, course);
+  row.append(td);
+
 
   // Move up/down, remove
-  row.append(this.createRemoveButton(course));
+  row.append(this.createEditButton(course));
 
   return row;
 };
@@ -151,10 +156,10 @@ CourseListView.prototype.createCheckBox = function(course, quarter) {
 };
 
 /*
- * Creates a remove button that removes the class from the list.
+ * Adds movement buttons
  * PARAM-TYPE: Course course The course that's getting removed.
  */
-CourseListView.prototype.createRemoveButton = function(course) {
+CourseListView.prototype.createEditButton = function(course) {
   var cssClass = CourseListView.EDIT_COLUMN;
   var td = $('<td>').addClass(cssClass).
                      append($('<a>').text('X'));
