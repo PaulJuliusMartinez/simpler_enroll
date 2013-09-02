@@ -14,6 +14,7 @@
     <script src="./client/views/searchboxview.js"></script>
     <script src="./client/views/courselistview.js"></script>
     <script src="./client/views/previewview.js"></script>
+    <script src="./client/views/calendarview.js"></script>
 
     <!--Widgits-->
     <script src="./client/views/widgits/enrollplandrop.js"></script>
@@ -28,9 +29,12 @@
     <script src="./client/models/coursedatacache.js"></script>
 
     <!--Stylesheets-->
+    <link rel="stylesheet" type="text/css" href="./client/stylesheets/main.css"/>
     <link rel="stylesheet" type="text/css" href="./client/stylesheets/searchbox.css"/>
     <link rel="stylesheet" type="text/css" href="./client/stylesheets/courselist.css"/>
     <link rel="stylesheet" type="text/css" href="./client/stylesheets/enrollplandrop.css"/>
+    <link rel="stylesheet" type="text/css" href="./client/stylesheets/preview.css"/>
+    <link rel="stylesheet" type="text/css" href="./client/stylesheets/calendar.css"/>
 
     <!--Utility-->
     <script src="./client/utility/uniqueid.js"></script>
@@ -49,33 +53,31 @@
       $(document).ready(function() {
         CourseData.init();
         var mainController = new MainController($('#main'));
-        //var searchBar = new CourseSearchBox();
-        var autumnCalendar = new Calendar();
-        //searchBar.render($('#search_bar'));
-        autumnCalendar.render($('#autumn_calendar'));
-        var MWF = [1, 0, 1, 0, 1];
-        var TT = [0, 1, 0, 1, 0];
-        var CS144 = new Class('CS 144', 'LEC', MWF, '16:15',
-        '17:05', 'enrolled', 1);
-        var CS161 = new Class('CS 161', 'LEC', TT, "11:00",
-        '12:15', 'enrolled', 2);
-        var GYM = new Class('GYM', 'LEC', TT, '12:00',
-        '12:50', 'planned', 3);
-        var E40 = new Class('ENGR 40', 'LEC', MWF, '11:00',
-        '12:15', 'enrolled', 4);
-        var EE263 = new Class('EE 263', 'LEC', TT, '09:30',
-        '10:45', 'enrolled', 5);
-        var MUSIC19A = new Class('Music 21', 'LEC', TT, '12:50',
-        '14:05', 'enrolled', 6);
-        var CS242 = new Class('CS 242', 'LEC', TT, '14:15',
-        '15:30', 'planned', 7);
-        autumnCalendar.addClass(CS144);
-        autumnCalendar.addClass(CS161);
-        autumnCalendar.addClass(GYM);
-        autumnCalendar.addClass(E40);
-        autumnCalendar.addClass(EE263);
-        autumnCalendar.addClass(MUSIC19A);
-        autumnCalendar.addClass(CS242);
+        <!--var autumnCalendar = new Calendar();-->
+        <!--autumnCalendar.render($('#autumn_calendar'));-->
+        <!--var MWF = [1, 0, 1, 0, 1];-->
+        <!--var TT = [0, 1, 0, 1, 0];-->
+        <!--var CS144 = new Class('CS 144', 'LEC', MWF, '16:15',-->
+        <!--'17:05', 'enrolled', 1);-->
+        <!--var CS161 = new Class('CS 161', 'LEC', TT, "11:00",-->
+        <!--'12:15', 'enrolled', 2);-->
+        <!--var GYM = new Class('GYM', 'LEC', TT, '12:00',-->
+        <!--'12:50', 'planned', 3);-->
+        <!--var E40 = new Class('ENGR 40', 'LEC', MWF, '11:00',-->
+        <!--'12:15', 'enrolled', 4);-->
+        <!--var EE263 = new Class('EE 263', 'LEC', TT, '09:30',-->
+        <!--'10:45', 'enrolled', 5);-->
+        <!--var MUSIC19A = new Class('Music 21', 'LEC', TT, '12:50',-->
+        <!--'14:05', 'enrolled', 6);-->
+        <!--var CS242 = new Class('CS 242', 'LEC', TT, '14:15',-->
+        <!--'15:30', 'planned', 7);-->
+        <!--autumnCalendar.addClass(CS144);-->
+        <!--autumnCalendar.addClass(CS161);-->
+        <!--autumnCalendar.addClass(GYM);-->
+        <!--autumnCalendar.addClass(E40);-->
+        <!--autumnCalendar.addClass(EE263);-->
+        <!--autumnCalendar.addClass(MUSIC19A);-->
+        <!--autumnCalendar.addClass(CS242);-->
       });
     </script>
   </head>

@@ -19,6 +19,9 @@ MainController = function(parent) {
   // TYPE: CourseListController
   this.courseList_ = new CourseListController(
       containers[MainView.COURSE_LIST], this);
+  // TYPE: PreviewController
+  this.preview_ = new PreviewController(
+      containers[MainView.SCHEDULE_PREVIEW], this);
 };
 
 

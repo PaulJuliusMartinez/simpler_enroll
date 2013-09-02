@@ -1,0 +1,38 @@
+/*
+ * Style for the schedule preivew.
+ */
+
+.preview-view-third {
+  width: 32%;
+  float: left;
+}
+
+.preview-view-left {
+  margin-right: 5px;
+}
+
+.preview-view-middle {
+  margin-right: 5px;
+  margin-left: 5px;
+}
+
+.preview-view-right {
+  margin-left: 5px;
+}
+
+.preview-view-header {
+  overflow: hidden;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  width: 100%;
+}
+
+.preview-view-quarter {
+  font-size: 24pt;
+  float: left;
+}
+
+.preview-view-units {
+  font-size: 24pt;
+  float: right;
+}

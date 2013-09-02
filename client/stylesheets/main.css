@@ -1,0 +1,28 @@
+/*
+ * Style sheets for arranging the main layout.
+ */
+
+.main-course-selection-container {
+  /*border: 1px solid black;*/
+  float: left;
+  width: 50%;
+}
+
+.main-search-box-container {
+  /*border: 1px solid black;*/
+}
+
+.main-course-list-container {
+  /*border: 1px solid black;*/
+}
+
+.main-preferences-panel-container {
+  /*border: 1px solid black;*/
+  width: 50%;
+  float: right;
+}
+
+.main-schedule-preview-container {
+  /*border: 1px solid black;*/
+  clear: both;
+}
