@@ -68,19 +68,31 @@ CalendarView.prototype.getContainer = function() {
 };
 
 /*
- * Adds a class to the calendar.
- * @param Class newClass The class to add.
+ * Gets the width of the first column.
  */
-CalendarView.prototype.addClass = function(newClass) {
-  this.classRenderer_.addClass(newClass);
+CalendarView.prototype.getHourWidth = function() {
+  this.element_.children('tr')[0].children[0].clientWidth;
 };
 
 /*
- * Remove a class from the calendar.
- * @param Class removeClass The class to remove.
+ * Gets the width of one of the day columns.
  */
-CalendarView.prototype.removeClass = function(removeClass) {
-  this.classRenderer_.removeClass(removeClass);
+CalendarView.prototype.getDayWidth = function() {
+  this.element_.children('tr')[0].children[1].clientWidth;
+};
+
+/*
+ * Gets the height of the header row.
+ */
+CalendarView.prototype.getHeaderRowHeight = function() {
+  this.element_.children('th')[0].children[0].clientHeight;
+};
+
+/*
+ * Gets the height of a normal row.
+ */
+CalendarView.prototype.getNormalRowHeight = function() {
+  this.element_.children('td')[0].children[0].clientHeight;
 };
 
 // CSS Constants:

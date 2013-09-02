@@ -1,107 +1,103 @@
 /*
- * A class for a class renderer. Every calendar has its own class renderer.
- * This takes a list of classes and figures out how they should be arranged.
+ * A class for a schedule renderer. Every calendar has its own renderer.
+ * This takes a list of Meetings and figures out how they should be arranged.
  */
 
 
 /*
  * Constructor
- * @param Calendar calendar The calendar this is a renderer for.
+ * PARAM-TYPE: Calendar calendar The calendar this is a renderer for.
  */
-ClassRenderer = function(calendar) {
+MeetingRenderer = function(calendar) {
+  // TYPE: CalendarView
   this.calendar_ = calendar;
-  this.classes_ = {};
+  // TYPE: Meeting[]
+  this.meetings_ = [];
+  // TYPE: MeetingDisplay[]
+  this.boxes_ = [];
 };
 
 
 /*
- * @param Class Add a class to the renderer. The calendar will be re-rendered.
+ * Add a meeting to the list of meetings that should be rendered. Adding
+ * duplicates will result in duplicates being rendered.
+ * PARAM-TYPE: Meeting meeting Add a meeting to the renderer. The classes will
+ * not re-rendered.
  */
-ClassRenderer.prototype.addClass = function(newClass) {
-  this.classes_[newClass.getUniqueID()] = newClass;
-  this.render_();
+MeetingRenderer.prototype.addMeeting = function(meeting) {
 };
 
-
 /*
- * @param Class Remove class from renderer. The calendar will be re-rendered.
+ * Draws the schedule.
  */
-ClassRenderer.prototype.removeClass = function(deleteClass) {
-  delete this.classes_[deleteClass.getUniqueID()];
-  this.render_();
-};
-
-
-/*
- * Renders the schedule.
- */
-ClassRenderer.prototype.render_ = function() {
-  this.unrender_();
+MeetingRenderer.prototype.draw = function() {
   for (var day = 0; day < 5; day++) {
     this.renderOnDay_(day);
   }
 };
 
-
 /*
- * Unrender all the classes;
+ * Clears all the old classes.
  */
-ClassRenderer.prototype.unrender_ = function() {
-  for (key in this.classes_) {
-    this.classes_[key].unrender();
+MeetingRenderer.prototype.clear = function() {
+  for (var i = 0; i < this.meetings_.length; i++) {
+    this.boxes_[i].remove();
   }
+  this.meetings_ = [];
+  this.boxes_ = [];
 };
-
 
 /*
  * Renders classes on a specific day.
+ * PARAM-TYPE: number day The day of the week (0-4).
  */
-ClassRenderer.prototype.renderOnDay_ = function(day) {
-  // Get the keys for the relevant classes.
-  var classKeys = [];
-  for (key in this.classes_) {
-    if (this.classes_[key].meetsOn(day)) classKeys.push(key);
+MeetingRenderer.prototype.renderOnDay_ = function(day) {
+  // Make a temporary array of just the meetings that meet today.
+  var today = [];
+  for (var i = 0; i < this.meetings_.length; i++) {
+    if (this.meetings_[i].meetsOn(day)) today.push(this.meetings_[i]);
   }
 
-  var numClasses = classKeys.length;
+  var numMeetings = today.length;
   // Deal with these simple cases.
-  if (numClasses == 0) {
-    return;
-  } else if (numClasses == 1) {
-    this.classes_[classKeys[0]].render(this.calendar_.getContainer(), day);
+  if (numMeetings == 0) {
     return;
   }
 
-  this.sortClassKeys_(classKeys);
+  // Sort the meetings
+  today.sort(Meeting.sort);
 
-  // Count how many conflicts each class has.
-  var conflictMatrix = this.buildConflictMatrix_(classKeys, day);
+  // Count how many conflicts each meeting has.
+  var conflictMatrix = Graph.buildConflictMatrix(today, day);
 
   var previousPositions = new Array();
   var parent = this.calendar_.getContainer();
   for (var i = 0; i < numClasses; i++) {
-    var className = this.classes_[classKeys[i]].name_;
-    var cliqueSize = ClassRenderer.findLargestCliqueWith(conflictMatrix, i);
-    var position = ClassRenderer.calculateNextPosition(conflictMatrix,
-                                                       previousPositions,
-                                                       cliqueSize);
-    this.classes_[classKeys[i]].render(parent,
-                                       day,
-                                       position.index,
-                                       position.total);
+    var cliqueSize = Graph.findLargestCliqueWith(conflictMatrix, i);
+    var position = Graph.calculateNextPosition(conflictMatrix,
+                                               previousPositions,
+                                               cliqueSize);
+
+    var box = new MeetingDisplay(today[i], day, this.calendar_);
+    box.render(position.index, position.total);
+    this.boxes_.push(box);
+
     previousPositions.push(position);
   }
-
 };
 
 
+// Create Graph helper class.
+Graph = Graph || {};
+
+
 /*
- * Build a conflict matrix given an array of keys.
- * @param Array keys The keys to the classes in the classes_ object.
- * @param number day The day we're building the conflict matrix for.
+ * Build a conflict matrix for a list of Meetings.
+ * PARAM-TYPE: Meeting[] meetings The list of Meetings.
+ * PARAM-TYPE: number day The day we're building the conflict matrix for.
  */
-ClassRenderer.prototype.buildConflictMatrix_ = function(keys, day) {
-  var len = keys.length;
+Graph.buildConflictMatrix = function(meetings, day) {
+  var len = meetings.length;
   var conflictMatrix  = new Array(len);
   for (var i = 0; i < len; i++) {
     conflictMatrix[i] = new Array(len);
@@ -112,8 +108,7 @@ ClassRenderer.prototype.buildConflictMatrix_ = function(keys, day) {
       if (i == j) {
         conflictMatrix[i][j] = false;
       } else {
-        if (this.classes_[keys[i]].conflictsWithOnDay(
-            this.classes_[keys[j]], day)) {
+        if (meetings[i].conflictsWith(meetings[j])) {
           conflictMatrix[i][j] = true;
           conflictMatrix[j][i] = true;
         } else {
@@ -126,37 +121,13 @@ ClassRenderer.prototype.buildConflictMatrix_ = function(keys, day) {
   return conflictMatrix;
 };
 
-
-/*
- * Sorts an array of keys of the object containing the classes.
- * Sorts based by start time of the corresponding class, then by length.
- * @param Array keys The keys to be sorted.
- * @param Object classes The object containing the classes.
- */
-ClassRenderer.prototype.sortClassKeys_ = function(classKeys) {
-  // Sort classes by start time. I think this should make things easier.
-  var classes = this.classes_;
-  var sortFn = function(keyA, keyB) {
-    var classA = classes[keyA];
-    var classB = classes[keyB];
-    if (classA.getStartTime() < classB.getStartTime()) return -1;
-    if (classA.getStartTime() > classB.getStartTime()) return 1;
-    if (classA.getEndTime() < classB.getEndTime()) return -1;
-    if (classA.getEndTime() > classB.getEndTime()) return 1;
-    return 0;
-  };
-
-  classKeys.sort(sortFn);
-};
-
-
 /*
  * Calculates the size of the largest clique containing the given element
  * (given as an index).
- * @param Array.Array matrix Conflict matrix.
- * @param number index The element that must be part of the clique.
+ * PARAM-TYPE: number[][] matrix Conflict matrix.
+ * PARAM-TYPE: number index The element that must be part of the clique.
  */
-ClassRenderer.findLargestCliqueWith = function(matrix, index) {
+Graph.findLargestCliqueWith = function(matrix, index) {
   var len = matrix.length;
   var conflicts = [];
   for (var i = 0; i < len; i++) {
@@ -164,9 +135,8 @@ ClassRenderer.findLargestCliqueWith = function(matrix, index) {
   }
 
   // +1 because the original element which isn't considered in this method.
-  return 1 + ClassRenderer.findLargestCliqueAmongst(matrix, [], conflicts);
+  return 1 + Graph.findLargestCliqueAmongst(matrix, [], conflicts);
 };
-
 
 /*
  * This recursive function checks checks if the 'yeses' make a clique when
@@ -175,13 +145,13 @@ ClassRenderer.findLargestCliqueWith = function(matrix, index) {
  * Otherwise, we'll try adding and not adding a member from the conflicts to the
  * 'yeses', and recurse. We return the max of those two calls and 0. (-1 is
  * returned if the 'yeses' do not all conflict.)
- * @param Array.Array matrix The conflict matrix.
- * @param Array yeses The elements we are saying are in our clique.
- * @param Array maybes The elements we might say are in our clique.
+ * PARAM-TYPE: Array.Array matrix The conflict matrix.
+ * PARAM-TYPE: Array yeses The elements we are saying are in our clique.
+ * PARAM-TYPE: Array maybes The elements we might say are in our clique.
  * @return number The largest clique that has all the yeses and some of the
  *     maybes.
  */
-ClassRenderer.findLargestCliqueAmongst = function(matrix, yeses, maybes) {
+Graph.findLargestCliqueAmongst = function(matrix, yeses, maybes) {
   if (maybes.length == 0) {
     var len = yeses.length;
     for (var i = 0; i < len; i++) {
@@ -201,25 +171,23 @@ ClassRenderer.findLargestCliqueAmongst = function(matrix, yeses, maybes) {
   }
 };
 
-
 /*
  * Considers the previous positions and calculates the first position after the
  * previous one (then looping around to the beginning) where a class of this
  * width can go. Object returned has a 'index' and 'total' field.
- * @param Array.Array matrix The conflict matrix.
- * @param Array positions Old positions.
- * @param number clique Size of the clique this element is a part of.
- * @return Position A new position, where the new object should go, containing a
- *     'index' and 'total' field.
+ * PARAM-TYPE: number[][] matrix The conflict matrix.
+ * PARAM-TYPE: Position[] positions Old positions.
+ * PARAM-TYPE: number clique Size of the clique this element is a part of.
+ * RETURN-TYPE: Position A new position, where the new object should go,
+ *     containing a 'index' and 'total' field.
  */
-ClassRenderer.calculateNextPosition = function(matrix, positions, clique) {
+Graph.calculateNextPosition = function(matrix, positions, clique) {
   var len = positions.length;
   var pos = {'index': 1, 'total': clique}
   if (len == 0) return pos;
-  pos.index = ClassRenderer.calculateBucketAfterPosition(positions[len - 1],
-                                                         clique);
+  pos.index = Graph.calculateBucketAfterPosition(positions[len - 1], clique);
   for (var i = 0; i < clique; i++) {
-    if (ClassRenderer.conflictsWithPreviousPositions(matrix, positions, pos)) {
+    if (Graph.conflictsWithPreviousPositions(matrix, positions, pos)) {
       pos.index++;
       if (pos.index > clique) pos.index = 1;
     } else {
@@ -228,18 +196,18 @@ ClassRenderer.calculateNextPosition = function(matrix, positions, clique) {
   }
 
   window.console.log("Couldn't figure out where " + len + " should go.");
-  return ClassRenderer.calculateNextPosition(matrix, positions, clique + 1);
+  return Graph.calculateNextPosition(matrix, positions, clique + 1);
 };
-
 
 /*
  * Find position after takes a position and a clique size and finds the first
  * bucket that can appear to the right of the position. If nothing can appear
  * to the right, then we return 1 (Position indexes are 1 indexed.)
- * @param Position position The position, with 'index' and 'total' properties.
- * @param number clique The bucket size.
+ * PARAM-TYPE: Position position The position, with 'index' and 'total'
+ *     properties.
+ * PARAM-TYPE: number clique The bucket size.
  */
-ClassRenderer.calculateBucketAfterPosition = function(position, clique) {
+Graph.calculateBucketAfterPosition = function(position, clique) {
   var width = 1 / clique;
   var start = 0;
   var index = 1;
@@ -252,18 +220,16 @@ ClassRenderer.calculateBucketAfterPosition = function(position, clique) {
   return (index <= clique) ? index : 1;
 };
 
-
 /*
  * Checks whether placing this element at this position will conflict with any
  * of the previously placed elements.
- * @param Array.Array matrix The conflict matrix.
- * @param Array positions Previous placed elements.
- * @param Position newPos Possible location of new position.
- * @return boolean Whether the position conflicts with any of the previous
+ * PARAM-TYPE: Array.Array matrix The conflict matrix.
+ * PARAM-TYPE: Array positions Previous placed elements.
+ * PARAM-TYPE: Position newPos Possible location of new position.
+ * RETURN-TYPE: boolean Whether the position conflicts with any of the previous
  *     positions.
  */
-ClassRenderer.conflictsWithPreviousPositions = function(
-    matrix, positions, newPos) {
+Graph.conflictsWithPreviousPositions = function(matrix, positions, newPos) {
   var len = positions.length;
   var newIndex = len + 1;
   var newStart = (newPos.index - 1) / newPos.total;

@@ -8,16 +8,16 @@
 }
 
 .preview-view-left {
-  margin-right: 5px;
+  margin-right: 1%;
 }
 
 .preview-view-middle {
-  margin-right: 5px;
-  margin-left: 5px;
+  margin-right: 1%;
+  margin-left: 1%;
 }
 
 .preview-view-right {
-  margin-left: 5px;
+  margin-left: 1%;
 }
 
 .preview-view-header {

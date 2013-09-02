@@ -72,3 +72,11 @@ Meeting.prototype.meetsOn = function(day) {
 Meeting.prototype.getLength = function() {
   return this.endTime_ - this.startTime_;
 };
+
+/*
+ * Sort function for Meetings.
+ */
+Meeting.sort = function(a, b) {
+  if (a.startTime_ != b.startTime_) return a.startTime_ - b.startTime_;
+  return a.endTime_ - b.endTime_;
+};
