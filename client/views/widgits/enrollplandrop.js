@@ -44,14 +44,13 @@ EnrollPlanDrop.prototype.moveLeft = function() {
     this.rightArrow_.removeClass(EnrollPlanDrop.DISABLED);
   }
   this.index_--;
-  var newOption = EnrollPlanDrop.OPTIONS[this.index_];
-  this.text_.nodeValue = newOption;
+  this.text_.nodeValue = EnrollPlanDrop.OPTIONS[this.index_];
   if (this.index_ == 0) {
     this.leftArrow_.addClass(EnrollPlanDrop.DISABLED);
   }
 
   // Alert controller
-  this.controller_.setCourseStatus(newOption);
+  this.controller_.setEnrollmentStatus(this.course_, this.index_);
 };
 
 /*
@@ -63,14 +62,13 @@ EnrollPlanDrop.prototype.moveRight = function() {
     this.leftArrow_.removeClass(EnrollPlanDrop.DISABLED);
   }
   this.index_++;
-  var newOption = EnrollPlanDrop.OPTIONS[this.index_];
-  this.text_.nodeValue = newOption;
+  this.text_.nodeValue = EnrollPlanDrop.OPTIONS[this.index_];
   if (this.index_ == EnrollPlanDrop.OPTIONS.length - 1) {
     this.rightArrow_.addClass(EnrollPlanDrop.DISABLED);
   }
 
   // Alert controller
-  this.controller_.setCourseStatus(this.course_, newOption.toLowerCase());
+  this.controller_.setEnrollmentStatus(this.course_, this.index_);
 };
 
 EnrollPlanDrop.OPTIONS = ['Enroll', 'Plan', 'Drop'];
