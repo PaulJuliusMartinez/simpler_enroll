@@ -27,10 +27,10 @@ Course = function(obj) {
   assert(obj[CourseConstants.PRIMARY_COMPONENT],
       'This course object had no primary component!');
   // TYPE: Section[][]
-  this.primaryComponent_ = Course.convertJSONSectionsToSectionArray(
+  this.primaryComponent_ = this.convertJSONSectionsToSectionArray(
       obj, CourseConstants.PRIMARY_COMPONENT);
   // TYPE: Section[][]
-  this.secondaryComponent_ = Course.convertJSONSectionsToSectionArray(
+  this.secondaryComponent_ = this.convertJSONSectionsToSectionArray(
       obj, CourseConstants.SECONDARY_COMPONENT);
   // TYPE: Status
   this.status_ = new Status();
@@ -44,7 +44,7 @@ Course = function(obj) {
  * PARAM-TYPE: string key The key of the relevant field.
  * RETURN-TYPE: Section[][]
  */
-Course.convertJSONSectionsToSectionArray = function(obj, key) {
+Course.prototype.convertJSONSectionsToSectionArray = function(obj, key) {
   if (!obj[key]) return null;
   var arr = [[], [], []];
   for (var i = 0; i < 3; i++) {

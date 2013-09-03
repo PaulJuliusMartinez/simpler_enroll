@@ -73,13 +73,14 @@ PreviewView.prototype.displayCourses = function(courses) {
   for (var quarter = 0; quarter < 3; quarter++) {
     for (var i = 0; i < courses.length; i++) {
       if (courses[i].isOfferedIn(quarter) &&
-          courses[i].getStatus().getQuarterStatus(quarter)) {
+          courses[i].getStatus().getQuarterStatus(quarter) &&
+          courses[i].getStatus().getEnrollmentStatus() != Status.DROP) {
         var primarySections = courses[i].getPrimarySectionsForQuarter(quarter);
         for (var j = 0; j < primarySections.length; j++) {
           var section = primarySections[j];
           var meetings = section.getMeetings();
           for (var k = 0; k < meetings.length; k++) {
-            this.calendars_[quarter].addMeeting(meetings[i]);
+            this.calendars_[quarter].addMeeting(meetings[k]);
           }
         }
       }

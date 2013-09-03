@@ -1,8 +1,8 @@
 /*
- * Minimal CSS for a Class Object
+ * Minimal CSS for a MeetingDisplay object
  */
 
-.class-box {
+.meeting-display-box {
   position: absolute;
   border: 1px solid black;
   border-radius: 2px;
@@ -14,10 +14,10 @@
   overflow: hidden;
 }
 
-.class-box.enrolled {
+.meeting-display-box.meeting-display-enrolled {
   background-color: #a9ec6b;
 }
 
-.class-box.planned {
+.meeting-display-box.meeting-display-planned {
   background-color: #61c3ef;
 }

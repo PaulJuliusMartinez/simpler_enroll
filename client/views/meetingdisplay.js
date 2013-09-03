@@ -38,13 +38,20 @@ MeetingDisplay.prototype.render = function(num, total) {
   var width = dayWidth / total;
   xOffset += (num - 1) * dayWidth / total;
 
+  var status = this.meeting_.getSection().
+                             getCourse().getStatus().getEnrollmentStatus();
+  var title = this.meeting_.getSection().getCourse().getShortName();
+
+  var colorClass = (status == Status.ENROLL) ? MeetingDisplay.ENROLLED :
+                                                 MeetingDisplay.PLANNED;
+
   this.elem_ = $('<div>').addClass(MeetingDisplay.BOX).
+                          addClass(colorClass).
+                          text(title).
                           css('top', yOffset + 'px').
                           css('height', height + 'px').
                           css('left', xOffset + 'px').
-                          css('width', width + 'px').
-                          css('position', 'absolute').
-                          css('border', '1px solid black');
+                          css('width', width + 'px');
   this.calendar_.getContainer().append(this.elem_);
 };
 
@@ -54,3 +61,9 @@ MeetingDisplay.prototype.render = function(num, total) {
 MeetingDisplay.prototype.remove = function() {
   this.elem_.remove();
 };
+
+
+// CSS Constants
+MeetingDisplay.BOX = 'meeting-display-box';
+MeetingDisplay.ENROLLED = 'meeting-display-enrolled';
+MeetingDisplay.PLANNED = 'meeting-display-planned';

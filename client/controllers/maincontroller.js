@@ -39,7 +39,6 @@ MainController.prototype.notifyCourseAdded = function(course) {
  * Called when something in the course list changes.
  */
 MainController.prototype.notifyCourseListChange = function() {
-  // When this happens we'll have to collect the data again from the course list
-  // and send it out to the schedule preview to rerender.
-  window.console.log('Something changed!');
+  var courses = this.courseList_.getCourses();
+  this.preview_.displayCourseList(courses);
 };

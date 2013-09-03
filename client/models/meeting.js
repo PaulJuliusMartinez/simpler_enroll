@@ -23,6 +23,7 @@ Meeting = function(section, obj) {
 
 
 // First some simple getters.
+Meeting.prototype.getSection = function() { return this.section_; };
 Meeting.prototype.getStartTime = function() { return this.startTime_; };
 Meeting.prototype.getEndTime = function() { return this.endTime_; };
 Meeting.prototype.getID = function() { return this.id_; };

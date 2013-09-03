@@ -38,7 +38,7 @@ CourseListController.prototype.addCourse = function(course) {
  */
 CourseListController.prototype.removeCourse = function(course) {
   if (this.courses_[course.getID()]) {
-    this.courses_[course.getID()] = null;
+    delete this.courses_[course.getID()];
     this.view_.removeCourse(course);
     this.manager_.notifyCourseListChange();
   }
