@@ -62,6 +62,33 @@ PreviewView.prototype.createQuarterHeader = function(quarter) {
   return header;
 };
 
+/*
+ * Takes a list of courses and divides up their sections and meetings and gives
+ * them to the calendars to draw.
+ * PARAM-TYPE: Course[] courses A list of courses.
+ */
+PreviewView.prototype.displayCourses = function(courses) {
+  for (var i = 0; i < 3; i++) this.calendars_[i].clear();
+
+  for (var quarter = 0; quarter < 3; quarter++) {
+    for (var i = 0; i < courses.length; i++) {
+      if (courses[i].isOfferedIn(quarter) &&
+          courses[i].getStatus().getQuarterStatus(quarter)) {
+        var primarySections = courses[i].getPrimarySectionsForQuarter(quarter);
+        for (var j = 0; j < primarySections.length; j++) {
+          var section = primarySections[j];
+          var meetings = section.getMeetings();
+          for (var k = 0; k < meetings.length; k++) {
+            this.calendars_[quarter].addMeeting(meetings[i]);
+          }
+        }
+      }
+    }
+  }
+
+  for (var i = 0; i < 3; i++) this.calendars_[i].draw();
+};
+
 // CSS Constants
 PreviewView.LEFT_THIRD = 'preview-view-third preview-view-left';
 PreviewView.MIDDLE_THIRD = 'preview-view-third preview-view-middle';

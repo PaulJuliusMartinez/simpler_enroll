@@ -25,6 +25,7 @@ MeetingRenderer = function(calendar) {
  * not re-rendered.
  */
 MeetingRenderer.prototype.addMeeting = function(meeting) {
+  this.meetings_.push(meeting);
 };
 
 /*
@@ -40,7 +41,7 @@ MeetingRenderer.prototype.draw = function() {
  * Clears all the old classes.
  */
 MeetingRenderer.prototype.clear = function() {
-  for (var i = 0; i < this.meetings_.length; i++) {
+  for (var i = 0; i < this.boxes_.length; i++) {
     this.boxes_[i].remove();
   }
   this.meetings_ = [];
@@ -72,7 +73,7 @@ MeetingRenderer.prototype.renderOnDay_ = function(day) {
 
   var previousPositions = new Array();
   var parent = this.calendar_.getContainer();
-  for (var i = 0; i < numClasses; i++) {
+  for (var i = 0; i < today.length; i++) {
     var cliqueSize = Graph.findLargestCliqueWith(conflictMatrix, i);
     var position = Graph.calculateNextPosition(conflictMatrix,
                                                previousPositions,
@@ -88,7 +89,7 @@ MeetingRenderer.prototype.renderOnDay_ = function(day) {
 
 
 // Create Graph helper class.
-Graph = Graph || {};
+Graph = {};
 
 
 /*

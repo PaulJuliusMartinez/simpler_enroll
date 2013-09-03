@@ -42,7 +42,9 @@ MeetingDisplay.prototype.render = function(num, total) {
                           css('top', yOffset + 'px').
                           css('height', height + 'px').
                           css('left', xOffset + 'px').
-                          css('width', width + 'px');
+                          css('width', width + 'px').
+                          css('position', 'absolute').
+                          css('border', '1px solid black');
   this.calendar_.getContainer().append(this.elem_);
 };
 

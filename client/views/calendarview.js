@@ -10,16 +10,13 @@
 CalendarView = function(parent) {
   // TYPE: jQuery
   this.parent_ = parent;
-  // TYPE: ClassRenderer
-  this.classRenderer_ = new ClassRenderer(this);
+  // TYPE: MeetingRenderer
+  this.meetingRenderer_ = new MeetingRenderer(this);
 };
+
 
 // TYPE: jQuery The internal container of the calendar.
 CalendarView.prototype.container_;
-
-CalendarView.HOUR_WIDTH = 30;
-CalendarView.DAY_WIDTH = 75;
-CalendarView.ROW_HEIGHT = 25;
 
 /*
  * This builds up the internal DOM structure.
@@ -39,7 +36,7 @@ CalendarView.prototype.render = function() {
         )
       )
   );
-  this.container_ = this.parent_.firstChild;
+  this.container_ = $(this.parent_.get()[0].firstChild);
 
   // Add the 'hour' rows to the table
   var table = this.parent_.find('tbody');
@@ -59,40 +56,62 @@ CalendarView.prototype.render = function() {
 };
 
 /*
+ * Gives a meeting to add to the calendar. Does not redraw.
+ * PARAM-TYPE: Meeting meeting The meeting to add.
+ */
+CalendarView.prototype.addMeeting = function(meeting) {
+  this.meetingRenderer_.addMeeting(meeting);
+};
+
+/*
+ * Draws all the meetings.
+ */
+CalendarView.prototype.draw = function() {
+  this.meetingRenderer_.draw();
+};
+
+/*
+ * Clears the meeting renderer.
+ */
+CalendarView.prototype.clear = function() {
+  this.meetingRenderer_.clear();
+};
+
+/*
  * Returns the container element of the Calendar. If called before render(),
  * this returns null.
  * @return Jquery elem The container element, as a Jquery object.
  */
 CalendarView.prototype.getContainer = function() {
-  return this.element_;
+  return this.container_;
 };
 
 /*
  * Gets the width of the first column.
  */
 CalendarView.prototype.getHourWidth = function() {
-  this.element_.children('tr')[0].children[0].clientWidth;
+  return this.container_.find('th').get()[0].clientWidth;
 };
 
 /*
  * Gets the width of one of the day columns.
  */
 CalendarView.prototype.getDayWidth = function() {
-  this.element_.children('tr')[0].children[1].clientWidth;
+  return this.container_.find('th').get()[1].clientWidth;
 };
 
 /*
  * Gets the height of the header row.
  */
 CalendarView.prototype.getHeaderRowHeight = function() {
-  this.element_.children('th')[0].children[0].clientHeight;
+  return this.container_.find('tr').get()[0].clientHeight;
 };
 
 /*
  * Gets the height of a normal row.
  */
 CalendarView.prototype.getNormalRowHeight = function() {
-  this.element_.children('td')[0].children[0].clientHeight;
+  return this.container_.find('tr').get()[1].clientHeight;
 };
 
 // CSS Constants:

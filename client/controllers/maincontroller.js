@@ -31,6 +31,8 @@ MainController = function(parent) {
  */
 MainController.prototype.notifyCourseAdded = function(course) {
   this.courseList_.addCourse(course);
+  var courses = this.courseList_.getCourses();
+  this.preview_.displayCourseList(courses);
 };
 
 /*

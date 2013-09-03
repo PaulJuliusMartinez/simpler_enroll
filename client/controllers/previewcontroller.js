@@ -22,7 +22,7 @@ PreviewController = function(parent, manager) {
  * PARAM-TYPE: Course[] courses The list of courses to draw.
  */
 PreviewController.prototype.displayCourseList = function(courses) {
-
+  this.view_.displayCourses(courses);
 };
 
 /*

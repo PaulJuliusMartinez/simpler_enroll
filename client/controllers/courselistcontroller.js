@@ -45,6 +45,18 @@ CourseListController.prototype.removeCourse = function(course) {
 };
 
 /*
+ * Gets all the courses and returns them as an array.
+ * RETURN-TYPE: Course[]
+ */
+CourseListController.prototype.getCourses = function() {
+  var arr = [];
+  for (key in this.courses_) {
+    arr.push(this.courses_[key]);
+  }
+  return arr;
+};
+
+/*
  * Mark whether or not a course should be considered to be taken in this
  * quarter.
  * PARAM-TYPE: Course course What course.
