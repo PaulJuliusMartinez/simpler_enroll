@@ -45,14 +45,18 @@ MeetingDisplay.prototype.render = function(num, total) {
   var colorClass = (status == Status.ENROLL) ? MeetingDisplay.ENROLLED :
                                                  MeetingDisplay.PLANNED;
 
+  // The little +/- 1/2 are to account for the borders.
   this.elem_ = $('<div>').addClass(MeetingDisplay.BOX).
                           addClass(colorClass).
                           text(title).
                           css('top', yOffset + 'px').
-                          css('height', height + 'px').
-                          css('left', xOffset + 'px').
-                          css('width', width + 'px');
+                          css('height', (height - 2) + 'px').
+                          css('left', (xOffset + 1)  + 'px').
+                          css('width', (width - 2) + 'px');
   this.calendar_.getContainer().append(this.elem_);
+
+  var popup = new CourseInfoPopup(this.elem_, this.meeting_);
+  popup.render();
 };
 
 /*

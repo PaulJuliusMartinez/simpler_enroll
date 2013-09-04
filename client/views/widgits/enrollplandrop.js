@@ -31,41 +31,20 @@ EnrollPlanDrop = function(elem, controller, course) {
   elem.append(this.leftArrow_, this.text_, this.rightArrow_);
 
   var epd = this;
-  this.leftArrow_.click(function() { epd.moveLeft(); });
-  this.rightArrow_.click(function() { epd.moveRight(); });
+  $(this.text_).click(function() { epd.move(false); });
+  this.leftArrow_.click(function() { epd.move(true); });
+  this.rightArrow_.click(function() { epd.move(false); });
 };
 
 /*
- * Moves 'left' in the list of options.
+ * Cycles through the list of options.
+ * PARAM-TYPE: boolean positive True to cycle through in the positive direction.
  */
-EnrollPlanDrop.prototype.moveLeft = function() {
-  if (this.index_ == 0) return;
-  if (this.index_ == EnrollPlanDrop.OPTIONS.length - 1) {
-    this.rightArrow_.removeClass(EnrollPlanDrop.DISABLED);
-  }
-  this.index_--;
+EnrollPlanDrop.prototype.move= function(positive) {
+  var diff = positive ? 1 : -1;
+  var len = EnrollPlanDrop.OPTIONS.length;
+  this.index_ = (this.index_ + len + diff) % len;
   this.text_.nodeValue = EnrollPlanDrop.OPTIONS[this.index_];
-  if (this.index_ == 0) {
-    this.leftArrow_.addClass(EnrollPlanDrop.DISABLED);
-  }
-
-  // Alert controller
-  this.controller_.setEnrollmentStatus(this.course_, this.index_);
-};
-
-/*
- * Moves 'right' in the list of options.
- */
-EnrollPlanDrop.prototype.moveRight = function() {
-  if (this.index_ == EnrollPlanDrop.OPTIONS.length - 1) return;
-  if (this.index_ == 0) {
-    this.leftArrow_.removeClass(EnrollPlanDrop.DISABLED);
-  }
-  this.index_++;
-  this.text_.nodeValue = EnrollPlanDrop.OPTIONS[this.index_];
-  if (this.index_ == EnrollPlanDrop.OPTIONS.length - 1) {
-    this.rightArrow_.addClass(EnrollPlanDrop.DISABLED);
-  }
 
   // Alert controller
   this.controller_.setEnrollmentStatus(this.course_, this.index_);

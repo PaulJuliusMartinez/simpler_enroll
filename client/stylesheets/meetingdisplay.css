@@ -11,7 +11,6 @@
   font-weight: bold;
   white-space: nowrap;
   text-overflow: ellipsis;
-  overflow: hidden;
 }
 
 .meeting-display-box.meeting-display-enrolled {
