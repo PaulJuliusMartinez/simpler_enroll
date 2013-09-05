@@ -3,14 +3,24 @@
  */
 
 .meeting-display-box {
+  display: table;
+  table-layout: fixed;
   position: absolute;
   border: 1px solid black;
   border-radius: 2px;
-  width: 71px;
   text-align: center;
   font-weight: bold;
   white-space: nowrap;
-  text-overflow: ellipsis;
+}
+
+.meeting-display-text {
+  display: table-cell;
+  font-size: 12pt;
+  vertical-align: middle;
+  overflow: hidden;
+  margin: 0 auto;
+  width: 100%;
+  direction: rtl;
 }
 
 .meeting-display-box.meeting-display-enrolled {

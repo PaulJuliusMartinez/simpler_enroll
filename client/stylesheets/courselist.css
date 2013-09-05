@@ -56,45 +56,46 @@ table.course-list-table tbody {
   border-bottom: 1px solid black;
 }
 
-.course-list-table tr th:nth-child(1),
-.course-list-table tr td:nth-child(1) {
+/* Delete column */
+.course-list-table tr td:nth-child(1),
+.course-list-table tr th:nth-child(1) {
+  width: 20px;
+  max-width: 20px;
+}
+
+/* Course name column */
+.course-list-table tr th:nth-child(2),
+.course-list-table tr td:nth-child(2) {
   padding-left: 5px;
   box-sizing: border-box;
-  width: 390px;
-  max-width: 390px;
+  width: 400px;
+  max-width: 400px;
 }
 
 /* Quarter columns */
-.course-list-table tr th:nth-child(2),
-.course-list-table tr td:nth-child(2),
 .course-list-table tr th:nth-child(3),
 .course-list-table tr td:nth-child(3),
 .course-list-table tr th:nth-child(4),
-.course-list-table tr td:nth-child(4) {
+.course-list-table tr td:nth-child(4),
+.course-list-table tr th:nth-child(5),
+.course-list-table tr td:nth-child(5) {
   width: 40px;
   max-width: 40px;
 }
 
 /* Section column */
-.course-list-table tr td:nth-child(5),
-.course-list-table tr th:nth-child(5) {
+.course-list-table tr td:nth-child(6),
+.course-list-table tr th:nth-child(6) {
   text-align: center;
-  width: 90px;
-  max-width: 90px;
+  width: 80px;
+  max-width: 80px;
 }
 
 /* Yes/Maybe/No column */
-.course-list-table tr td:nth-child(6),
-.course-list-table tr th:nth-child(6) {
-  width: 70px;
-  max-width: 70px;
-}
-
-/* Edit column */
 .course-list-table tr td:nth-child(7),
 .course-list-table tr th:nth-child(7) {
-  width: 30px;
-  max-width: 30px;
+  width: 80px;
+  max-width: 80px;
 }
 
 /*
@@ -154,6 +155,8 @@ tbody .course-list-spring-column {
   background-color: #ddd; /* Grayed out color */
 }
 
-.course-list-edit-column {
-  text-align: center;
+.course-list-edit-column img {
+  display: block;
+  margin: auto;
+  padding-left: 1px;
 }

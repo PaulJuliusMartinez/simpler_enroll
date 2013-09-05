@@ -45,15 +45,25 @@ MeetingDisplay.prototype.render = function(num, total) {
   var colorClass = (status == Status.ENROLL) ? MeetingDisplay.ENROLLED :
                                                  MeetingDisplay.PLANNED;
 
+  var text = $('<div>').addClass(MeetingDisplay.TEXT).text(title);
+
   // The little +/- 1/2 are to account for the borders.
   this.elem_ = $('<div>').addClass(MeetingDisplay.BOX).
                           addClass(colorClass).
-                          text(title).
                           css('top', yOffset + 'px').
                           css('height', (height - 2) + 'px').
                           css('left', (xOffset + 1)  + 'px').
-                          css('width', (width - 2) + 'px');
+                          css('width', (width - 2) + 'px').
+                          append(text);
   this.calendar_.getContainer().append(this.elem_);
+
+  // Squeeze in the text
+  var fontSize = parseInt(text.css('font-size'), 10);
+  // 2 Fudge factor to make sure there's space between text and border.
+  while (fontSize > 6 && text.get()[0].scrollWidth + 2 > width) {
+    fontSize--;
+    text.css('font-size', fontSize + 'pt');
+  }
 
   var popup = new CourseInfoPopup(this.elem_, this.meeting_);
   popup.render();
@@ -69,5 +79,6 @@ MeetingDisplay.prototype.remove = function() {
 
 // CSS Constants
 MeetingDisplay.BOX = 'meeting-display-box';
+MeetingDisplay.TEXT = 'meeting-display-text';
 MeetingDisplay.ENROLLED = 'meeting-display-enrolled';
 MeetingDisplay.PLANNED = 'meeting-display-planned';
