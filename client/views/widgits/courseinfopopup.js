@@ -7,14 +7,28 @@
  * Constructor takes:
  * PARAM-TYPE: jQuery parent The parent div this will be appended to.
  * PARAM-TYPE: Meeting meeting The meeting this is a popup for.
+ * PARAM-TYPE: number day The day of the week this popup is for. Used for
+ *     alignment.
  */
-CourseInfoPopup = function(parent, meeting) {
+CourseInfoPopup = function(parent, meeting, day) {
   // TYPE: jQuery
   this.parent_ = parent;
   // TYPE: Meeting
   this.meeting_ = meeting;
+
+  if (day == 0) {
+    this.alignment_ = 'left';
+  } else if (day == 4) {
+    this.alignment_ = 'right';
+  }
 };
 
+
+/*
+ * CSS style for the popup to set the alignment.
+ * TYPE: string
+ */
+CourseInfoPopup.prototype.alignment_ = '';
 
 /*
  * Renders the popup!
@@ -24,12 +38,15 @@ CourseInfoPopup.prototype.render = function() {
   var section = this.meeting_.getSection();
   var course = section.getCourse();
 
-  var courseName = course.getShortName() + ' ' + course.getTitle();
+  // Add Title
+  var courseName = course.getShortName() + ': ' + course.getTitle();
   popup.append($('<p>').text(courseName));
 
+  // Add Units
   var units = course.getMinUnits() + '-' + course.getMaxUnits();
   popup.append($('<p>').text(units + ' units'));
 
+  // Iterate through meetings and add their times
   var meetings = section.getMeetings();
   for (var i = 0; i < meetings.length; i++) {
     var m = meetings[i];
@@ -41,15 +58,21 @@ CourseInfoPopup.prototype.render = function() {
 
   this.parent_.append(popup);
 
+  // Get all the height/widths for positioning the popup
   var width = popup.get()[0].clientWidth;
   var parentWidth = this.parent_.get()[0].clientWidth;
   var height = popup.get()[0].clientHeight;
-  var parentHeight = this.parent_.get()[0].clientHeight;
 
   popup.css('top', '-' + height + 'px');
-  popup.css('left', ((parentWidth - width) / 2) + 'px');
+  // Special alignments for Monday/Friday
+  if (this.alignment_ != '') {
+    popup.css(this.alignment_, -1); // -1 for the border
+  } else {
+    popup.css('left', ((parentWidth - width) / 2) + 'px');
+  }
   popup.hide();
 
+  // Add show/hide behavior
   this.parent_.hover(function() { popup.show(); },
                      function() { popup.hide(); });
 };

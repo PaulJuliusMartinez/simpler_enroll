@@ -7,36 +7,14 @@
   background-color: #ddd;
   border: 1px solid black;
   border-radius: 2px;
-  opacity: 0.9;
+  font-weight: normal;
   text-align: left;
-}
-
-.course-info-popup:before {
-  content:"";
-  position:absolute;
-  bottom: -20px; /* value = - border-top-width - border-bottom-width */
-  left: -webkit-calc(50% - 10px);
-  border-width: 20px 20px 0;
-  border-style: solid;
-  border-color: black transparent;
-  /* reduce the damage in FF3.0 */
-  display: block;
-  width: 0;
-}
-
-/* creates the smaller  triangle */
-.course-info-popup:after {
-  content: "";
-  position:absolute;
-  bottom: -18px; /* value = - border-top-width - border-bottom-width */
-  left: -webkit-calc(50% - 9px); /* value = (:before left) + (:before border-left) - (:after border-left) */
-  border-width: 19px 19px 0;
-  border-style: solid;
-  border-color: #ddd transparent;
-  display: block;
-  width: 0;
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap; /* Firefox */
+  width: 200px;
 }
 
 .course-info-popup p {
-
+  margin: 0;
+  padding: 3px;
 }

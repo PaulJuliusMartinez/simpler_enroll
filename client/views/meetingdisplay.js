@@ -65,7 +65,7 @@ MeetingDisplay.prototype.render = function(num, total) {
     text.css('font-size', fontSize + 'pt');
   }
 
-  var popup = new CourseInfoPopup(this.elem_, this.meeting_);
+  var popup = new CourseInfoPopup(this.elem_, this.meeting_, this.day_);
   popup.render();
 };
 
