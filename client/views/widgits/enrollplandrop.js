@@ -15,8 +15,9 @@ EnrollPlanDrop = function(elem, controller, course) {
   this.leftArrow_ = $('<span>').addClass(EnrollPlanDrop.ARROW_CLASS).
                                 addClass(EnrollPlanDrop.LEFT_ARROW).
                                 text('<');
-  // TYPE: Node
-  this.text_ = document.createTextNode(EnrollPlanDrop.OPTIONS[1]);
+  // TYPE: jQuery
+  this.text_ = $('<span>').addClass(EnrollPlanDrop.TEXT).
+                           text(EnrollPlanDrop.OPTIONS[1]);
   // TYPE: number
   this.index_ = 1;
   // TYPE: jQuery
@@ -31,50 +32,27 @@ EnrollPlanDrop = function(elem, controller, course) {
   elem.append(this.leftArrow_, this.text_, this.rightArrow_);
 
   var epd = this;
-  this.leftArrow_.click(function() { epd.moveLeft(); });
-  this.rightArrow_.click(function() { epd.moveRight(); });
+  this.text_.click(function() { epd.move(false); });
+  this.leftArrow_.click(function() { epd.move(true); });
+  this.rightArrow_.click(function() { epd.move(false); });
 };
 
 /*
- * Moves 'left' in the list of options.
+ * Cycles through the list of options.
+ * PARAM-TYPE: boolean positive True to cycle through in the positive direction.
  */
-EnrollPlanDrop.prototype.moveLeft = function() {
-  if (this.index_ == 0) return;
-  if (this.index_ == EnrollPlanDrop.OPTIONS.length - 1) {
-    this.rightArrow_.removeClass(EnrollPlanDrop.DISABLED);
-  }
-  this.index_--;
-  var newOption = EnrollPlanDrop.OPTIONS[this.index_];
-  this.text_.nodeValue = newOption;
-  if (this.index_ == 0) {
-    this.leftArrow_.addClass(EnrollPlanDrop.DISABLED);
-  }
+EnrollPlanDrop.prototype.move= function(positive) {
+  var diff = positive ? 1 : -1;
+  var len = EnrollPlanDrop.OPTIONS.length;
+  this.index_ = (this.index_ + len + diff) % len;
+  this.text_.text(EnrollPlanDrop.OPTIONS[this.index_]);
 
   // Alert controller
-  this.controller_.setCourseStatus(newOption);
-};
-
-/*
- * Moves 'right' in the list of options.
- */
-EnrollPlanDrop.prototype.moveRight = function() {
-  if (this.index_ == EnrollPlanDrop.OPTIONS.length - 1) return;
-  if (this.index_ == 0) {
-    this.leftArrow_.removeClass(EnrollPlanDrop.DISABLED);
-  }
-  this.index_++;
-  var newOption = EnrollPlanDrop.OPTIONS[this.index_];
-  this.text_.nodeValue = newOption;
-  if (this.index_ == EnrollPlanDrop.OPTIONS.length - 1) {
-    this.rightArrow_.addClass(EnrollPlanDrop.DISABLED);
-  }
-
-  // Alert controller
-  this.controller_.setCourseStatus(this.course_, newOption.toLowerCase());
+  this.controller_.setEnrollmentStatus(this.course_, this.index_);
 };
 
 EnrollPlanDrop.OPTIONS = ['Enroll', 'Plan', 'Drop'];
-EnrollPlanDrop.DISABLED = 'enroll-plan-drop-disabled';
+EnrollPlanDrop.TEXT = 'enroll-plan-drop-text';
 EnrollPlanDrop.ARROW_CLASS = 'enroll-plan-drop-arrow';
 EnrollPlanDrop.LEFT_ARROW = 'enroll-plan-drop-left-arrow';
 EnrollPlanDrop.RIGHT_ARROW = 'enroll-plan-drop-right-arrow';

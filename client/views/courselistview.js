@@ -37,23 +37,23 @@ CourseListView.prototype.render = function() {
                              attr('cellpadding', 0);
   var header = $('<thead>').addClass(CourseListView.HEADER_BAR);
   header.append($('<tr>').append(
+      $('<th>').addClass(CourseListView.EDIT_COLUMN),
       $('<th>').addClass(CourseListView.NAME_COLUMN).text('Class:'),
       $('<th>').addClass(CourseListView.AUTUMN_COLUMN).text('A'),
       $('<th>').addClass(CourseListView.WINTER_COLUMN).text('W'),
       $('<th>').addClass(CourseListView.SPRING_COLUMN).text('S'),
       $('<th>').addClass(CourseListView.SECTION_COLUMN).text('Section'),
-      $('<th>').addClass(CourseListView.CERTAINTY_COLUMN).
-                text('Status'),
-      $('<th>').addClass(CourseListView.EDIT_COLUMN)
+      $('<th>').addClass(CourseListView.CERTAINTY_COLUMN).text('Status')
   ));
 
   body.append(this.table_);
   this.table_.append(header);
   this.noClasses_ = $('<tr>').
                         addClass(CourseListView.NO_COURSES_ROW).
-                        append($('<td>').text(CourseListView.NO_COURSES_TEXT),
+                        append($('<td>'),
+                               $('<td>').text(CourseListView.NO_COURSES_TEXT),
                                $('<td>'), $('<td>'), $('<td>'),
-                               $('<td>'), $('<td>'), $('<td>')
+                               $('<td>'), $('<td>')
                         );
   this.table_.append(this.noClasses_);
 
@@ -110,6 +110,9 @@ CourseListView.prototype.removeCourse = function(course) {
 CourseListView.prototype.createCourseRow = function(course) {
   var row = $('<tr>').addClass(CourseListView.COURSE_ROW);
 
+  // Trashcan
+  row.append(this.createTrashcan(course));
+
   // Name
   row.append($('<td>').addClass(CourseListView.NAME_COLUMN).
                        text(course.getShortName() + ': ' + course.getTitle()));
@@ -126,10 +129,6 @@ CourseListView.prototype.createCourseRow = function(course) {
   var td = $('<td>').addClass(CourseListView.CERTAINTY_COLUMN);
   var widgit = new EnrollPlanDrop(td, this.controller_, course);
   row.append(td);
-
-
-  // Move up/down, remove
-  row.append(this.createEditButton(course));
 
   return row;
 };
@@ -159,10 +158,11 @@ CourseListView.prototype.createCheckBox = function(course, quarter) {
  * Adds movement buttons
  * PARAM-TYPE: Course course The course that's getting removed.
  */
-CourseListView.prototype.createEditButton = function(course) {
+CourseListView.prototype.createTrashcan = function(course) {
   var cssClass = CourseListView.EDIT_COLUMN;
   var td = $('<td>').addClass(cssClass).
-                     append($('<a>').text('X'));
+                     append($('<img>').
+                         attr('src', './client/images/trashcan.svg'));
   var controller = this.controller_;
   $(td.children()[0]).click(function() {
     controller.removeCourse(course);

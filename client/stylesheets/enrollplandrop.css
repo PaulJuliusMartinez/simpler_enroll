@@ -2,16 +2,18 @@
  * Style for the enrollplandrop widgit.
  */
 
-.enroll-plan-drop-arrow {
-  /*font-weight: bold;*/
+.enroll-plan-drop-text:hover {
+  text-decoration: underline;
 }
 
 .enroll-plan-drop-left-arrow {
   float: left;
+  padding-left: 4px;
 }
 
 .enroll-plan-drop-right-arrow {
   float: right;
+  padding-right: 4px;
 }
 
 .enroll-plan-drop-arrow:hover {

@@ -23,6 +23,8 @@ Meeting = function(section, obj) {
 
 
 // First some simple getters.
+Meeting.prototype.getSection = function() { return this.section_; };
+Meeting.prototype.getDays = function() { return this.days_.slice(); };
 Meeting.prototype.getStartTime = function() { return this.startTime_; };
 Meeting.prototype.getEndTime = function() { return this.endTime_; };
 Meeting.prototype.getID = function() { return this.id_; };
@@ -71,4 +73,12 @@ Meeting.prototype.meetsOn = function(day) {
  */
 Meeting.prototype.getLength = function() {
   return this.endTime_ - this.startTime_;
+};
+
+/*
+ * Sort function for Meetings.
+ */
+Meeting.sort = function(a, b) {
+  if (a.startTime_ != b.startTime_) return a.startTime_ - b.startTime_;
+  return a.endTime_ - b.endTime_;
 };

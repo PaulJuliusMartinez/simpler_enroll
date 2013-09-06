@@ -33,8 +33,10 @@ SearchBoxView.prototype.render = function() {
   this.parent_.addClass(SearchBoxView.CONTAINER);
   this.input_ = $('<input>').addClass(SearchBoxView.INPUT_CLASS);
   this.input_.attr('placeholder', 'Search for a class...');
+  var elementsContainer = $('<div>').addClass(SearchBoxView.ELEMENTS_CONTAINER);
   this.elements_ = $('<div>').addClass(SearchBoxView.ELEMENTS);
-  this.parent_.append(this.input_).append(this.elements_);
+  this.parent_.append(this.input_).append(
+      elementsContainer.append(this.elements_));
 
   // Focus the search box.
   this.input_.focus();
@@ -188,6 +190,7 @@ SearchBoxView.prototype.getSelected_ = function() {
  */
 SearchBoxView.CONTAINER = 'search-box-container';
 SearchBoxView.INPUT_CLASS = 'search-box-input';
+SearchBoxView.ELEMENTS_CONTAINER = 'search-box-elements-container';
 SearchBoxView.ELEMENTS = 'search-box-elements';
 SearchBoxView.RESULT_CLASS = 'search-box-result';
 SearchBoxView.FIRST = 'search-box-result-first';

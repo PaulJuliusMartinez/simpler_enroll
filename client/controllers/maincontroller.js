@@ -19,6 +19,9 @@ MainController = function(parent) {
   // TYPE: CourseListController
   this.courseList_ = new CourseListController(
       containers[MainView.COURSE_LIST], this);
+  // TYPE: PreviewController
+  this.preview_ = new PreviewController(
+      containers[MainView.SCHEDULE_PREVIEW], this);
 };
 
 
@@ -28,13 +31,14 @@ MainController = function(parent) {
  */
 MainController.prototype.notifyCourseAdded = function(course) {
   this.courseList_.addCourse(course);
+  var courses = this.courseList_.getCourses();
+  this.preview_.displayCourseList(courses);
 };
 
 /*
  * Called when something in the course list changes.
  */
 MainController.prototype.notifyCourseListChange = function() {
-  // When this happens we'll have to collect the data again from the course list
-  // and send it out to the schedule preview to rerender.
-  window.console.log('Something changed!');
+  var courses = this.courseList_.getCourses();
+  this.preview_.displayCourseList(courses);
 };

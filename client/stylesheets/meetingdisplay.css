@@ -1,0 +1,31 @@
+/*
+ * Minimal CSS for a MeetingDisplay object
+ */
+
+.meeting-display-box {
+  display: table;
+  table-layout: fixed;
+  position: absolute;
+  border: 1px solid black;
+  border-radius: 2px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.meeting-display-text {
+  display: table-cell;
+  font-size: 12pt;
+  vertical-align: middle;
+  overflow: hidden;
+  margin: 0 auto;
+  width: 100%;
+  direction: rtl;
+}
+
+.meeting-display-box.meeting-display-enrolled {
+  background-color: #a9ec6b;
+}
+
+.meeting-display-box.meeting-display-planned {
+  background-color: #61c3ef;
+}

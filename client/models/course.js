@@ -21,17 +21,19 @@ Course = function(obj) {
   this.minUnits_ = obj[CourseConstants.MIN_UNITS] || 0;
   // TYPE: number
   this.maxUnits_ = obj[CourseConstants.MAX_UNITS] || 0;
-  // Type: string[]
+  // TYPE: string[]
   this.gers_ = obj[CourseConstants.GERS] || [];
   // We have a problem if there's no primary component...
   assert(obj[CourseConstants.PRIMARY_COMPONENT],
       'This course object had no primary component!');
-  // Type: Section[][]
-  this.primaryComponent_ = Course.convertJSONSectionsToSectionArray(
+  // TYPE: Section[][]
+  this.primaryComponent_ = this.convertJSONSectionsToSectionArray(
       obj, CourseConstants.PRIMARY_COMPONENT);
-  // Type: Section[][]
-  this.secondaryComponent_ = Course.convertJSONSectionsToSectionArray(
+  // TYPE: Section[][]
+  this.secondaryComponent_ = this.convertJSONSectionsToSectionArray(
       obj, CourseConstants.SECONDARY_COMPONENT);
+  // TYPE: Status
+  this.status_ = new Status();
   // TYPE: number
   this.id_ = UniqueID.newID();
 };
@@ -42,7 +44,7 @@ Course = function(obj) {
  * PARAM-TYPE: string key The key of the relevant field.
  * RETURN-TYPE: Section[][]
  */
-Course.convertJSONSectionsToSectionArray = function(obj, key) {
+Course.prototype.convertJSONSectionsToSectionArray = function(obj, key) {
   if (!obj[key]) return null;
   var arr = [[], [], []];
   for (var i = 0; i < 3; i++) {
@@ -67,6 +69,8 @@ Course.prototype.getMinUnits = function() { return this.minUnits_; };
 Course.prototype.getMaxUnits = function() { return this.maxUnits_; };
 // Return a shallow copy.
 Course.prototype.getGERs = function() { return this.gers_.slice(); };
+// Status and ID
+Course.prototype.getStatus = function() { return this.status_; };
 Course.prototype.getID = function() { return this.id_; };
 
 // Some basic util methods.
@@ -99,4 +103,11 @@ Course.prototype.hasSecondaryComponent = function() {
  */
 Course.prototype.isOfferedIn = function(quarter) {
   return (this.primaryComponent_[quarter].length != 0);
+};
+
+/*
+ * Resets the status of the course.
+ */
+Course.prototype.resetStatus = function() {
+  this.status_ = new Status();
 };

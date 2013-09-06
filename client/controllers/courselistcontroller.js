@@ -24,6 +24,10 @@ CourseListController = function(parent, manager) {
  * PARAM-TYPE: Course course The course added.
  */
 CourseListController.prototype.addCourse = function(course) {
+  // If the course isn't in the list, reset its status.
+  if (!this.courses_[course.getID()]) {
+    course.resetStatus();
+  }
   this.courses_[course.getID()] = course;
   this.view_.addCourse(course);
 };
@@ -34,10 +38,22 @@ CourseListController.prototype.addCourse = function(course) {
  */
 CourseListController.prototype.removeCourse = function(course) {
   if (this.courses_[course.getID()]) {
-    this.courses_[course.getID()] = null;
+    delete this.courses_[course.getID()];
     this.view_.removeCourse(course);
     this.manager_.notifyCourseListChange();
   }
+};
+
+/*
+ * Gets all the courses and returns them as an array.
+ * RETURN-TYPE: Course[]
+ */
+CourseListController.prototype.getCourses = function() {
+  var arr = [];
+  for (key in this.courses_) {
+    arr.push(this.courses_[key]);
+  }
+  return arr;
 };
 
 /*
@@ -50,8 +66,8 @@ CourseListController.prototype.removeCourse = function(course) {
  */
 CourseListController.prototype.willTakeClassInQuarter = function(
     course, quarter, considered) {
-  // Alert the main controller!
-  window.console.log(course.getShortName() + (considered ? ' will ' : "won't ") + 'be considered for the ' + (quarter + 1) + ' quarter.');
+  course.getStatus().setQuarterStatus(quarter, considered);
+  this.manager_.notifyCourseListChange();
 };
 
 /*
@@ -59,8 +75,7 @@ CourseListController.prototype.willTakeClassInQuarter = function(
  * PARAM-TYPE: Course course Which course.
  * PARAM-TYPE: number status Status, E/P/D <=> 0-2.
  */
-CourseListController.prototype.setCourseStatus = function(course, status) {
-  // Alert the main controller!
-  // Update internal status list!
-  window.console.log(course.getShortName() + ' will have status ' + status);
+CourseListController.prototype.setEnrollmentStatus = function(course, status) {
+  course.getStatus().setEnrollmentStatus(status);
+  this.manager_.notifyCourseListChange();
 };
