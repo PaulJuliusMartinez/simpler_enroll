@@ -4,6 +4,7 @@
 
 .main-course-list-container h1 {
   font-size: 24px;
+  font-weight: normal;
   margin-top: 12px;
   margin-bottom: 12px;
 }
@@ -30,7 +31,6 @@ table.course-list-table thead {
   width: 700px;
   padding: 0px;
   font-size: 18px;
-  font-weight: bold;
   border-bottom: 1px solid black;
 }
 

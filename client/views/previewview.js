@@ -63,31 +63,28 @@ PreviewView.prototype.createQuarterHeader = function(quarter) {
 };
 
 /*
- * Takes a list of courses and divides up their sections and meetings and gives
- * them to the calendars to draw.
- * PARAM-TYPE: Course[] courses A list of courses.
+ * Clears the calendars.
  */
-PreviewView.prototype.displayCourses = function(courses) {
+PreviewView.prototype.clearCalendars = function() {
   for (var i = 0; i < 3; i++) this.calendars_[i].clear();
+};
 
-  for (var quarter = 0; quarter < 3; quarter++) {
-    for (var i = 0; i < courses.length; i++) {
-      if (courses[i].isOfferedIn(quarter) &&
-          courses[i].getStatus().getQuarterStatus(quarter) &&
-          courses[i].getStatus().getEnrollmentStatus() != Status.DROP) {
-        var primarySections = courses[i].getPrimarySectionsForQuarter(quarter);
-        for (var j = 0; j < primarySections.length; j++) {
-          var section = primarySections[j];
-          var meetings = section.getMeetings();
-          for (var k = 0; k < meetings.length; k++) {
-            this.calendars_[quarter].addMeeting(meetings[k]);
-          }
-        }
-      }
-    }
-  }
+/*
+ * Get the calendar view for a particular quarter.
+ * PARAM-TYPE: number quarter Which quarter.
+ * RETURN-TYPE: CalendarView
+ */
+PreviewView.prototype.getCalendarView = function(quarter) {
+  return this.calendars_[quarter];
+};
 
-  for (var i = 0; i < 3; i++) this.calendars_[i].draw();
+/*
+ * Set the units for the quarter.
+ * PARAM-TYPE: number quarter Which quarter.
+ * PARAM-TYPE: number units How many units.
+ */
+PreviewView.prototype.setUnits = function(quarter, units) {
+  this.unitLabels_[quarter].text(units + ' Units');
 };
 
 // CSS Constants
