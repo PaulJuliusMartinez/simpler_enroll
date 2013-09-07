@@ -4,19 +4,30 @@
  * See: http://api.jquery.com/jQuery.Callbacks/
  */
 
-var eventCallbackLists_ = {};
+Events = {};
+Events.eventCallbackLists_ = {};
 
-jQuery.Events = function(eventType) {
+$.Events = function(eventType) {
   assert(eventType);
 
-  if (eventCallbackLists_[eventType]) return eventCallbackLists_[eventType];
+  if (Events.eventCallbackLists_[eventType]) {
+    return Events.eventCallbackLists_[eventType];
+  }
 
-  var callbacks = jQuery.Callbacks();
+  var callbacks = $.Callbacks();
   var list = {
     dispatch: callbacks.fire,
     listen: callbacks.add,
     unlisten: callbacks.remove
   };
-  eventCallbackLists_[eventType] = list;
+  Events.eventCallbackLists_[eventType] = list;
   return list;
 };
+
+
+// Event types and the signature of the callbacks
+
+// Arguments: function(string prefix, Department[] departments)
+Events.DEPARTMENTS_BY_PREFIX = 'departmentsByPrefix';
+// Arguments: function(string dep, string num, Course[] courses)
+Events.COURSES_BY_PREFIX = 'coursesByPrefix';

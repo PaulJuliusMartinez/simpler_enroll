@@ -42,8 +42,10 @@ CourseInfoPopup.prototype.render = function() {
   var courseName = course.getShortName() + ': ' + course.getTitle();
   popup.append($('<p>').text(courseName));
 
-  // Add Units
-  var units = course.getMinUnits() + '-' + course.getMaxUnits();
+  // Add Units, making sure we say 3 units or 4-5 units, but not 3-3 units.
+  var minUnits = course.getMinUnits();
+  var maxUnits = course.getMaxUnits();
+  var units = (minUnits == maxUnits) ? maxUnits : minUnits + '-' + maxUnits;
   popup.append($('<p>').text(units + ' units'));
 
   // Iterate through meetings and add their times

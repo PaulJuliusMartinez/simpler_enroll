@@ -15,6 +15,15 @@ SearchBoxController = function(parent, manager) {
   this.view_.render();
   // TYPE: MainController
   this.manager_ = manager;
+
+  // Listen to CourseData for completions
+  var searchBox = this;
+  $.Events(Events.DEPARTMENTS_BY_PREFIX).listen(function(prefix, deps) {
+    searchBox.suggestDepartments(prefix, deps);
+  });
+  $.Events(Events.COURSES_BY_PREFIX).listen(function(dep, num, courses) {
+    searchBox.suggestCourses(dep, num, courses);
+  });
 };
 
 
@@ -27,29 +36,63 @@ SearchBoxController.prototype.handleInput = function(input) {
     this.view_.clearResults();
     return;
   }
-  var match = CourseData.REGEXP.exec(input);
+  var match = CourseData.REGEXP.exec(input.toUpperCase());
   var dep = match[1].trim().toUpperCase();
   var num = match[2].trim().toUpperCase();
   if (num == '') {
-    // They haven't typed numbers yet, we're checking departments.
-    var deps = Department.thatStartWith(input);
-    var results = [];
-    for (var i = 0; i < deps.length; i++) {
-      results.push({text: deps[i].short + ': ' + deps[i].long,
-                    value: deps[i].short});
-    }
-    this.view_.setResults(results);
+    // They haven't typed numbers yet, so fetch the departments.
+    CourseData.fetchDepartmentsByPrefix(dep);
+    // suggestDepartments will be called upon execution.
   } else {
-    // They've started typing numbers, look for courses in that department.
-    var courses = CourseData.getCourseNamesForDepartmentByPrefix(dep, num);
-    var results = [];
-    for (var i = 0; i < courses.length; i++) {
-      results.push({text: dep + ' ' + courses[i] + ': ' +
-                           CourseData.getCourse(dep, courses[i]).getTitle(),
-                    value: dep + courses[i]});
-    }
-    this.view_.setResults(results);
+    // Otherwise, get specific courses.
+    CourseData.fetchCoursesByPrefix(dep, num);
+    // suggestCourses will be called upon execution.
   }
+};
+
+/*
+ * Called whenever CourseData has Departments ready.
+ * PARAM-TYPE: string prefix The common prefix of the departments. (Assumed to
+ *     be in all CAPS.)
+ * PARAM-TYPE: Department[] deps The departments.
+ */
+SearchBoxController.prototype.suggestDepartments = function(prefix, deps) {
+  var currentInput = this.view_.getInput().toUpperCase();
+  var match = CourseData.REGEXP.exec(currentInput);
+  // Return if no match, or the entered numbers, or it's not the right prefix
+  // anymore.
+  if (!match || match[2].trim() != '' || match[1].trim() != prefix) return;
+
+  // Build up the data to give back to the view.
+  var results = [];
+  for (var i = 0; i < deps.length; i++) {
+    results.push({text: deps[i].short + ': ' + deps[i].long,
+                  value: deps[i].short});
+  }
+  this.view_.setResults(results);
+};
+
+/*
+ * Called whenever CourseData has a list of Courses ready. Both strings are
+ * assumed to be in all caps.
+ * PARAM-TYPE: string dep The department all the courses are in.
+ * PARAM-TYPE: string num The number prefix of all the courses.
+ * PARAM-TYPE: Course[] The courses that match the prefixes.
+ */
+SearchBoxController.prototype.suggestCourses = function(dep, num, courses) {
+  var currentInput = this.view_.getInput().toUpperCase();
+  var match = CourseData.REGEXP.exec(currentInput);
+  // Return if the prefixes don't match anymore.
+  if (!match || match[1].trim() != dep || match[2].trim() != num) return;
+
+  var results = [];
+  for (var i = 0; i < courses.length; i++) {
+    results.push({text: courses[i].getShortName() + ': ' +
+                            courses[i].getTitle(),
+                  value: courses[i].getShortName()});
+  }
+
+  this.view_.setResults(results);
 };
 
 /*

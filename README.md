@@ -6,7 +6,7 @@ year.
 
 
 TODOs:
-- Make class autocompletion asynchronous
+X Make class autocompletion asynchronous
 X Update Units labels
 - Refactor to use a publisher/subscribe model, to be able to do things like:
   - highlight classes when you hover over them in the course list

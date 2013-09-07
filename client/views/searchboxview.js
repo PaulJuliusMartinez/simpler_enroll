@@ -63,6 +63,14 @@ SearchBoxView.prototype.render = function() {
 };
 
 /*
+ * Gets the current input.
+ * RETURN-TYPE: string
+ */
+SearchBoxView.prototype.getInput = function() {
+  return this.input_.val();
+};
+
+/*
  * Shows the results.
  */
 SearchBoxView.prototype.showResults = function() {

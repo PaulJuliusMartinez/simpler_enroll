@@ -14,6 +14,7 @@ CourseDataCache = function() {
 /*
  * Get the course data for a department.
  * PARAM-TYPE: string dep The short name of the department.
+ * RETURN-TYPE:
  */
 CourseDataCache.prototype.getCourses = function(dep) {
   if (this.storedCourses_[dep]) {
@@ -22,7 +23,8 @@ CourseDataCache.prototype.getCourses = function(dep) {
     var filename = './client/models/data/' + dep + '.js';
     var cache = this;
 
-    // Load data NOT asynchronously
+    // This function is not asynchronous and will lag depending on the
+    // connection. Aynchronous handling must happen elsewhere.
     $.ajax({
         dataType: "json",
         url: filename,
@@ -46,6 +48,7 @@ CourseDataCache.prototype.getCourses = function(dep) {
  * a sorted list of the course names, the second is the original object
  * containing all the courses.
  * PARAM-TYPE: Object courses The courses object.
+ * RETURN_TYPE: Object
  */
 CourseDataCache.createSortedCourseNameObject = function(data) {
   var sortedNames = [];
