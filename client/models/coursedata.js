@@ -2,6 +2,8 @@
  * Utility class with methods designed for interacting with all the
  * coarse-grained course data, i.e., dealing with all the courses for a
  * department.
+ *
+ * Every public method in this class uses callbacks to return the response.
  */
 
 
@@ -21,9 +23,9 @@ CourseData.init = function() {
  * Fetch all the departments that start with a certain prefix,
  * then dispatch a DEPARTMENTS_BY_PREFIX event.
  * PARAM-TYPE: string depPrefix The prefix of the department.
- * DISPATCH-EVENT: DEPARTMENTS_BY_PREFIX
+ * PARAM-TYPE: function(string, Department[]) callback The callback.
  */
-CourseData.fetchDepartmentsByPrefix = function(depPrefix) {
+CourseData.fetchDepartmentsByPrefix = function(depPrefix, callback) {
   var re = new RegExp('^' + depPrefix.toUpperCase() + '.*$');
   var list = [];
   for (var i = 0; i < this.DEPARTMENTS.length; i++) {
@@ -32,7 +34,7 @@ CourseData.fetchDepartmentsByPrefix = function(depPrefix) {
       list.push(this.DEPARTMENTS[i]);
     }
   }
-  $.Events(Events.DEPARTMENTS_BY_PREFIX).dispatch(depPrefix, list);
+  callback(depPrefix, list);
 };
 
 /*
@@ -40,36 +42,42 @@ CourseData.fetchDepartmentsByPrefix = function(depPrefix) {
  * a prefix in that particular department.
  * PARAM-TYPE: string dep The department.
  * PARAM-TYPE: string numPrefix The prefix.
- * DISPATCH-EVENT: COURSES_BY_PREFIX
+ * PARAM-TYPE: function(string, string, Courses[]) callback The callback.
  */
-CourseData.fetchCoursesByPrefix = function(dep, numPrefix) {
-  var courses = this.cache_.getCourses(dep);
-  if (!courses) return [];
-  var allCoursesInDep = courses[CourseDataCache.SORTED_COURSE_LIST];
-  if (!allCoursesInDep) return [];
-  var re = new RegExp('^' + numPrefix);
-  var results = [];
-  for (var i = 0; i < allCoursesInDep.length; i++) {
-    var name = allCoursesInDep[i];
-    if (re.test(name)) {
-      results.push(courses[CourseDataCache.COURSE_DATA][name]);
+CourseData.fetchCoursesByPrefix = function(dep, numPrefix, callback) {
+  this.cache_.getCourses(dep, function(courses) {
+    if (!courses) return;
+    var allCoursesInDep = courses[CourseDataCache.SORTED_COURSE_LIST];
+    if (!allCoursesInDep) return;
+    var re = new RegExp('^' + numPrefix);
+    var results = [];
+    for (var i = 0; i < allCoursesInDep.length; i++) {
+      var name = allCoursesInDep[i];
+      if (re.test(name)) {
+        results.push(courses[CourseDataCache.COURSE_DATA][name]);
+      }
     }
-  }
-
-  $.Events(Events.COURSES_BY_PREFIX).dispatch(dep, numPrefix, results);
+    callback(dep, numPrefix, results);
+  });
 };
+
+/*
+ * Actually dispatches the course data, once it's available.
+ */
 
 /*
  * Returns a course given the department and course number.
  * PARAM-TYPE: string dep The department.
  * PARAM-TYPE: string number The course number.
- * RETURN-TYPE: Course
+ * PARAM-TYPE: function(Course) callback The callback.
  */
-CourseData.getCourse = function(dep, number) {
-  var courses = this.cache_.getCourses(dep);
-  if (!courses) return "";
-  var course = courses[CourseDataCache.COURSE_DATA][number];
-  return course;
+CourseData.getCourse = function(dep, number, callback) {
+  this.cache_.getCourses(dep, function(courses) {
+    if (courses) {
+      var course = courses[CourseDataCache.COURSE_DATA][number];
+      callback(course);
+    }
+  });
 };
 
 CourseData.COURSE_REGEX_ = /^(\D+)(\d*.*)$/;

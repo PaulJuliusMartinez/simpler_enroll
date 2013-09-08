@@ -15,15 +15,6 @@ SearchBoxController = function(parent, manager) {
   this.view_.render();
   // TYPE: MainController
   this.manager_ = manager;
-
-  // Listen to CourseData for completions
-  var searchBox = this;
-  $.Events(Events.DEPARTMENTS_BY_PREFIX).listen(function(prefix, deps) {
-    searchBox.suggestDepartments(prefix, deps);
-  });
-  $.Events(Events.COURSES_BY_PREFIX).listen(function(dep, num, courses) {
-    searchBox.suggestCourses(dep, num, courses);
-  });
 };
 
 
@@ -39,14 +30,17 @@ SearchBoxController.prototype.handleInput = function(input) {
   var match = CourseData.REGEXP.exec(input.toUpperCase());
   var dep = match[1].trim().toUpperCase();
   var num = match[2].trim().toUpperCase();
+  var searchBox = this;
   if (num == '') {
     // They haven't typed numbers yet, so fetch the departments.
-    CourseData.fetchDepartmentsByPrefix(dep);
-    // suggestDepartments will be called upon execution.
+    CourseData.fetchDepartmentsByPrefix(dep, function(prefix, deps) {
+      searchBox.suggestDepartments(prefix, deps);
+    });
   } else {
     // Otherwise, get specific courses.
-    CourseData.fetchCoursesByPrefix(dep, num);
-    // suggestCourses will be called upon execution.
+    CourseData.fetchCoursesByPrefix(dep, num, function(dep, num, courses) {
+      searchBox.suggestCourses(dep, num, courses);
+    });
   }
 };
 
@@ -96,25 +90,25 @@ SearchBoxController.prototype.suggestCourses = function(dep, num, courses) {
 };
 
 /*
- * The callback for handling a submit. Returns true if the submit was
- * successful.
+ * The callback for handling a submit.
  * PARAM-TYPE: string input The current input.
- * RETURN-TYPE: boolean
  */
 SearchBoxController.prototype.submitInput = function(input) {
   var match = CourseData.REGEXP.exec(input);
-  if (!match) return false;
+  if (!match) return;
   var dep = match[1].trim().toUpperCase();
   var num = match[2].trim().toUpperCase();
   if (num == '') {
     // Do nothing (for now). They've just autocompleted the department.
   } else {
-    var course = CourseData.getCourse(dep, num);
-    if (course) {
-      this.manager_.notifyCourseAdded(course);
-      this.view_.clearInput();
-      return true;
-    }
+    // TODO/VERYIMPORTANT CHANGE THIS TO A DISPATCH COURSE_ADDED EVENT.
+    var searchBox = this;
+    CourseData.getCourse(dep, num, function(course) {
+      if (course) {
+        searchBox.manager_.notifyCourseAdded(course);
+        searchBox.view_.clearInput();
+        searchBox.view_.clearResults();
+      }
+    });
   }
-  return false;
 };

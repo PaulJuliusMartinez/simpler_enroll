@@ -163,9 +163,7 @@ SearchBoxView.prototype.handleKeyPress_ = function(e) {
  * PARAM-TYPE: string value The value to be submitted.
  */
 SearchBoxView.prototype.submitValue = function(value) {
-  this.input_.val(value);
-  var worked = this.controller_.submitInput(value);
-  if (worked) this.clearResults();
+  this.controller_.submitInput(value);
 };
 
 

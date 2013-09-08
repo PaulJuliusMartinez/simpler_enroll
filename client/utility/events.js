@@ -23,11 +23,3 @@ $.Events = function(eventType) {
   Events.eventCallbackLists_[eventType] = list;
   return list;
 };
-
-
-// Event types and the signature of the callbacks
-
-// Arguments: function(string prefix, Department[] departments)
-Events.DEPARTMENTS_BY_PREFIX = 'departmentsByPrefix';
-// Arguments: function(string dep, string num, Course[] courses)
-Events.COURSES_BY_PREFIX = 'coursesByPrefix';
