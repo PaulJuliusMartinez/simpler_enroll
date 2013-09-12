@@ -22,7 +22,8 @@ MainView = function(parent) {
  */
 MainView.prototype.render = function() {
   var topleft = $('<div>').addClass(MainView.COURSE_SELECTION_AREA);
-  var topright = $('<div>').addClass(MainView.PREFERENCES_PANEL);
+  var topright = $('<div>').addClass(MainView.PREFERENCES_PANEL).
+                            attr('id', MainView.PREFERENCES_PANEL);
   var bottom = $('<div>').addClass(MainView.SCHEDULE_PREVIEW);
   var search = $('<div>').addClass(MainView.SEARCH_BOX);
   var courselist = $('<div>').addClass(MainView.COURSE_LIST);

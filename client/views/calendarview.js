@@ -18,6 +18,13 @@ CalendarView = function(parent) {
 // TYPE: jQuery The internal container of the calendar.
 CalendarView.prototype.container_;
 
+// TYPE: boolean Whether the calendar has been resized.
+CalendarView.prototype.resized_ = false;
+
+// TYPE: number Width/heights of internal elements.
+CalendarView.prototype.clientWidth_;
+CalendarView.prototype.clientHeight_;
+
 /*
  * This builds up the internal DOM structure.
  */
@@ -103,15 +110,8 @@ CalendarView.prototype.getDayWidth = function() {
 /*
  * Gets the height of the header row.
  */
-CalendarView.prototype.getHeaderRowHeight = function() {
+CalendarView.prototype.getRowHeight = function() {
   return this.container_.find('tr').get()[0].clientHeight;
-};
-
-/*
- * Gets the height of a normal row.
- */
-CalendarView.prototype.getNormalRowHeight = function() {
-  return this.container_.find('tr').get()[1].clientHeight;
 };
 
 // CSS Constants:

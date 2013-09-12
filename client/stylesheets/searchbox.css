@@ -4,13 +4,16 @@
 
 .search-box-container {
   position: relative;
+  float: right;
+  height: 40px;
 }
 
 .search-box-input {
+  vertical-align: top;
   color: black;
-  font-size: 24px;
+  font-size: 22px;
   font-weight: bold;
-  height: 35px;
+  height: 40px;
   width: 350px;
   border: 5px solid #8c1515;
   border-radius: 3px;
@@ -43,7 +46,7 @@
   border-style: solid;
   border-color: #8c1515;
   background-color: white;
-  height: 20px;
+  height: 31px;
   width: 330px;
   font-size: 20px;
   padding: 3px;

@@ -4,12 +4,9 @@
 
 /*
  * Constructor takes:
- * PARAM-TYPE: jQuery parent The parent element of the view.
  * PARAM-TYPE: SearchBoxController controller The controller of the view.
  */
-SearchBoxView = function(parent, controller) {
-  // TYPE: jQuery
-  this.parent_ = parent;
+SearchBoxView = function(controller) {
   // TYPE: SearchBoxController
   this.controller_ = controller;
 };
@@ -26,17 +23,17 @@ SearchBoxView.prototype.elements_ = null;
 SearchBoxView.prototype.currentSelected_ = -1;
 
 /*
- * Renders the search box into the DOM.
+ * Decorates a DOM element.
  * PARAM-TYPE: Jquery parent The parent element for the search bar.
  */
-SearchBoxView.prototype.render = function() {
-  this.parent_.addClass(SearchBoxView.CONTAINER);
-  this.input_ = $('<input>').addClass(SearchBoxView.INPUT_CLASS);
+SearchBoxView.prototype.decorate = function(parent) {
+  this.input_ = $(parent.children()[0]);
+  this.input_.addClass(SearchBoxView.INPUT_CLASS);
   this.input_.attr('placeholder', 'Search for a class...');
+
   var elementsContainer = $('<div>').addClass(SearchBoxView.ELEMENTS_CONTAINER);
   this.elements_ = $('<div>').addClass(SearchBoxView.ELEMENTS);
-  this.parent_.append(this.input_).append(
-      elementsContainer.append(this.elements_));
+  parent.append(this.input_).append(elementsContainer.append(this.elements_));
 
   // Focus the search box.
   this.input_.focus();

@@ -11,8 +11,8 @@
  */
 SearchBoxController = function(parent, manager) {
   // TYPE: SearchBoxView
-  this.view_ = new SearchBoxView(parent, this);
-  this.view_.render();
+  this.view_ = new SearchBoxView(this);
+  this.view_.decorate($(parent.children()[0]));
   // TYPE: MainController
   this.manager_ = manager;
 };
@@ -105,7 +105,7 @@ SearchBoxController.prototype.submitInput = function(input) {
     var searchBox = this;
     CourseData.getCourse(dep, num, function(course) {
       if (course) {
-        searchBox.manager_.notifyCourseAdded(course);
+        $.Events(Events.COURSE_ADDED).dispatch(course);
         searchBox.view_.clearInput();
         searchBox.view_.clearResults();
       }

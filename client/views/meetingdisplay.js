@@ -27,11 +27,10 @@ this.elem_;
  * PARAM-TYPE: number total How many meetings are in this time slot.
  */
 MeetingDisplay.prototype.render = function(num, total) {
-  var headerHeight = this.calendar_.getHeaderRowHeight();
-  var hourHeight = this.calendar_.getNormalRowHeight();
+  var rowHeight = this.calendar_.getRowHeight();
   var numHours = (this.meeting_.getStartTime() / 60) - 9;
-  var height = hourHeight * this.meeting_.getLength() / 60;
-  var yOffset = headerHeight + hourHeight * numHours;
+  var height = rowHeight * this.meeting_.getLength() / 60;
+  var yOffset = rowHeight * (1 + numHours);
   var dayWidth = this.calendar_.getDayWidth();
   var xOffset = this.calendar_.getHourWidth() + this.day_ * dayWidth;
 
@@ -61,7 +60,7 @@ MeetingDisplay.prototype.render = function(num, total) {
   var fontSize = parseInt(text.css('font-size'), 10);
   // 2 Fudge factor to make sure there's space between text and border.
   while (fontSize > 6 && text.get()[0].scrollWidth + 2 > width) {
-    fontSize--;
+    fontSize -= 2;
     text.css('font-size', fontSize + 'pt');
   }
 

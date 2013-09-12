@@ -14,22 +14,24 @@ MainController = function(parent) {
 
   var containers = this.view_.getContainers();
   // TYPE: SearchBoxController
-  this.searchBox_ = new SearchBoxController(
-      containers[MainView.SEARCH_BOX], this);
+  this.searchBox_ = new SearchBoxController($('#search-bar'), this);
   // TYPE: CourseListController
-  this.courseList_ = new CourseListController(
-      containers[MainView.COURSE_LIST], this);
+  this.courseList_ = new CourseListController($('#course-list'), this);
   // TYPE: PreviewController
-  this.preview_ = new PreviewController(
-      containers[MainView.SCHEDULE_PREVIEW], this);
+  this.preview_ = new PreviewController($('#bottom-section'), this);
+
+  var main = this;
+  $.Events(Events.COURSE_ADDED).listen(function(course) {
+    main.addCourse(course);
+  });
 };
 
 
 /*
- * Called when a class is added by the search box.
+ * Called when this hears a COURSE_ADDED event.
  * PARAM-TYPE: Course course The course added.
  */
-MainController.prototype.notifyCourseAdded = function(course) {
+MainController.prototype.addCourse = function(course) {
   this.courseList_.addCourse(course);
   var courses = this.courseList_.getCourses();
   this.preview_.displayCourseList(courses);

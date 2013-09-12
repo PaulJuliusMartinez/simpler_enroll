@@ -23,3 +23,5 @@ $.Events = function(eventType) {
   Events.eventCallbackLists_[eventType] = list;
   return list;
 };
+
+Events.COURSE_ADDED = 'course-added';
