@@ -3,8 +3,10 @@
  */
 
 .search-box-container {
-  position: relative;
-  float: right;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50%;
   height: 40px;
 }
 
@@ -13,8 +15,8 @@
   color: black;
   font-size: 22px;
   font-weight: bold;
-  height: 40px;
-  width: 350px;
+  height: 100%;
+  width: 100%;
   border: 5px solid #8c1515;
   border-radius: 3px;
   padding-left: 5px;

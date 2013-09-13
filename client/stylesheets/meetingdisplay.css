@@ -3,8 +3,6 @@
  */
 
 .meeting-display-box {
-  display: table;
-  table-layout: fixed;
   position: absolute;
   border: 1px solid black;
   border-radius: 2px;
@@ -13,12 +11,13 @@
 }
 
 .meeting-display-text {
-  display: table-cell;
-  font-size: 12pt;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
   vertical-align: middle;
   overflow: hidden;
-  margin: 0 auto;
-  width: 100%;
   direction: rtl;
 }
 

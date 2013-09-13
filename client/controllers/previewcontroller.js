@@ -10,8 +10,8 @@
  */
 PreviewController = function(parent, manager) {
   // TYPE: PreviewView
-  this.view_ = new PreviewView(parent, this);
-  this.view_.render();
+  this.view_ = new PreviewView(this);
+  this.view_.render(parent);
   // TYPE: MainController
   this.manager_ = manager;
 };

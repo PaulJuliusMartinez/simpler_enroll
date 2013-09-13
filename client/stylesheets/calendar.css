@@ -3,35 +3,34 @@
  */
 
 .calendar-view-container {
-  height: 275px;
-  width: -webkit-calc(100% - 10px);
-  width: -moz-calc(100% - 10px);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   border: 5px solid #8c1515;
   border-radius: 3px;
-  position: relative;
 }
 
 .calendar-view-container table {
   width: 100%;
+  height: 100%;
   table-layout: fixed;
   border-spacing: 0px;
 }
 
-.calendar-view-container .calendar-view-hour-num {
-  width: 30px;
+.calendar-view-hour-num {
+  width: 10%;
+  font-size: 100%;
+}
+
+.calendar-view.container tr {
+  height: 7.14%;
 }
 
 .calendar-view-container th,
 .calendar-view-container td {
   text-align: center;
-}
-
-.calendar-view-container th {
-  height: 23px;
-}
-
-.calendar-view-container td {
-  height: 22px;
 }
 
 .calendar-view-hour-row td {

@@ -21,9 +21,8 @@ CalendarView.prototype.container_;
 // TYPE: boolean Whether the calendar has been resized.
 CalendarView.prototype.resized_ = false;
 
-// TYPE: number Width/heights of internal elements.
-CalendarView.prototype.clientWidth_;
-CalendarView.prototype.clientHeight_;
+// TYPE: number number of rows.
+CalendarView.prototype.numRows_;
 
 /*
  * This builds up the internal DOM structure.
@@ -47,7 +46,8 @@ CalendarView.prototype.render = function() {
 
   // Add the 'hour' rows to the table
   var table = this.parent_.find('tbody');
-  var hours = [9, 10, 11, 12, 1, 2, 3, 4, 5, 6];
+  var hours = [9, 10, 11, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+  this.numRows_ = hours.length + 1;
   for (var i = 0; i < hours.length; i++) {
     table.append(
         $('<tr>').addClass(CalendarView.HOUR_ROW).append(
@@ -87,10 +87,18 @@ CalendarView.prototype.clear = function() {
 /*
  * Returns the container element of the Calendar. If called before render(),
  * this returns null.
- * @return Jquery elem The container element, as a Jquery object.
+ * RETURN-TYPE: Jquery elem The container element, as a Jquery object.
  */
 CalendarView.prototype.getContainer = function() {
   return this.container_;
+};
+
+/*
+ * Gets the number of rows in the calendar.
+ * RETURN-TYPE: number
+ */
+CalendarView.prototype.getNumRows = function() {
+  return this.numRows_;
 };
 
 /*
