@@ -22,6 +22,7 @@
 .calendar-view-hour-num {
   width: 10%;
   font-size: 100%;
+  overflow: hidden;
 }
 
 .calendar-view.container tr {

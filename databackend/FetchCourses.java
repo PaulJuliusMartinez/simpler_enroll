@@ -103,8 +103,8 @@ public class FetchCourses {
     String s = "\"" + c.getSubjectCodeSuffix() + "\":{";
     s += "\"department\":\"" + c.getSubjectCodePrefix() + "\",";
     s += "\"number\":\"" + c.getSubjectCodeSuffix() + "\",";
-    s += "\"title\":\"" + c.getTitle() + "\",";
-    s += "\"description\":\"" + c.getDescription() + "\",";
+    s += "\"title\":\"" + convertToJSONEscapedString(c.getTitle()) + "\",";
+    s += "\"description\":\"" + convertToJSONEscapedString(c.getDescription()) + "\",";
     s += "\"min_units\":" + c.getMinimumUnits() + ",";
     s += "\"max_units\":" + c.getMaximumUnits() + ",";
     String GERSSatisfied = parseGERString(c.getGeneralEducationRequirementsSatisfied());
@@ -121,6 +121,17 @@ public class FetchCourses {
     s += "}";
 
     return s;
+  }
+
+  /* Used to convert things like &quot; to " but then also escape it. */
+  private static String convertToJSONEscapedString(String s) {
+    // Convert the HTML things to actual characters.
+    s = s.replace("&amp;", "&");
+    s = s.replace("&#39;", "'");
+    s = s.replace("&quot;", "\"");
+    s = s.replace("\t", "\\t");
+    // Escape the " now
+    return s.replace("\"", "\\\"");
   }
 
   private static String parseGERString(String gers) {
