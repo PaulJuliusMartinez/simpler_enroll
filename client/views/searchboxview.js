@@ -196,6 +196,7 @@ SearchBoxView.INPUT_CLASS = 'search-box-input';
 SearchBoxView.ELEMENTS_CONTAINER = 'search-box-elements-container';
 SearchBoxView.ELEMENTS = 'search-box-elements';
 SearchBoxView.RESULT_CLASS = 'search-box-result';
+SearchBoxView.HOVER_TEXT = 'search-box-hover-text';
 SearchBoxView.FIRST = 'search-box-result-first';
 SearchBoxView.LAST = 'search-box-result-last';
 SearchBoxView.SELECTED = 'search-box-result-selected';

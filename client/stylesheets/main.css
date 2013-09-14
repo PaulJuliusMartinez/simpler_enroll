@@ -17,7 +17,9 @@ html {
 /* Keep the margin around the screen; it looks nice. */
 body {
   position: relative;
+  min-width: 1336px;
   width: calc(100% - 16px);
+  min-height: 752px;
   height: calc(100% - 16px);
 }
 

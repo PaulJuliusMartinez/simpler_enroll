@@ -7,14 +7,11 @@
 /*
  * Constructor takes the parent element of the view.
  * PARAM-TYPE: jQuery parent The parent element for the SearchBoxView.
- * PARAM-TYPE: MainController manager The controller that manages this one.
  */
-SearchBoxController = function(parent, manager) {
+SearchBoxController = function(parent) {
   // TYPE: SearchBoxView
   this.view_ = new SearchBoxView(this);
   this.view_.decorate($(parent.children()[0]));
-  // TYPE: MainController
-  this.manager_ = manager;
 };
 
 

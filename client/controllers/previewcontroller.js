@@ -6,14 +6,11 @@
 /*
  * Constructor takes:
  * PARAM-TYPE: jQuery parent The parent element for the SearchBoxView.
- * PARAM-TYPE: MainController manager The controller that manages this one.
  */
-PreviewController = function(parent, manager) {
+PreviewController = function(parent) {
   // TYPE: PreviewView
   this.view_ = new PreviewView(this);
-  this.view_.render(parent);
-  // TYPE: MainController
-  this.manager_ = manager;
+  this.view_.decorate(parent);
 };
 
 

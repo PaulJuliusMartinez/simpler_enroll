@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"> </script>
-    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+    <!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"> </script>-->
+    <script src="./client/utility/jquery.js"></script>
+    <!--<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>-->
     <!--Components-->
     <script src="./client/components/tabs.js"></script>
 
@@ -11,6 +12,7 @@
     <script src="./client/controllers/searchboxcontroller.js"></script>
     <script src="./client/controllers/courselistcontroller.js"></script>
     <script src="./client/controllers/previewcontroller.js"></script>
+    <script src="./client/controllers/sectioncontroller.js"></script>
 
     <!--Views-->
     <script src="./client/views/mainview.js"></script>
@@ -18,6 +20,7 @@
     <script src="./client/views/courselistview.js"></script>
     <script src="./client/views/previewview.js"></script>
     <script src="./client/views/calendarview.js"></script>
+    <script src="./client/views/sectionview.js"></script>
 
     <!--Not views, but other things-->
     <script src="./client/views/meetingrenderer.js"></script>
@@ -46,6 +49,7 @@
     <link rel="stylesheet" type="text/css" href="./client/stylesheets/meetingdisplay.css"/>
     <link rel="stylesheet" type="text/css" href="./client/stylesheets/courseinfopopup.css"/>
     <link rel="stylesheet" type="text/css" href="./client/stylesheets/tabs.css"/>
+    <link rel="stylesheet" type="text/css" href="./client/stylesheets/sectionviewer.css"/>
 
     <!--Utility-->
     <script src="./client/utility/uniqueid.js"></script>
@@ -58,14 +62,16 @@
     <script>
       $(document).ready(function() {
         CourseData.init();
-        var mainController = new MainController($('#main'));
-        var tabs = new Tabs();
-        tabs.render($('#top-right'));
-        tabs.addTab('Tab 1');
-        tabs.addTab('Tab 2');
-        tabs.addTab('Tab 3');
-        tabs.addTab('Tab 4');
-        tabs.addTab('Tab 5');
+        var main = new MainController();
+        $.Events(Events.COURSE_ADDED).listen(function(course) {
+          main.addCourse(course);
+        });
+        $.Events(Events.COURSE_REMOVED).listen(function(course) {
+          main.refreshComponents();
+        });
+        $.Events(Events.COURSE_CHANGE).listen(function() {
+          main.refreshComponents();
+        });
       });
     </script>
   </head>
@@ -191,4 +197,43 @@
         <td class="course-list-status-column"></td>
       </tr>
     </table>
+
+    <!-- Section Viewer Template -->
+    <div class="section-template section-container">
+      <div class="section-instructions">
+        <p>
+          Select a class and a quarter and then click on any of listed sections
+          to toggle its visibility in the calendars.
+        </p>
+      </div>
+      <div class="section-viewer-container">
+        <div class="section-viewer-course-selection">
+          Course:
+          <select class="section-course-select">
+          </select>
+          Quarter:
+          <select class="section-quarter-select">
+            <option value="0">Autumn</option>
+            <option value="1">Winter</option>
+            <option value="2">Spring</option>
+          </select>
+        </div>
+        <div class="section-viewer-selector-container">
+          <div class="section-primary-container">
+            <div class="section-section-container"></div>
+            <div class="section-buttons">
+              <input type=button value="View All" class="section-all-button"/>
+              <input type=button value="View None" class="section-none-button"/>
+            </div>
+          </div>
+          <div class="section-secondary-container">
+            <div class="section-section-container"></div>
+            <div class="section-buttons">
+              <input type=button value="View All" class="section-all-button"/>
+              <input type=button value="View None" class="section-none-button"/>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 </html>

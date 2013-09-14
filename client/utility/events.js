@@ -25,3 +25,5 @@ $.Events = function(eventType) {
 };
 
 Events.COURSE_ADDED = 'course-added';
+Events.COURSE_REMOVED = 'course-removed';
+Events.COURSE_CHANGE = 'course-change';

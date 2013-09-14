@@ -4,21 +4,25 @@
  */
 
 /*
- * Constructor takes the main element of the page.
- * PARAM-TYPE: jQuery parent The parent element for the MainView.
+ * Constructor takes no arguments.
  */
-MainController = function(parent) {
+MainController = function() {
   // TYPE: SearchBoxController
-  this.searchBox_ = new SearchBoxController($('#search-bar'), this);
+  this.searchBox_ = new SearchBoxController($('#search-bar'));
   // TYPE: CourseListController
-  this.courseList_ = new CourseListController($('#course-list'), this);
+  this.courseList_ = new CourseListController($('#course-list'));
   // TYPE: PreviewController
-  this.preview_ = new PreviewController($('#bottom-section'), this);
+  this.preview_ = new PreviewController($('#bottom-section'));
 
-  var main = this;
-  $.Events(Events.COURSE_ADDED).listen(function(course) {
-    main.addCourse(course);
-  });
+  // Create tabbed area.
+  var tabs = new Tabs();
+  tabs.render($('#top-right'));
+  var sectionTab = tabs.addTab('Sections');
+
+  // TYPE: SectionController
+  this.sections_ = new SectionController(sectionTab);
+
+  tabs.addTab('Tab 2');
 };
 
 
@@ -28,6 +32,7 @@ MainController = function(parent) {
  */
 MainController.prototype.addCourse = function(course) {
   this.courseList_.addCourse(course);
+  this.sections_.addCourse(course);
   var courses = this.courseList_.getCourses();
   this.preview_.displayCourseList(courses);
 };
@@ -35,7 +40,7 @@ MainController.prototype.addCourse = function(course) {
 /*
  * Called when something in the course list changes.
  */
-MainController.prototype.notifyCourseListChange = function() {
+MainController.prototype.refreshComponents = function() {
   var courses = this.courseList_.getCourses();
   this.preview_.displayCourseList(courses);
 };

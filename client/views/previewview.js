@@ -20,10 +20,10 @@ PreviewView.prototype.calendars_ = [];
 PreviewView.prototype.unitLabels_ = [];
 
 /*
- * Renders and initializes the three calendars.
+ * Decorates the three calendars.
  * PARAM-TYPE: jQuery parent The parent element of the view.
  */
-PreviewView.prototype.render = function(parent) {
+PreviewView.prototype.decorate = function(parent) {
   var calendars = parent.find('.' + PreviewView.CALENDAR);
   var units = parent.find('.' + PreviewView.UNITS);
 

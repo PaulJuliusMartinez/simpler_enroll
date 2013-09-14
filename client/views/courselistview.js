@@ -5,12 +5,9 @@
 
 /*
  * Constructor takes:
- * PARAM-TYPE: jQuery parent The parent element of the view.
  * PARAM-TYPE: CourseListController controller The controller of the view.
  */
-CourseListView = function(parent, controller) {
-  // TYPE: jQuery
-  this.parent_ = parent;
+CourseListView = function(controller) {
   // TYPE: CourseListController
   this.controller_ = controller;
   // Type: Object.jQuery
@@ -29,10 +26,11 @@ this.table_;
 this.noClasses_ = 0;
 
 /*
- * Renders the view.
+ * Decorates a component.
+ * PARAM-TYPE: jQuery parent The parent element of the view.
  */
-CourseListView.prototype.render = function() {
-  this.table_ = $(this.parent_.find('.course-list-body')[0]);
+CourseListView.prototype.decorate = function(parent) {
+  this.table_ = $(parent.find('.course-list-body')[0]);
   // Add the 'No classes' message.
   this.noClasses_ = $($('.' + CourseListView.NO_COURSES_ROW)[0]);
 };
