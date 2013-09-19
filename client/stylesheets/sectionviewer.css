@@ -105,6 +105,21 @@
   background-color: #f2a6a6;
   height: 24px;
   width: 100px;
+  font-family: "HelveticaNeue-Light",
+               "Helvetica Neue Light",
+               "Helvetica Neue",
+                Helvetica, Arial,
+               "Lucida Grande",
+                sans-serif;
+  font-size: 12pt;
+}
+
+.section-buttons input:hover {
+  background-color: #f9d3d3;
+}
+
+.section-buttons input:active {
+  background-color: #eb7979;
 }
 
 .section-all-button {

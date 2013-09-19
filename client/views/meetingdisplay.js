@@ -71,10 +71,11 @@ MeetingDisplay.prototype.render = function(num, total) {
   // Squeeze in the text
   var fontSize = parseInt(text.css('font-size'), 10);
   // 2 Fudge factor to make sure there's space between text and border.
-  while (fontSize > 6 && text.get()[0].scrollWidth + 2 > width) {
-    fontSize -= 2;
-    text.css('font-size', fontSize + 'pt');
-  }
+  // TODO: width is a %, we need to convert that to pixels for this to work.
+  //while (fontSize > 6 && text.get()[0].scrollWidth + 2 > width) {
+    //fontSize -= 2;
+    //text.css('font-size', fontSize + 'pt');
+  //}
 
   this.popup_ = new CourseInfoPopup(this.elem_, this.meeting_, this.day_);
   this.popup_.render();
