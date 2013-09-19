@@ -23,12 +23,27 @@ SectionController.prototype.addCourse = function(course) {
 };
 
 /*
+ * Removes a course.
+ * PARAM-TYPE: Course course The course to remove.
+ */
+SectionController.prototype.removeCourse = function(course) {
+  this.view_.removeCourse(course);
+};
+
+/*
  * Select all/none of the primary/secondary sections.
- * PARAM-TYPE: boolean isSelected True if select all was clicked.
+ * PARAM-TYPE: boolean all True if select all was clicked.
  * PARAM-TYPE: boolean isPrimary True if the button for the primary was clicked.
  */
-SectionController.prototype.viewAll = function(isSelected, isPrimary) {
-  //var course = this.view_.getSelectedCourse();
-  //var quarter = this.view_.getSelectedQuarter();
-  alert(isSelected + ' ' + isPrimary);
+SectionController.prototype.viewAll = function(all, isPrimary) {
+  var helper = this.view_.getSelectedCourse();
+  if (!helper) return;
+  var quarter = this.view_.getSelectedQuarter();
+
+  var displays = (isPrimary ? helper.primarySectionDisplays :
+                              helper.secondarySectionDisplays)[quarter];
+  for (var i = 0; i < displays.length; i++) {
+    displays[i].setShow(all);
+  }
+  $.Events(Events.COURSE_CHANGE).dispatch();
 };

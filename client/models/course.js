@@ -28,10 +28,10 @@ Course = function(obj) {
       'This course object had no primary component!');
   // TYPE: Section[][]
   this.primaryComponent_ = this.convertJSONSectionsToSectionArray(
-      obj, CourseConstants.PRIMARY_COMPONENT);
+      obj, CourseConstants.PRIMARY_COMPONENT, true);
   // TYPE: Section[][]
   this.secondaryComponent_ = this.convertJSONSectionsToSectionArray(
-      obj, CourseConstants.SECONDARY_COMPONENT);
+      obj, CourseConstants.SECONDARY_COMPONENT, false);
   // TYPE: Status
   this.status_ = new Status();
   // TYPE: number
@@ -42,14 +42,17 @@ Course = function(obj) {
  * Takes the list of sections and converts them to Section objects.
  * PARAM-TYPE: Object obj The JSON object.
  * PARAM-TYPE: string key The key of the relevant field.
+ * PARAM-TYPE: boolean show Whether the section should initially be shown.
  * RETURN-TYPE: Section[][]
  */
-Course.prototype.convertJSONSectionsToSectionArray = function(obj, key) {
+Course.prototype.convertJSONSectionsToSectionArray = function(obj, key, show) {
   if (!obj[key]) return null;
   var arr = [[], [], []];
   for (var i = 0; i < 3; i++) {
     for (var j = 0; j < obj[key][i].length; j++) {
-      arr[i].push(new Section(this, obj[key][i][j]));
+      var section = new Section(this, obj[key][i][j]);
+      section.setShow(show);
+      arr[i].push(section);
     }
   }
   return arr;

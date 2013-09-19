@@ -76,6 +76,45 @@ Meeting.prototype.getLength = function() {
 };
 
 /*
+ * Converts the meeting to a human readable string.
+ * RETURN-TYPE: string
+ */
+Meeting.prototype.toString = function() {
+  var days = Meeting.convertBooleanDaysArrayToString(this.getDays());
+  var start = Meeting.convertMinutesToTimeString(this.getStartTime());
+  var end = Meeting.convertMinutesToTimeString(this.getEndTime());
+  return days + ': ' + start + '-' + end;
+};
+
+/*
+ * Converts a boolean array to a days of the week acronym.
+ * PARAM-TYPE: boolean[5] days The days a class meets.
+ * RETURN-TYPE: string
+ */
+Meeting.convertBooleanDaysArrayToString = function(days) {
+  var str = '';
+  if (days[0]) str += 'M';
+  if (days[1]) str += 'Tu';
+  if (days[2]) str += 'W';
+  if (days[3]) str += 'Th';
+  if (days[4]) str += 'F';
+  return str;
+};
+
+/*
+ * Converts number of minutes since midnight to a normal time string.
+ * PARAM-TYPE: number minutes Minutes since midnight
+ */
+Meeting.convertMinutesToTimeString = function(minutes) {
+  var mm = ('00' + (minutes % 60)).slice(-2);
+  var hours = (minutes - minutes % 60) / 60;
+  var ending = (hours >= 12) ? 'PM' : 'AM';
+  if (hours > 12) hours -= 12;
+  if (hours == 0) hours = 12;
+  return hours + ':' + mm + ' ' + ending;
+};
+
+/*
  * Sort function for Meetings.
  */
 Meeting.sort = function(a, b) {

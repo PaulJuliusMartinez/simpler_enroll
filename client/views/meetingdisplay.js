@@ -15,11 +15,23 @@ MeetingDisplay = function(meeting, day, calendar) {
   this.day_ = day;
   // TYPE: CalendarView
   this.calendar_ = calendar;
+
+  var id = meeting.getSection().getID();
+  var display = this;
+  $.Events(Events.SECTION_ACCENT_PREFIX + id).listen(function() {
+    display.accent();
+  });
+  $.Events(Events.SECTION_UNACCENT_PREFIX + id).listen(function() {
+    display.unaccent();
+  });
 };
 
 
 // TYPE: jQuery The visual element.
 this.elem_;
+
+// TYPE: CourseInfoPopup The popup with section information.
+this.popup_;
 
 /*
  * Draws the rectangle in the given position.
@@ -42,7 +54,7 @@ MeetingDisplay.prototype.render = function(num, total) {
   var title = this.meeting_.getSection().getCourse().getShortName();
 
   var colorClass = (status == Status.ENROLL) ? MeetingDisplay.ENROLLED :
-                                                 MeetingDisplay.PLANNED;
+                                               MeetingDisplay.PLANNED;
 
   var text = $('<div>').addClass(MeetingDisplay.TEXT).text(title);
 
@@ -56,17 +68,28 @@ MeetingDisplay.prototype.render = function(num, total) {
                           append(text);
   this.calendar_.getContainer().append(this.elem_);
 
-  // TODO: This isn't working right now.
   // Squeeze in the text
-  //var fontSize = parseInt(text.css('font-size'), 10);
-  //// 2 Fudge factor to make sure there's space between text and border.
-  //while (fontSize > 6 && text.get()[0].scrollWidth + 2 > width) {
-    //fontSize -= 2;
-    //text.css('font-size', fontSize + 'pt');
-  //}
+  var fontSize = parseInt(text.css('font-size'), 10);
+  // 2 Fudge factor to make sure there's space between text and border.
+  while (fontSize > 6 && text.get()[0].scrollWidth + 2 > width) {
+    fontSize -= 2;
+    text.css('font-size', fontSize + 'pt');
+  }
 
-  var popup = new CourseInfoPopup(this.elem_, this.meeting_, this.day_);
-  popup.render();
+  this.popup_ = new CourseInfoPopup(this.elem_, this.meeting_, this.day_);
+  this.popup_.render();
+
+  // Add accent/unaccent events.
+  var id = this.meeting_.getSection().getID();
+  var popup = this.popup_;
+  this.elem_.hover(function() {
+                     popup.show();
+                     $.Events(Events.SECTION_ACCENT_PREFIX + id).dispatch();
+                   },
+                   function() {
+                     popup.hide();
+                     $.Events(Events.SECTION_UNACCENT_PREFIX + id).dispatch();
+                   });
 };
 
 /*
@@ -76,9 +99,24 @@ MeetingDisplay.prototype.remove = function() {
   this.elem_.remove();
 };
 
+/*
+ * Called when the section should be accented.
+ */
+MeetingDisplay.prototype.accent = function() {
+  if (this.elem_) this.elem_.addClass(MeetingDisplay.ACCENTED);
+};
+
+/*
+ * Called when the section should be unaccented.
+ */
+MeetingDisplay.prototype.unaccent = function() {
+  if (this.elem_) this.elem_.removeClass(MeetingDisplay.ACCENTED);
+};
+
 
 // CSS Constants
 MeetingDisplay.BOX = 'meeting-display-box';
 MeetingDisplay.TEXT = 'meeting-display-text';
 MeetingDisplay.ENROLLED = 'meeting-display-enrolled';
 MeetingDisplay.PLANNED = 'meeting-display-planned';
+MeetingDisplay.ACCENTED = 'meeting-display-accented';

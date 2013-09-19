@@ -21,7 +21,6 @@
   width: 100%;
   height: 15%;
   overflow: scroll;
-  border: 1px solid black;
 }
 
 .section-instructions p {
@@ -35,7 +34,6 @@
   width: 100%;
   height: 83%;
   overflow: scroll;
-  border: 1px solid black;
 }
 
 .section-viewer-course-selection {
@@ -65,21 +63,32 @@
 .section-secondary-container {
   position: absolute;
   top: 0px;
-  width: 50%;
+  width: calc(50% - 4px);
   height: 100%;
-  border-top: 1px solid black;
+  border: 1px solid black;
 }
 
 .section-primary-container {
   left: 0;
-  border-right: 1px solid black;
 }
 
 .section-secondary-container {
-  left: 50%;
+  right: 0px;
 }
 
-/* Set up the buttons first */
+/* Center the primary/secondary section labels */
+.section-section-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 30px;
+  text-align: center;
+  line-height: 30px;
+  border-bottom: 1px solid black;
+}
+
+/* Set up the buttons */
 .section-buttons {
   position: absolute;
   left: 0;
@@ -87,6 +96,7 @@
   width: 100%;
   height: 30px;
   padding: 3px;
+  border-top: 1px solid black;
 }
 
 .section-buttons input {
@@ -108,7 +118,45 @@
 .section-section-container {
   position: absolute;
   left: 0;
-  top: 0;
+  top: 30px;
   width: 100%;
-  height: calc(100% - 30px);
+  height: calc(100% - 60px);
+  overflow: scroll;
+}
+
+/* Style for the actual section list */
+
+.section-course-sections {
+  width: 100%;
+}
+
+.section-individual-section {
+  width: 100%;
+  padding: 3px;
+  text-align: left;
+  border-top: 1px solid black;
+}
+
+.section-individual-section:hover {
+  background: #ddd;
+}
+
+.section-individual-section:active {
+  background: #ccc;
+}
+
+.section-individual-section:first-child {
+  border-top: none;
+}
+
+.section-individual-section:last-child {
+  border-bottom: 1px solid black;
+}
+
+.section-individual-section span {
+  color: red;
+}
+
+.section-individual-section.section-showing-section span {
+  color: green;
 }

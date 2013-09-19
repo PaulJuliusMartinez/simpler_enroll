@@ -67,7 +67,7 @@
           main.addCourse(course);
         });
         $.Events(Events.COURSE_REMOVED).listen(function(course) {
-          main.refreshComponents();
+          main.removeCourse(course);
         });
         $.Events(Events.COURSE_CHANGE).listen(function() {
           main.refreshComponents();
@@ -220,17 +220,19 @@
         </div>
         <div class="section-viewer-selector-container">
           <div class="section-primary-container">
+            <div class="section-section-header">Primary Section:</div>
             <div class="section-section-container"></div>
             <div class="section-buttons">
-              <input type=button value="View All" class="section-all-button"/>
-              <input type=button value="View None" class="section-none-button"/>
+              <input type=button value="Show All" class="section-all-button"/>
+              <input type=button value="Show None" class="section-none-button"/>
             </div>
           </div>
           <div class="section-secondary-container">
+            <div class="section-section-header">Secondary Section:</div>
             <div class="section-section-container"></div>
             <div class="section-buttons">
-              <input type=button value="View All" class="section-all-button"/>
-              <input type=button value="View None" class="section-none-button"/>
+              <input type=button value="Show All" class="section-all-button"/>
+              <input type=button value="Show None" class="section-none-button"/>
             </div>
           </div>
         </div>

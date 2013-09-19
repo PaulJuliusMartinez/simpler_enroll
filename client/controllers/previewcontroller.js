@@ -29,7 +29,8 @@ PreviewController.prototype.displayCourseList = function(courses) {
           courses[i].getStatus().getEnrollmentStatus() != Status.DROP) {
         this.displaySectionList_(
             courses[i].getPrimarySectionsForQuarter(quarter), quarter);
-        // Maybe display secondary sections here too?
+        this.displaySectionList_(
+            courses[i].getSecondarySectionsForQuarter(quarter), quarter);
         units += courses[i].getMaxUnits();
       }
     }
@@ -45,9 +46,11 @@ PreviewController.prototype.displayCourseList = function(courses) {
  */
 PreviewController.prototype.displaySectionList_ = function(sections, quarter) {
   for (var i = 0; i < sections.length; i++) {
-    var meetings = sections[i].getMeetings();
-    for (var j = 0; j < meetings.length; j++) {
-      this.view_.getCalendarView(quarter).addMeeting(meetings[j]);
+    if (sections[i].shouldShow()) {
+      var meetings = sections[i].getMeetings();
+      for (var j = 0; j < meetings.length; j++) {
+        this.view_.getCalendarView(quarter).addMeeting(meetings[j]);
+      }
     }
   }
 };

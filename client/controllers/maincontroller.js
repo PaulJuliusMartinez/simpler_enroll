@@ -21,8 +21,6 @@ MainController = function() {
 
   // TYPE: SectionController
   this.sections_ = new SectionController(sectionTab);
-
-  tabs.addTab('Tab 2');
 };
 
 
@@ -33,8 +31,16 @@ MainController = function() {
 MainController.prototype.addCourse = function(course) {
   this.courseList_.addCourse(course);
   this.sections_.addCourse(course);
-  var courses = this.courseList_.getCourses();
-  this.preview_.displayCourseList(courses);
+  this.refreshComponents();
+};
+
+/*
+ * Called when a course is removed.
+ * PARAM-TYPE: Course course the removed course.
+ */
+MainController.prototype.removeCourse = function(course) {
+  this.sections_.removeCourse(course);
+  this.refreshComponents();
 };
 
 /*

@@ -20,6 +20,8 @@ Section = function(course, obj) {
       this.meetings_.push(new Meeting(this, obj[CourseConstants.MEETINGS][i]));
     }
   }
+  // TYPE: boolean
+  this.shouldShow_ = true;
   // TYPE: number
   this.id_ = UniqueID.newID();
 };
@@ -32,7 +34,11 @@ Section.prototype.getInstructors = function() {
 Section.prototype.getMeetings = function() {
   return this.meetings_.slice();
 };
+Section.prototype.shouldShow = function() { return this.shouldShow_; };
 Section.prototype.getID = function() { return this.id_; };
+
+/* Setters */
+Section.prototype.setShow = function(should) { this.shouldShow_ = should; };
 
 /*
  * Check if a section conflicts with another section of a different class.
