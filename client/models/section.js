@@ -23,7 +23,7 @@ Section = function(course, obj) {
   // TYPE: boolean
   this.shouldShow_ = true;
   // TYPE: number
-  this.id_ = UniqueID.newID();
+  this.id_ = obj[CourseConstants.SECTION_ID];
 };
 
 /* Simple getters */

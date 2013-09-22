@@ -54,6 +54,12 @@ CourseListView.prototype.addCourse = function(course) {
     this.noClasses_.remove();
     // This isn't working right now.
     //this.table_.sortable({ axis: 'y' });
+
+    // Add course select event to the row.
+    row.click(function() {
+      $.Events(Events.COURSE_SELECTED).dispatch(
+          course, course.firstQuarterOffered());
+    });
   }
 };
 

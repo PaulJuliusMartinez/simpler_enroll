@@ -16,6 +16,10 @@ SectionView = function(controller) {
   // TYPE: jQuery
   this.quarterSelect_;
   // TYPE: jQuery
+  this.primaryType_;
+  // TYPE: jQuery
+  this.secondaryType_;
+  // TYPE: jQuery
   this.primaryContainer_;
   // TYPE: jQuery
   this.secondaryContainer_;
@@ -50,6 +54,11 @@ SectionView.prototype.decorate = function(parent) {
   var view = this;
   this.courseSelect_.on('change', function() { view.fixDisplay(); });
   this.quarterSelect_.on('change', function() { view.fixDisplay(); });
+
+  // Get the headers for the section names
+  var headers = sectionView.find('.' + SectionView.HEADER);
+  this.primaryType_ = $(headers[0]);
+  this.secondaryType_ = $(headers[1]);
 
   // Get the containers for the section lists.
   var primary = $(sectionView.find('.' + SectionView.PRIMARY));
@@ -169,6 +178,22 @@ SectionView.prototype.removeCourse = function(course) {
 };
 
 /*
+ * Selects a specific course.
+ * PARAM-TYPE: Course course The course to select.
+ */
+SectionView.prototype.selectCourse = function(course) {
+  this.courseSelect_.val(course.getID());
+};
+
+/*
+ * Selects a specific quarter.
+ * PARAM-TYPE: number quarter The quarter to select.
+ */
+SectionView.prototype.selectQuarter = function(quarter) {
+  this.quarterSelect_.val(quarter);
+};
+
+/*
  * Fixes the display by properly hiding all the elements and showing only the
  * ones that should be displayed.
  */
@@ -187,6 +212,11 @@ SectionView.prototype.fixDisplay = function() {
   if (selectedCourse && selectedQuarter) {
     this.courses_[selectedCourse].primarySections[selectedQuarter].show();
     this.courses_[selectedCourse].secondarySections[selectedQuarter].show();
+
+    // Set the course types:
+    var course = this.courses_[selectedCourse].course;
+    this.primaryType_.text(course.getPrimarySectionType());
+    this.secondaryType_.text(course.getSecondarySectionType());
   }
 }
 
@@ -275,6 +305,7 @@ SectionView.COURSE_SELECT = 'section-course-select';
 SectionView.QUARTER_SELECT = 'section-quarter-select';
 SectionView.PRIMARY = 'section-primary-container';
 SectionView.SECONDARY = 'section-secondary-container';
+SectionView.HEADER = 'section-section-header';
 SectionView.SECTION_CONTAINER = 'section-section-container';
 SectionView.BUTTONS = 'section-buttons';
 SectionView.COURSE_SECTIONS = 'section-course-sections';

@@ -28,7 +28,7 @@ PreviewView.prototype.decorate = function(parent) {
   var units = parent.find('.' + PreviewView.UNITS);
 
   for (var i = 0; i < 3; i++) {
-    this.calendars_.push(new CalendarView($(calendars[i])));
+    this.calendars_.push(new CalendarView($(calendars[i]), i));
     this.unitLabels_.push($(units[i]));
     this.calendars_[i].render();
   }

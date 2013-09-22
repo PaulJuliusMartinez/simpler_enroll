@@ -27,5 +27,6 @@ $.Events = function(eventType) {
 Events.COURSE_ADDED = 'course-added';
 Events.COURSE_REMOVED = 'course-removed';
 Events.COURSE_CHANGE = 'course-change';
+Events.COURSE_SELECTED  = 'course-selected';
 Events.SECTION_ACCENT_PREFIX = 'section-accent-';
 Events.SECTION_UNACCENT_PREFIX = 'section-unaccent-';

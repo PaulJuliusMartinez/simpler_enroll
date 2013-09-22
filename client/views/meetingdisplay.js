@@ -91,6 +91,12 @@ MeetingDisplay.prototype.render = function(num, total) {
                      popup.hide();
                      $.Events(Events.SECTION_UNACCENT_PREFIX + id).dispatch();
                    });
+
+  // Add course select event.
+  this.elem_.click(function() {
+    $.Events(Events.COURSE_SELECTED).dispatch(
+        this.meeting_.getSection().getCourse(), this.calendar_.getQuarter());
+  }.bind(this));
 };
 
 /*

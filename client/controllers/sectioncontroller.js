@@ -11,6 +11,10 @@ SectionController = function(parent) {
   // TYPE: SectionView
   this.view_ = new SectionView(this);
   this.view_.decorate(parent);
+
+  $.Events(Events.COURSE_SELECTED).listen(function(course, quarter) {
+    this.showCourse(course, quarter);
+  }.bind(this));
 };
 
 
@@ -28,6 +32,17 @@ SectionController.prototype.addCourse = function(course) {
  */
 SectionController.prototype.removeCourse = function(course) {
   this.view_.removeCourse(course);
+};
+
+/*
+ * Show a specific course.
+ * PARAM-TYPE: Course course The course to show.
+ * PARAM-TYPE: number quarter Which quarter to show.
+ */
+SectionController.prototype.showCourse = function(course, quarter) {
+  this.view_.selectCourse(course);
+  this.view_.selectQuarter(quarter);
+  this.view_.fixDisplay();
 };
 
 /*

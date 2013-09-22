@@ -29,13 +29,17 @@ Course = function(obj) {
   // TYPE: Section[][]
   this.primaryComponent_ = this.convertJSONSectionsToSectionArray(
       obj, CourseConstants.PRIMARY_COMPONENT, true);
+  // TYPE: string
+  this.primaryComponentType_ = obj[CourseConstants.PRIMARY_TYPE];
   // TYPE: Section[][]
   this.secondaryComponent_ = this.convertJSONSectionsToSectionArray(
       obj, CourseConstants.SECONDARY_COMPONENT, false);
+  // TYPE: string
+  this.secondaryComponentType_ = obj[CourseConstants.SECONDARY_TYPE] || 'N/A';
   // TYPE: Status
   this.status_ = new Status();
   // TYPE: number
-  this.id_ = UniqueID.newID();
+  this.id_ = obj[CourseConstants.COURSE_ID];
 };
 
 /*
@@ -75,6 +79,13 @@ Course.prototype.getGERs = function() { return this.gers_.slice(); };
 // Status and ID
 Course.prototype.getStatus = function() { return this.status_; };
 Course.prototype.getID = function() { return this.id_; };
+// Section types
+Course.prototype.getPrimarySectionType = function() {
+  return this.primaryComponentType_;
+};
+Course.prototype.getSecondarySectionType = function() {
+  return this.secondaryComponentType_;
+};
 
 // Some basic util methods.
 /*
@@ -97,6 +108,16 @@ Course.prototype.getSecondarySectionsForQuarter = function(quarter) {
  */
 Course.prototype.hasSecondaryComponent = function() {
   return (this.secondaryComponent_ != null);
+};
+
+/*
+ * Returns the first quarter the course is taught in.
+ * RETURN-TYPE: quarter
+ */
+Course.prototype.firstQuarterOffered = function() {
+  if (this.isOfferedIn(0)) return 0;
+  if (this.isOfferedIn(1)) return 1;
+  return 2;
 };
 
 /*

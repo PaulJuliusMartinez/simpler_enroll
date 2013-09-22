@@ -164,10 +164,6 @@
   border-top: none;
 }
 
-.section-individual-section:last-child {
-  border-bottom: 1px solid black;
-}
-
 .section-individual-section span {
   color: red;
 }

@@ -6,12 +6,15 @@
 /*
  * Constructor takes the parent element of the calendar.
  * PARAM-TYPE: jQuery parent The parent element of the calendar.
+ * PARAM-TYPE: number quarter What quarter this is a calendar for.
  */
-CalendarView = function(parent) {
+CalendarView = function(parent, quarter) {
   // TYPE: jQuery
   this.parent_ = parent;
   // TYPE: MeetingRenderer
   this.meetingRenderer_ = new MeetingRenderer(this);
+  // TYPE: number
+  this.quarter_ = quarter;
 };
 
 
@@ -68,6 +71,14 @@ CalendarView.prototype.render = function() {
  */
 CalendarView.prototype.addMeeting = function(meeting) {
   this.meetingRenderer_.addMeeting(meeting);
+};
+
+/*
+ * Returns what quarter this is for.
+ * RETURN-TYPE: number
+ */
+CalendarView.prototype.getQuarter = function() {
+  return this.quarter_;
 };
 
 /*
