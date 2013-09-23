@@ -10,7 +10,6 @@ UserState = {};
 UserState.loadSavedCourses = function() {
   this.ignoreSaveCalls();
   var cookie = document.cookie;
-  window.console.log(cookie);
   var start = cookie.indexOf(UserState.COURSE_LIST_V1 + "=");
   if (start == -1) {
     // If there was no cookie, we'll add one.

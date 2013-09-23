@@ -10,7 +10,7 @@
   margin: 8px;
   width: calc(100% - 16px);
   height: calc(100% - 16px);
-  border: 5px solid #8c1515;
+  border: 5px solid #a31818;
   border-radius: 3px;
 }
 
@@ -30,9 +30,9 @@
   width: auto;
   padding-left: 5px;
   padding-right: 5px;
-  border-left: 1px solid #8c1515;
-  border-right: 1px solid #8c1515;
-  border-bottom: 1px solid #8c1515;
+  border-left: 1px solid #a31818;
+  border-right: 1px solid #a31818;
+  border-bottom: 1px solid #a31818;
   text-align: center;
   cursor: pointer;
 }
@@ -47,9 +47,9 @@
 
 .tabs-selected {
   font-weight: bold;
-  border-left: 2px solid #8c1515;
-  border-right: 2px solid #8c1515;
-  border-bottom: 2px solid #8c1515;
+  border-left: 2px solid #a31818;
+  border-right: 2px solid #a31818;
+  border-bottom: 2px solid #a31818;
 }
 
 /* Bodies */
