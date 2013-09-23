@@ -119,3 +119,9 @@ CourseConstants.SPRING = 2;
          */
         CourseConstants.START_TIME = 'start';
         CourseConstants.END_TIME = 'end';
+
+        /*
+         * Location of the meeting.
+         * TYPE: string
+         */
+        CourseConstants.LOCATION = 'location';

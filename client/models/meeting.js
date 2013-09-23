@@ -17,6 +17,8 @@ Meeting = function(section, obj) {
   this.startTime_ = Meeting.parseTimeString(obj[CourseConstants.START_TIME]);
   // TYPE: number
   this.endTime_ = Meeting.parseTimeString(obj[CourseConstants.END_TIME]);
+  // TYPE: string
+  this.location_ = obj[CourseConstants.LOCATION] || 'N/A';
   // TYPE: number
   this.id_ = UniqueID.newID();
 };
@@ -27,6 +29,7 @@ Meeting.prototype.getSection = function() { return this.section_; };
 Meeting.prototype.getDays = function() { return this.days_.slice(); };
 Meeting.prototype.getStartTime = function() { return this.startTime_; };
 Meeting.prototype.getEndTime = function() { return this.endTime_; };
+Meeting.prototype.getLocation = function() { return this.location_; };
 Meeting.prototype.getID = function() { return this.id_; };
 
 /*
@@ -83,7 +86,8 @@ Meeting.prototype.toString = function() {
   var days = Meeting.convertBooleanDaysArrayToString(this.getDays());
   var start = Meeting.convertMinutesToTimeString(this.getStartTime());
   var end = Meeting.convertMinutesToTimeString(this.getEndTime());
-  return days + ': ' + start + '-' + end;
+  var location = (this.location_ == 'N/A') ? '' : ' in ' + this.location_;
+  return days + ': ' + start + '-' + end + location;
 };
 
 /*

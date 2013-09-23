@@ -376,12 +376,13 @@ public class FetchCourses {
     s += "\"days\":" + convertDaysToBooleanArray(m.getDays()) + ",";
     try {
       s += "\"start\":\"" + m.getStartTime().split(" ")[3] + "\",";
-      s += "\"end\":\"" + m.getEndTime().split(" ")[3] + "\"";
+      s += "\"end\":\"" + m.getEndTime().split(" ")[3] + "\",";
     } catch (ArrayIndexOutOfBoundsException e) {
       System.out.println("Error with the splitting? Start: " +
           m.getStartTime() + " - End: " + m.getEndTime());
       return null;
     }
+    s += "\"location\":\"" + m.getLocation() + "\"";
     s += "}";
     return s;
   }
