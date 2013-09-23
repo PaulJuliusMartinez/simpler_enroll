@@ -21,10 +21,6 @@ CourseListController = function(parent) {
  * PARAM-TYPE: Course course The course added.
  */
 CourseListController.prototype.addCourse = function(course) {
-  // If the course isn't in the list, reset its status.
-  if (!this.courses_[course.getID()]) {
-    course.resetStatus();
-  }
   this.courses_[course.getID()] = course;
   this.view_.addCourse(course);
 };
@@ -35,6 +31,7 @@ CourseListController.prototype.addCourse = function(course) {
  */
 CourseListController.prototype.removeCourse = function(course) {
   if (this.courses_[course.getID()]) {
+    course.resetStatus();
     delete this.courses_[course.getID()];
     this.view_.removeCourse(course);
     $.Events(Events.COURSE_REMOVED).dispatch(course);

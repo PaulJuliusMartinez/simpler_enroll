@@ -107,6 +107,7 @@ SectionView.prototype.addCourse = function(course) {
   // If the courses is already added, we'll just select it and return.
   if (this.courses_[id]) {
     this.courseSelect_.val(id);
+    this.selectQuarter(course.firstQuarterOffered());
     this.fixDisplay();
     return;
   }
@@ -156,6 +157,7 @@ SectionView.prototype.addCourse = function(course) {
   // Save the helper and fix the display.
   this.courses_[id] = helper;
   this.courseSelect_.val(id);
+  this.selectQuarter(course.firstQuarterOffered());
   this.fixDisplay();
 };
 

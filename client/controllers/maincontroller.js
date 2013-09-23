@@ -32,6 +32,9 @@ MainController.prototype.addCourse = function(course) {
   this.courseList_.addCourse(course);
   this.sections_.addCourse(course);
   this.refreshComponents();
+  // Save state
+  var courses = this.courseList_.getCourses();
+  UserState.saveCourses(courses);
 };
 
 /*
@@ -41,6 +44,9 @@ MainController.prototype.addCourse = function(course) {
 MainController.prototype.removeCourse = function(course) {
   this.sections_.removeCourse(course);
   this.refreshComponents();
+  // Save state
+  var courses = this.courseList_.getCourses();
+  UserState.saveCourses(courses);
 };
 
 /*
@@ -49,4 +55,6 @@ MainController.prototype.removeCourse = function(course) {
 MainController.prototype.refreshComponents = function() {
   var courses = this.courseList_.getCourses();
   this.preview_.displayCourseList(courses);
+  // Save state
+  UserState.saveCourses(courses);
 };

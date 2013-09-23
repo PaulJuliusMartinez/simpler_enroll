@@ -121,8 +121,9 @@ CourseListView.prototype.createCourseRow = function(course) {
  */
 CourseListView.prototype.createCheckBox = function(td, course, quarter) {
   var isOffered = course.isOfferedIn(quarter);
+  var shouldShow = course.getStatus().getQuarterStatus(quarter);
   var checkbox = $(td.children()[0]);
-  checkbox.prop('checked', isOffered).attr('disabled', !isOffered);
+  checkbox.prop('checked', shouldShow).attr('disabled', !isOffered);
 
   var controller = this.controller_;
   td.click(function() {
