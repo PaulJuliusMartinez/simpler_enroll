@@ -6,14 +6,11 @@
 /*
  * Constructor takes the parent element of the view and the manager of the view.
  * PARAM-TYPE: jQuery parent The parent element for the SearchBoxView.
- * PARAM-TYPE: MainController manager The controller that manages this one.
  */
-CourseListController = function(parent, manager) {
+CourseListController = function(parent) {
   // TYPE: CourseListView
-  this.view_ = new CourseListView(parent, this);
-  this.view_.render();
-  // TYPE: MainController
-  this.manager_ = manager;
+  this.view_ = new CourseListView(this);
+  this.view_.decorate(parent);
   // TYPE: Object.Course
   this.courses_ = {};
 };
@@ -24,10 +21,6 @@ CourseListController = function(parent, manager) {
  * PARAM-TYPE: Course course The course added.
  */
 CourseListController.prototype.addCourse = function(course) {
-  // If the course isn't in the list, reset its status.
-  if (!this.courses_[course.getID()]) {
-    course.resetStatus();
-  }
   this.courses_[course.getID()] = course;
   this.view_.addCourse(course);
 };
@@ -38,9 +31,10 @@ CourseListController.prototype.addCourse = function(course) {
  */
 CourseListController.prototype.removeCourse = function(course) {
   if (this.courses_[course.getID()]) {
+    course.resetStatus();
     delete this.courses_[course.getID()];
     this.view_.removeCourse(course);
-    this.manager_.notifyCourseListChange();
+    $.Events(Events.COURSE_REMOVED).dispatch(course);
   }
 };
 
@@ -67,7 +61,7 @@ CourseListController.prototype.getCourses = function() {
 CourseListController.prototype.willTakeClassInQuarter = function(
     course, quarter, considered) {
   course.getStatus().setQuarterStatus(quarter, considered);
-  this.manager_.notifyCourseListChange();
+  $.Events(Events.COURSE_CHANGE).dispatch();
 };
 
 /*
@@ -77,5 +71,5 @@ CourseListController.prototype.willTakeClassInQuarter = function(
  */
 CourseListController.prototype.setEnrollmentStatus = function(course, status) {
   course.getStatus().setEnrollmentStatus(status);
-  this.manager_.notifyCourseListChange();
+  $.Events(Events.COURSE_CHANGE).dispatch();
 };

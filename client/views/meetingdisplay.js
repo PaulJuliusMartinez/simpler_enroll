@@ -15,11 +15,23 @@ MeetingDisplay = function(meeting, day, calendar) {
   this.day_ = day;
   // TYPE: CalendarView
   this.calendar_ = calendar;
+
+  var id = meeting.getSection().getID();
+  var display = this;
+  $.Events(Events.SECTION_ACCENT_PREFIX + id).listen(function() {
+    display.accent();
+  });
+  $.Events(Events.SECTION_UNACCENT_PREFIX + id).listen(function() {
+    display.unaccent();
+  });
 };
 
 
 // TYPE: jQuery The visual element.
 this.elem_;
+
+// TYPE: CourseInfoPopup The popup with section information.
+this.popup_;
 
 /*
  * Draws the rectangle in the given position.
@@ -27,13 +39,12 @@ this.elem_;
  * PARAM-TYPE: number total How many meetings are in this time slot.
  */
 MeetingDisplay.prototype.render = function(num, total) {
-  var headerHeight = this.calendar_.getHeaderRowHeight();
-  var hourHeight = this.calendar_.getNormalRowHeight();
+  var rowHeight = 100 / this.calendar_.getNumRows();
   var numHours = (this.meeting_.getStartTime() / 60) - 9;
-  var height = hourHeight * this.meeting_.getLength() / 60;
-  var yOffset = headerHeight + hourHeight * numHours;
-  var dayWidth = this.calendar_.getDayWidth();
-  var xOffset = this.calendar_.getHourWidth() + this.day_ * dayWidth;
+  var height = rowHeight * this.meeting_.getLength() / 60;
+  var yOffset = rowHeight * (1 + numHours);
+  var dayWidth = 18; // 18%
+  var xOffset = 10 + this.day_ * dayWidth;
 
   var width = dayWidth / total;
   xOffset += (num - 1) * dayWidth / total;
@@ -43,30 +54,48 @@ MeetingDisplay.prototype.render = function(num, total) {
   var title = this.meeting_.getSection().getCourse().getShortName();
 
   var colorClass = (status == Status.ENROLL) ? MeetingDisplay.ENROLLED :
-                                                 MeetingDisplay.PLANNED;
+                                               MeetingDisplay.PLANNED;
 
   var text = $('<div>').addClass(MeetingDisplay.TEXT).text(title);
 
   // The little +/- 1/2 are to account for the borders.
   this.elem_ = $('<div>').addClass(MeetingDisplay.BOX).
                           addClass(colorClass).
-                          css('top', yOffset + 'px').
-                          css('height', (height - 2) + 'px').
-                          css('left', (xOffset + 1)  + 'px').
-                          css('width', (width - 2) + 'px').
+                          css('top', yOffset + '%').
+                          css('height', height + '%').
+                          css('left', xOffset  + '%').
+                          css('width', 'calc(' + width + '%' + ' - 2px)').
                           append(text);
   this.calendar_.getContainer().append(this.elem_);
 
   // Squeeze in the text
   var fontSize = parseInt(text.css('font-size'), 10);
-  // 2 Fudge factor to make sure there's space between text and border.
-  while (fontSize > 6 && text.get()[0].scrollWidth + 2 > width) {
-    fontSize--;
+	var divWidth = this.elem_.get()[0].scrollWidth;
+  while (fontSize > 6 && text.get()[0].scrollWidth > divWidth) {
+    fontSize -= 2;
     text.css('font-size', fontSize + 'pt');
   }
 
-  var popup = new CourseInfoPopup(this.elem_, this.meeting_, this.day_);
-  popup.render();
+  this.popup_ = new CourseInfoPopup(this.elem_, this.meeting_, this.day_);
+  this.popup_.render();
+
+  // Add accent/unaccent events.
+  var id = this.meeting_.getSection().getID();
+  var popup = this.popup_;
+  this.elem_.hover(function() {
+                     popup.show();
+                     $.Events(Events.SECTION_ACCENT_PREFIX + id).dispatch();
+                   },
+                   function() {
+                     popup.hide();
+                     $.Events(Events.SECTION_UNACCENT_PREFIX + id).dispatch();
+                   });
+
+  // Add course select event.
+  this.elem_.click(function() {
+    $.Events(Events.COURSE_SELECTED).dispatch(
+        this.meeting_.getSection().getCourse(), this.calendar_.getQuarter());
+  }.bind(this));
 };
 
 /*
@@ -76,9 +105,24 @@ MeetingDisplay.prototype.remove = function() {
   this.elem_.remove();
 };
 
+/*
+ * Called when the section should be accented.
+ */
+MeetingDisplay.prototype.accent = function() {
+  if (this.elem_) this.elem_.addClass(MeetingDisplay.ACCENTED);
+};
+
+/*
+ * Called when the section should be unaccented.
+ */
+MeetingDisplay.prototype.unaccent = function() {
+  if (this.elem_) this.elem_.removeClass(MeetingDisplay.ACCENTED);
+};
+
 
 // CSS Constants
 MeetingDisplay.BOX = 'meeting-display-box';
 MeetingDisplay.TEXT = 'meeting-display-text';
 MeetingDisplay.ENROLLED = 'meeting-display-enrolled';
 MeetingDisplay.PLANNED = 'meeting-display-planned';
+MeetingDisplay.ACCENTED = 'meeting-display-accented';

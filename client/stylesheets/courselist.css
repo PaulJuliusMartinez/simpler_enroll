@@ -2,100 +2,79 @@
  * Style for the course list view.
  */
 
-.main-course-list-container h1 {
-  font-size: 24px;
-  margin-top: 12px;
-  margin-bottom: 12px;
-}
-
-.course-list-body {
-  width: 700px;
-  max-width: 700px;
-  min-height: 310px;
-  max-height: 310px;
-  border: 5px solid #8c1515;
+.course-list-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border: 5px solid #a31818;
   border-radius: 3px;
 }
 
-table.course-list-table {
+/* Fix the position of the header */
+.course-list-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 25px;
+}
+
+.course-list-header th {
+  height: 25px;
+  border-bottom: 1px solid black;
+}
+
+/* Fix the position of the body */
+.course-list-body-container {
+  position: absolute;
+  top: 25px;
+  left: 0px;
+  width: 100%;
+  height: calc(100% - 25px);
+  overflow-y: scroll;
+}
+
+/* Set column widths */
+.course-list-delete-column {
+  width: 20px;
+}
+
+.course-list-name-column {
+  padding-left: 5px;
+  width: auto;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.course-list-autumn-column,
+.course-list-winter-column,
+.course-list-spring-column {
+  width: 40px;
+}
+
+.course-list-section-column,
+.course-list-status-column {
+  width: 80px;
+  text-align: center;
+}
+
+/* Set up the course list table */
+.course-list-body-table {
+  table-layout: fixed;
+  width: 100%;
+}
+.course-list-body {
   border-spacing: 0px;
   border-collapse: collapse;
-  table-layout: fixed;
-  width: 700px;
 }
 
-table.course-list-table thead {
-  display: table-header-group;
+/* 30 px row height */
+.course-list-body td {
   height: 30px;
-  width: 700px;
-  padding: 0px;
-  font-size: 18px;
-  font-weight: bold;
-  border-bottom: 1px solid black;
-}
-
-table.course-list-table tbody {
-  display: block;
-  height: 286px;
-  width: 700px;
-  overflow: auto;
-}
-
-/*
- * All that shit above is to get the effing table to work.
- * I can't figure out how to get it to work with percentages.
- */
-
-.course-list-table th {
-  border-bottom: 1px solid black;
-}
-
-.course-list-table td {
   background-color: white;
   border-top: 1px solid black;
   border-bottom: 1px solid black;
-}
-
-/* Delete column */
-.course-list-table tr td:nth-child(1),
-.course-list-table tr th:nth-child(1) {
-  width: 20px;
-  max-width: 20px;
-}
-
-/* Course name column */
-.course-list-table tr th:nth-child(2),
-.course-list-table tr td:nth-child(2) {
-  padding-left: 5px;
-  box-sizing: border-box;
-  width: 400px;
-  max-width: 400px;
-}
-
-/* Quarter columns */
-.course-list-table tr th:nth-child(3),
-.course-list-table tr td:nth-child(3),
-.course-list-table tr th:nth-child(4),
-.course-list-table tr td:nth-child(4),
-.course-list-table tr th:nth-child(5),
-.course-list-table tr td:nth-child(5) {
-  width: 40px;
-  max-width: 40px;
-}
-
-/* Section column */
-.course-list-table tr td:nth-child(6),
-.course-list-table tr th:nth-child(6) {
-  text-align: center;
-  width: 80px;
-  max-width: 80px;
-}
-
-/* Yes/Maybe/No column */
-.course-list-table tr td:nth-child(7),
-.course-list-table tr th:nth-child(7) {
-  width: 80px;
-  max-width: 80px;
 }
 
 /*
@@ -104,31 +83,19 @@ table.course-list-table tbody {
 
 .course-list-no-courses-row {
   font-style: italic;
-}
-
-.course-list-no-courses-row,
-.course-list-course-row {
-  height: 30px;
-}
-
-/* Get name column to overflow properly. */
-.course-list-course-row
-td.course-list-name-column {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  text-align: center;
 }
 
 /* Center check boxes */
-tbody .course-list-autumn-column,
-tbody .course-list-winter-column,
-tbody .course-list-spring-column {
+.course-list-autumn-column,
+.course-list-winter-column,
+.course-list-spring-column {
   padding-top: 2px;
   text-align: center;
   vertical-align: middle;
 }
 
-.course-list-certainty-column {
+.course-list-status-column {
   text-align: center;
 }
 
@@ -155,7 +122,7 @@ tbody .course-list-spring-column {
   background-color: #ddd; /* Grayed out color */
 }
 
-.course-list-edit-column img {
+.course-list-delete-column img {
   display: block;
   margin: auto;
   padding-left: 1px;

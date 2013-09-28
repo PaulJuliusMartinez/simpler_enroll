@@ -34,6 +34,7 @@ public class FetchCourses {
       for(Department d : s.getDepartments()) {
         if (d.getCode().equals("ENVRINST")) continue; // This one breaks things.
         writeDepartmentClassesToFile(d, connection);
+        System.gc();
       }
     }
   }
@@ -103,24 +104,38 @@ public class FetchCourses {
     String s = "\"" + c.getSubjectCodeSuffix() + "\":{";
     s += "\"department\":\"" + c.getSubjectCodePrefix() + "\",";
     s += "\"number\":\"" + c.getSubjectCodeSuffix() + "\",";
-    s += "\"title\":\"" + c.getTitle() + "\",";
-    s += "\"description\":\"" + c.getDescription() + "\",";
+    s += "\"title\":\"" + convertToJSONEscapedString(c.getTitle()) + "\",";
+    s += "\"description\":\"" + convertToJSONEscapedString(c.getDescription()) + "\",";
     s += "\"min_units\":" + c.getMinimumUnits() + ",";
     s += "\"max_units\":" + c.getMaximumUnits() + ",";
     String GERSSatisfied = parseGERString(c.getGeneralEducationRequirementsSatisfied());
     s += "\"gers\":" + GERSSatisfied + ",";
+    s += "\"id\":" + c.getcourseId() + ",";
 
     Map<String, String> sections = getPrimaryAndSecodaryComponentSections(c);
     // Case where a class has no valid sections
     if (sections == null) return null;
-    s += "\"primary\":" + sections.get("PRIMARY");
+    s += "\"primary\":" + sections.get("PRIMARY") + ",";
+    s += "\"primary_type\":\"" + sections.get("PRIMARY_TYPE") + "\"";
     if (sections.containsKey("SECONDARY")) {
-      s += ",\"secondary\":" + sections.get("SECONDARY");
+      s += ",\"secondary\":" + sections.get("SECONDARY") + ",";
+      s += "\"secondary_type\":\"" + sections.get("SECONDARY_TYPE") + "\"";
     }
 
     s += "}";
 
     return s;
+  }
+
+  /* Used to convert things like &quot; to " but then also escape it. */
+  private static String convertToJSONEscapedString(String s) {
+    // Convert the HTML things to actual characters.
+    s = s.replace("&amp;", "&");
+    s = s.replace("&#39;", "'");
+    s = s.replace("&quot;", "\"");
+    s = s.replace("\t", "\\t");
+    // Escape the " now
+    return s.replace("\"", "\\\"");
   }
 
   private static String parseGERString(String gers) {
@@ -148,7 +163,11 @@ public class FetchCourses {
     Map<String, ArrayList<String>> winterClasses = new HashMap<String, ArrayList<String>>();
     Map<String, ArrayList<String>> springClasses = new HashMap<String, ArrayList<String>>();
 
+    Set<Integer> addedSections = new HashSet<Integer>();
     for (Section s : c.getSections()) {
+      // Stupid explore courses has all these duplicate sections...
+      if (addedSections.contains(s.getClassId())) continue;
+
       String term = s.getTerm();
       // Ignore summer classes.
       if (term.contains("Summer")) continue;
@@ -158,6 +177,9 @@ public class FetchCourses {
       String JSON = convertSectionToJSONObject(s);
       // Sections that have 'empty' meetings will return null;
       if (JSON == null) continue;
+
+      // Mark the section as added
+      addedSections.add(s.getClassId());
 
       // Only add the component once we know it has a valid section.
       components.add(component);
@@ -184,11 +206,13 @@ public class FetchCourses {
     String pWinter = convertListToJSONArray(winterClasses.get(whichComponent.get("PRIMARY")));
     String pSpring = convertListToJSONArray(springClasses.get(whichComponent.get("PRIMARY")));
     sectionMap.put("PRIMARY", "[" + pAutumn + "," + pWinter + "," + pSpring + "]");
+    sectionMap.put("PRIMARY_TYPE", humanReadableComponent(whichComponent.get("PRIMARY")));
     if (whichComponent.containsKey("SECONDARY")) {
       String sAutumn = convertListToJSONArray(autumnClasses.get(whichComponent.get("SECONDARY")));
       String sWinter = convertListToJSONArray(winterClasses.get(whichComponent.get("SECONDARY")));
       String sSpring = convertListToJSONArray(springClasses.get(whichComponent.get("SECONDARY")));
       sectionMap.put("SECONDARY", "[" + sAutumn + "," + sWinter + "," + sSpring + "]");
+      sectionMap.put("SECONDARY_TYPE", humanReadableComponent(whichComponent.get("SECONDARY")));
     }
     return sectionMap;
   }
@@ -260,14 +284,48 @@ public class FetchCourses {
     if (!permissibleClassComponents.contains(sec.getComponent())) return null;
     String s = "{";
     // This is causing problems right now.
-    s += "\"instructors\":" + "[],"; //convertInstructorSetToJSONArray(sec.getInstructors());
+    String instructors;
+    try {
+      instructors = convertInstructorSetToJSONArray(sec.getInstructors());
+    } catch (NullPointerException e) {
+      instructors = "[]";
+    }
+    s += "\"instructors\":" + instructors + ",";
     String meetingSchedules = convertMeetingScheduleSetToJSONArray(sec.getMeetingSchedules());
 
     // Ignore sections that never meet.
     if (meetingSchedules == null) return null;
-    s += "\"meeting-times\":" + meetingSchedules;
+    s += "\"meeting-times\":" + meetingSchedules + ",";
+    s += "\"id\":" + sec.getClassId();
     s += "}";
     return s;
+  }
+
+  /*
+   * Converts a section type to the human readable format
+   */
+  private static String humanReadableComponent(String abbr) {
+    if (abbr.equals("LEC")) return "Lecture";
+    if (abbr.equals("SEM")) return "Seminar";
+    if (abbr.equals("DIS")) return "Discussion";
+    if (abbr.equals("LAB")) return "Lab";
+    if (abbr.equals("LBS")) return "Lab Section";
+    if (abbr.equals("ACT")) return "Activity";
+    if (abbr.equals("IDS")) return "Intro Dial";
+    if (abbr.equals("ISF")) return "Introsem";
+    if (abbr.equals("ISS")) return "Introsem";
+    if (abbr.equals("LNG")) return "Language";
+    if (abbr.equals("PRA")) return "Practicum";
+    if (abbr.equals("PRC")) return "Practicum";
+    if (abbr.equals("CAS")) return "Case Study";
+    if (abbr.equals("COL")) return "Colloquium";
+    if (abbr.equals("WKS")) return "Workshop";
+    if (abbr.equals("INS")) return "Independent Study";
+    if (abbr.equals("ITR")) return "Internship";
+    if (abbr.equals("RES")) return "Research";
+    if (abbr.equals("SCS")) return "Sophomore College";
+    if (abbr.equals("T/D")) return "Thesis/Dissertation";
+    return "N/A";
   }
 
   /*
@@ -316,8 +374,15 @@ public class FetchCourses {
     if (m.getStartTime().equals(m.getEndTime())) return null;
     String s = "{";
     s += "\"days\":" + convertDaysToBooleanArray(m.getDays()) + ",";
-    s += "\"start\":\"" + m.getStartTime() + "\",";
-    s += "\"end\":\"" + m.getEndTime() + "\"";
+    try {
+      s += "\"start\":\"" + m.getStartTime().split(" ")[3] + "\",";
+      s += "\"end\":\"" + m.getEndTime().split(" ")[3] + "\",";
+    } catch (ArrayIndexOutOfBoundsException e) {
+      System.out.println("Error with the splitting? Start: " +
+          m.getStartTime() + " - End: " + m.getEndTime());
+      return null;
+    }
+    s += "\"location\":\"" + m.getLocation() + "\"";
     s += "}";
     return s;
   }

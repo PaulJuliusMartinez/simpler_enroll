@@ -28,28 +28,35 @@ Course = function(obj) {
       'This course object had no primary component!');
   // TYPE: Section[][]
   this.primaryComponent_ = this.convertJSONSectionsToSectionArray(
-      obj, CourseConstants.PRIMARY_COMPONENT);
+      obj, CourseConstants.PRIMARY_COMPONENT, true);
+  // TYPE: string
+  this.primaryComponentType_ = obj[CourseConstants.PRIMARY_TYPE];
   // TYPE: Section[][]
   this.secondaryComponent_ = this.convertJSONSectionsToSectionArray(
-      obj, CourseConstants.SECONDARY_COMPONENT);
+      obj, CourseConstants.SECONDARY_COMPONENT, false);
+  // TYPE: string
+  this.secondaryComponentType_ = obj[CourseConstants.SECONDARY_TYPE] || 'N/A';
   // TYPE: Status
   this.status_ = new Status();
   // TYPE: number
-  this.id_ = UniqueID.newID();
+  this.id_ = obj[CourseConstants.COURSE_ID];
 };
 
 /*
  * Takes the list of sections and converts them to Section objects.
  * PARAM-TYPE: Object obj The JSON object.
  * PARAM-TYPE: string key The key of the relevant field.
+ * PARAM-TYPE: boolean show Whether the section should initially be shown.
  * RETURN-TYPE: Section[][]
  */
-Course.prototype.convertJSONSectionsToSectionArray = function(obj, key) {
+Course.prototype.convertJSONSectionsToSectionArray = function(obj, key, show) {
   if (!obj[key]) return null;
   var arr = [[], [], []];
   for (var i = 0; i < 3; i++) {
     for (var j = 0; j < obj[key][i].length; j++) {
-      arr[i].push(new Section(this, obj[key][i][j]));
+      var section = new Section(this, obj[key][i][j]);
+      section.setShow(show);
+      arr[i].push(section);
     }
   }
   return arr;
@@ -72,6 +79,13 @@ Course.prototype.getGERs = function() { return this.gers_.slice(); };
 // Status and ID
 Course.prototype.getStatus = function() { return this.status_; };
 Course.prototype.getID = function() { return this.id_; };
+// Section types
+Course.prototype.getPrimarySectionType = function() {
+  return this.primaryComponentType_;
+};
+Course.prototype.getSecondarySectionType = function() {
+  return this.secondaryComponentType_;
+};
 
 // Some basic util methods.
 /*
@@ -94,6 +108,16 @@ Course.prototype.getSecondarySectionsForQuarter = function(quarter) {
  */
 Course.prototype.hasSecondaryComponent = function() {
   return (this.secondaryComponent_ != null);
+};
+
+/*
+ * Returns the first quarter the course is taught in.
+ * RETURN-TYPE: quarter
+ */
+Course.prototype.firstQuarterOffered = function() {
+  if (this.isOfferedIn(0)) return 0;
+  if (this.isOfferedIn(1)) return 1;
+  return 2;
 };
 
 /*

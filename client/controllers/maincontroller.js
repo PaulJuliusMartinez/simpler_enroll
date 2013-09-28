@@ -4,41 +4,57 @@
  */
 
 /*
- * Constructor takes the main element of the page.
- * PARAM-TYPE: jQuery parent The parent element for the MainView.
+ * Constructor takes no arguments.
  */
-MainController = function(parent) {
-  // TYPE: MainViewController
-  this.view_ = new MainView(parent, this);
-  this.view_.render();
-
-  var containers = this.view_.getContainers();
+MainController = function() {
   // TYPE: SearchBoxController
-  this.searchBox_ = new SearchBoxController(
-      containers[MainView.SEARCH_BOX], this);
+  this.searchBox_ = new SearchBoxController($('#search-bar'));
   // TYPE: CourseListController
-  this.courseList_ = new CourseListController(
-      containers[MainView.COURSE_LIST], this);
+  this.courseList_ = new CourseListController($('#course-list'));
   // TYPE: PreviewController
-  this.preview_ = new PreviewController(
-      containers[MainView.SCHEDULE_PREVIEW], this);
+  this.preview_ = new PreviewController($('#bottom-section'));
+
+  // Create tabbed area.
+  var tabs = new Tabs();
+  tabs.render($('#top-right'));
+  var sectionTab = tabs.addTab('Sections');
+
+  // TYPE: SectionController
+  this.sections_ = new SectionController(sectionTab);
 };
 
 
 /*
- * Called when a class is added by the search box.
+ * Called when this hears a COURSE_ADDED event.
  * PARAM-TYPE: Course course The course added.
  */
-MainController.prototype.notifyCourseAdded = function(course) {
+MainController.prototype.addCourse = function(course) {
   this.courseList_.addCourse(course);
+  this.sections_.addCourse(course);
+  this.refreshComponents();
+  // Save state
   var courses = this.courseList_.getCourses();
-  this.preview_.displayCourseList(courses);
+  UserState.saveCourses(courses);
+};
+
+/*
+ * Called when a course is removed.
+ * PARAM-TYPE: Course course the removed course.
+ */
+MainController.prototype.removeCourse = function(course) {
+  this.sections_.removeCourse(course);
+  this.refreshComponents();
+  // Save state
+  var courses = this.courseList_.getCourses();
+  UserState.saveCourses(courses);
 };
 
 /*
  * Called when something in the course list changes.
  */
-MainController.prototype.notifyCourseListChange = function() {
+MainController.prototype.refreshComponents = function() {
   var courses = this.courseList_.getCourses();
   this.preview_.displayCourseList(courses);
+  // Save state
+  UserState.saveCourses(courses);
 };

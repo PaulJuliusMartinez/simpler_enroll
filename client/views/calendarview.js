@@ -6,17 +6,26 @@
 /*
  * Constructor takes the parent element of the calendar.
  * PARAM-TYPE: jQuery parent The parent element of the calendar.
+ * PARAM-TYPE: number quarter What quarter this is a calendar for.
  */
-CalendarView = function(parent) {
+CalendarView = function(parent, quarter) {
   // TYPE: jQuery
   this.parent_ = parent;
   // TYPE: MeetingRenderer
   this.meetingRenderer_ = new MeetingRenderer(this);
+  // TYPE: number
+  this.quarter_ = quarter;
 };
 
 
 // TYPE: jQuery The internal container of the calendar.
 CalendarView.prototype.container_;
+
+// TYPE: boolean Whether the calendar has been resized.
+CalendarView.prototype.resized_ = false;
+
+// TYPE: number number of rows.
+CalendarView.prototype.numRows_;
 
 /*
  * This builds up the internal DOM structure.
@@ -40,7 +49,8 @@ CalendarView.prototype.render = function() {
 
   // Add the 'hour' rows to the table
   var table = this.parent_.find('tbody');
-  var hours = [9, 10, 11, 12, 1, 2, 3, 4, 5, 6];
+  var hours = [9, 10, 11, 12, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+  this.numRows_ = hours.length + 1;
   for (var i = 0; i < hours.length; i++) {
     table.append(
         $('<tr>').addClass(CalendarView.HOUR_ROW).append(
@@ -64,6 +74,14 @@ CalendarView.prototype.addMeeting = function(meeting) {
 };
 
 /*
+ * Returns what quarter this is for.
+ * RETURN-TYPE: number
+ */
+CalendarView.prototype.getQuarter = function() {
+  return this.quarter_;
+};
+
+/*
  * Draws all the meetings.
  */
 CalendarView.prototype.draw = function() {
@@ -80,10 +98,18 @@ CalendarView.prototype.clear = function() {
 /*
  * Returns the container element of the Calendar. If called before render(),
  * this returns null.
- * @return Jquery elem The container element, as a Jquery object.
+ * RETURN-TYPE: Jquery elem The container element, as a Jquery object.
  */
 CalendarView.prototype.getContainer = function() {
   return this.container_;
+};
+
+/*
+ * Gets the number of rows in the calendar.
+ * RETURN-TYPE: number
+ */
+CalendarView.prototype.getNumRows = function() {
+  return this.numRows_;
 };
 
 /*
@@ -103,15 +129,8 @@ CalendarView.prototype.getDayWidth = function() {
 /*
  * Gets the height of the header row.
  */
-CalendarView.prototype.getHeaderRowHeight = function() {
+CalendarView.prototype.getRowHeight = function() {
   return this.container_.find('tr').get()[0].clientHeight;
-};
-
-/*
- * Gets the height of a normal row.
- */
-CalendarView.prototype.getNormalRowHeight = function() {
-  return this.container_.find('tr').get()[1].clientHeight;
 };
 
 // CSS Constants:

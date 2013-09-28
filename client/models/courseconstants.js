@@ -53,6 +53,12 @@ CourseConstants.MAX_UNITS = 'max_units';
 CourseConstants.GERS = 'gers';
 
 /*
+ * ID of the class
+ * TYPE: number
+ */
+CourseConstants.COURSE_ID = 'id';
+
+/*
  * Some classes have two components, a primary one, usually a lecture, and a
  * secondary one, such as a discussion section, or a lab. When these separate
  * components meet is split up within the Course object.
@@ -65,6 +71,13 @@ CourseConstants.PRIMARY_COMPONENT = 'primary';
 CourseConstants.SECONDARY_COMPONENT = 'secondary';
 
 /*
+ * The types of the two components
+ * TYPE: string
+ */
+CourseConstants.PRIMARY_TYPE = 'primary_type';
+CourseConstants.SECONDARY_TYPE = 'secondary_type';
+
+/*
  * Constants for the different quarters.
  * TYPE: enum
  */
@@ -73,6 +86,12 @@ CourseConstants.WINTER = 1;
 CourseConstants.SPRING = 2;
 
     // These are now properties that will contained in the Section class.
+
+    /*
+     * ID of the section
+     * TYPE: number
+     */
+    CourseConstants.SECTION_ID = 'id';
 
     /*
      * List of instructors.
@@ -100,3 +119,9 @@ CourseConstants.SPRING = 2;
          */
         CourseConstants.START_TIME = 'start';
         CourseConstants.END_TIME = 'end';
+
+        /*
+         * Location of the meeting.
+         * TYPE: string
+         */
+        CourseConstants.LOCATION = 'location';

@@ -5,12 +5,9 @@
 
 /*
  * Constructor takes:
- * PARAM-TYPE: jQuery parent The parent element of the view.
  * PARAM-TYPE: PreviewController controller The controller of the view.
  */
-PreviewView = function(parent, controller) {
-  // TYPE: jQuery
-  this.parent_ = parent;
+PreviewView = function(controller) {
   // TYPE: PreviewController
   this.controller_ = controller;
 };
@@ -23,71 +20,43 @@ PreviewView.prototype.calendars_ = [];
 PreviewView.prototype.unitLabels_ = [];
 
 /*
- * Renders and initializes the three calendars.
+ * Decorates the three calendars.
+ * PARAM-TYPE: jQuery parent The parent element of the view.
  */
-PreviewView.prototype.render = function() {
-  var leftThird = $('<div>').addClass(PreviewView.LEFT_THIRD).
-                             append(this.createQuarterHeader('Autumn', 0),
-                                    $('<div>').addClass(PreviewView.CALENDAR));
-  var midThird = $('<div>').addClass(PreviewView.MIDDLE_THIRD).
-                            append(this.createQuarterHeader('Winter', 1),
-                                   $('<div>').addClass(PreviewView.CALENDAR));
-  var rightThird = $('<div>').addClass(PreviewView.RIGHT_THIRD).
-                              append(this.createQuarterHeader('Spring', 2),
-                                     $('<div>').addClass(PreviewView.CALENDAR));
+PreviewView.prototype.decorate = function(parent) {
+  var calendars = parent.find('.' + PreviewView.CALENDAR);
+  var units = parent.find('.' + PreviewView.UNITS);
 
-  // Create and add calendars.
-  this.calendars_.push(new CalendarView($(leftThird.children()[1])));
-  this.calendars_.push(new CalendarView($(midThird.children()[1])));
-  this.calendars_.push(new CalendarView($(rightThird.children()[1])));
   for (var i = 0; i < 3; i++) {
+    this.calendars_.push(new CalendarView($(calendars[i]), i));
+    this.unitLabels_.push($(units[i]));
     this.calendars_[i].render();
   }
-
-  this.parent_.append(leftThird, midThird, rightThird);
 };
 
 /*
- * Creates a div for the header bar, given the quarter name.
- * PARAM-TYPE: string quarter The quarter.
+ * Clears the calendars.
  */
-PreviewView.prototype.createQuarterHeader = function(quarter) {
-  var header = $('<div>').addClass(PreviewView.HEADER);
-  var quarter = $('<span>').addClass(PreviewView.QUARTER_LABEL).
-                            text(quarter + ' Quarter:');
-  var units = $('<span>').addClass(PreviewView.UNITS).text('0 Units');
-  this.unitLabels_.push(units);
-
-  header.append(quarter, units);
-  return header;
-};
-
-/*
- * Takes a list of courses and divides up their sections and meetings and gives
- * them to the calendars to draw.
- * PARAM-TYPE: Course[] courses A list of courses.
- */
-PreviewView.prototype.displayCourses = function(courses) {
+PreviewView.prototype.clearCalendars = function() {
   for (var i = 0; i < 3; i++) this.calendars_[i].clear();
+};
 
-  for (var quarter = 0; quarter < 3; quarter++) {
-    for (var i = 0; i < courses.length; i++) {
-      if (courses[i].isOfferedIn(quarter) &&
-          courses[i].getStatus().getQuarterStatus(quarter) &&
-          courses[i].getStatus().getEnrollmentStatus() != Status.DROP) {
-        var primarySections = courses[i].getPrimarySectionsForQuarter(quarter);
-        for (var j = 0; j < primarySections.length; j++) {
-          var section = primarySections[j];
-          var meetings = section.getMeetings();
-          for (var k = 0; k < meetings.length; k++) {
-            this.calendars_[quarter].addMeeting(meetings[k]);
-          }
-        }
-      }
-    }
-  }
+/*
+ * Get the calendar view for a particular quarter.
+ * PARAM-TYPE: number quarter Which quarter.
+ * RETURN-TYPE: CalendarView
+ */
+PreviewView.prototype.getCalendarView = function(quarter) {
+  return this.calendars_[quarter];
+};
 
-  for (var i = 0; i < 3; i++) this.calendars_[i].draw();
+/*
+ * Set the units for the quarter.
+ * PARAM-TYPE: number quarter Which quarter.
+ * PARAM-TYPE: number units How many units.
+ */
+PreviewView.prototype.setUnits = function(quarter, units) {
+  this.unitLabels_[quarter].text(units + ' Units');
 };
 
 // CSS Constants

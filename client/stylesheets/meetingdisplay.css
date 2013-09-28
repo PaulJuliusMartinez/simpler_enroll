@@ -3,8 +3,6 @@
  */
 
 .meeting-display-box {
-  display: table;
-  table-layout: fixed;
   position: absolute;
   border: 1px solid black;
   border-radius: 2px;
@@ -12,14 +10,17 @@
   white-space: nowrap;
 }
 
+.meeting-display-box.meeting-display-accented.meeting-display-enrolled {
+  background-color: #75d51c;
+}
+
+.meeting-display-box.meeting-display-accented.meeting-display-planned {
+  background-color: #1ca9e8;
+}
+
 .meeting-display-text {
-  display: table-cell;
-  font-size: 12pt;
-  vertical-align: middle;
+  height: 100%;
   overflow: hidden;
-  margin: 0 auto;
-  width: 100%;
-  direction: rtl;
 }
 
 .meeting-display-box.meeting-display-enrolled {
@@ -27,5 +28,5 @@
 }
 
 .meeting-display-box.meeting-display-planned {
-  background-color: #61c3ef;
+  background-color: #78ccf1;
 }

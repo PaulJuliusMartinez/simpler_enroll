@@ -14,28 +14,27 @@ CourseDataCache = function() {
 /*
  * Get the course data for a department.
  * PARAM-TYPE: string dep The short name of the department.
+ * PARAM-TYPE: function(Course[]) callback The callback.
  */
-CourseDataCache.prototype.getCourses = function(dep) {
+CourseDataCache.prototype.getCourses = function(dep, callback) {
   if (this.storedCourses_[dep]) {
-    return this.storedCourses_[dep];
+    callback(this.storedCourses_[dep]);
   } else {
     var filename = './client/models/data/' + dep + '.js';
     var cache = this;
 
-    // Load data NOT asynchronously
     $.ajax({
         dataType: "json",
         url: filename,
-        async: false,
         success: function(data) {
           cache.storedCourses_[dep] =
-              CourseDataCache.createSortedCourseNameObject(data);
+              CourseDataCache.createSortedCourseNameObject_(data);
+          callback(cache.storedCourses_[dep]);
         },
         error: function() {
-          window.console.log('Error in downloading ' + dep);
+          window.console.log('Error in downloading/parsing ' + dep);
         }
     });
-    return this.storedCourses_[dep];
   }
 };
 
@@ -46,8 +45,9 @@ CourseDataCache.prototype.getCourses = function(dep) {
  * a sorted list of the course names, the second is the original object
  * containing all the courses.
  * PARAM-TYPE: Object courses The courses object.
+ * RETURN-TYPE: Object
  */
-CourseDataCache.createSortedCourseNameObject = function(data) {
+CourseDataCache.createSortedCourseNameObject_ = function(data) {
   var sortedNames = [];
   for (key in data) {
     sortedNames.push(key);

@@ -2,12 +2,17 @@
 <html>
   <head>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"> </script>
-    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+    <!--<script src="./client/utility/jquery.js"></script>-->
+    <!--<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>-->
+    <!--Components-->
+    <script src="./client/components/tabs.js"></script>
+
     <!--Controllers-->
     <script src="./client/controllers/maincontroller.js"></script>
     <script src="./client/controllers/searchboxcontroller.js"></script>
     <script src="./client/controllers/courselistcontroller.js"></script>
     <script src="./client/controllers/previewcontroller.js"></script>
+    <script src="./client/controllers/sectioncontroller.js"></script>
 
     <!--Views-->
     <script src="./client/views/mainview.js"></script>
@@ -15,6 +20,7 @@
     <script src="./client/views/courselistview.js"></script>
     <script src="./client/views/previewview.js"></script>
     <script src="./client/views/calendarview.js"></script>
+    <script src="./client/views/sectionview.js"></script>
 
     <!--Not views, but other things-->
     <script src="./client/views/meetingrenderer.js"></script>
@@ -32,6 +38,7 @@
     <script src="./client/models/courseconstants.js"></script>
     <script src="./client/models/coursedata.js"></script>
     <script src="./client/models/coursedatacache.js"></script>
+    <script src="./client/models/userstate.js"></script>
 
     <!--Stylesheets-->
     <link rel="stylesheet" type="text/css" href="./client/stylesheets/main.css"/>
@@ -42,55 +49,198 @@
     <link rel="stylesheet" type="text/css" href="./client/stylesheets/calendar.css"/>
     <link rel="stylesheet" type="text/css" href="./client/stylesheets/meetingdisplay.css"/>
     <link rel="stylesheet" type="text/css" href="./client/stylesheets/courseinfopopup.css"/>
+    <link rel="stylesheet" type="text/css" href="./client/stylesheets/tabs.css"/>
+    <link rel="stylesheet" type="text/css" href="./client/stylesheets/sectionviewer.css"/>
 
     <!--Utility-->
     <script src="./client/utility/uniqueid.js"></script>
+    <script src="./client/utility/assert.js"></script>
+    <script src="./client/utility/events.js"></script>
 
     <!--Old-->
-    <script src="./client/assert.js"></script>
-    <script src="./client/class.js"></script>
-    <script src="./client/department.js"></script>
-
     <link rel="stylesheet" type="text/css" href="./client/general.css"/>
+
     <script>
       $(document).ready(function() {
         CourseData.init();
-        var mainController = new MainController($('#main'));
-        <!--var autumnCalendar = new Calendar();-->
-        <!--autumnCalendar.render($('#autumn_calendar'));-->
-        <!--var MWF = [1, 0, 1, 0, 1];-->
-        <!--var TT = [0, 1, 0, 1, 0];-->
-        <!--var CS144 = new Class('CS 144', 'LEC', MWF, '16:15',-->
-        <!--'17:05', 'enrolled', 1);-->
-        <!--var CS161 = new Class('CS 161', 'LEC', TT, "11:00",-->
-        <!--'12:15', 'enrolled', 2);-->
-        <!--var GYM = new Class('GYM', 'LEC', TT, '12:00',-->
-        <!--'12:50', 'planned', 3);-->
-        <!--var E40 = new Class('ENGR 40', 'LEC', MWF, '11:00',-->
-        <!--'12:15', 'enrolled', 4);-->
-        <!--var EE263 = new Class('EE 263', 'LEC', TT, '09:30',-->
-        <!--'10:45', 'enrolled', 5);-->
-        <!--var MUSIC19A = new Class('Music 21', 'LEC', TT, '12:50',-->
-        <!--'14:05', 'enrolled', 6);-->
-        <!--var CS242 = new Class('CS 242', 'LEC', TT, '14:15',-->
-        <!--'15:30', 'planned', 7);-->
-        <!--autumnCalendar.addClass(CS144);-->
-        <!--autumnCalendar.addClass(CS161);-->
-        <!--autumnCalendar.addClass(GYM);-->
-        <!--autumnCalendar.addClass(E40);-->
-        <!--autumnCalendar.addClass(EE263);-->
-        <!--autumnCalendar.addClass(MUSIC19A);-->
-        <!--autumnCalendar.addClass(CS242);-->
+        var main = new MainController();
+        $.Events(Events.COURSE_ADDED).listen(function(course) {
+          main.addCourse(course);
+        });
+        $.Events(Events.COURSE_REMOVED).listen(function(course) {
+          main.removeCourse(course);
+        });
+        $.Events(Events.COURSE_CHANGE).listen(function() {
+          main.refreshComponents();
+        });
+        UserState.loadSavedCourses();
+        window.setTimeout(function() {
+          UserState.stopIgnoring();
+        }, 3000);
       });
     </script>
   </head>
   <body>
-    <div id="main"></div>
+    <div id="main">
+      <div id="top-left">
+        <div id="search-bar">
+          Courses I want to take:
+          <div class="search-box-container">
+            <input>
+          </div>
+        </div>
+        <div id="course-list">
+          <!-- Course List -->
+          <div class="course-list-container">
 
-    <!--Below here is simply remnants of the initial mockup demo.-->
-    <br>
-    <div id="autumn_calendar"></div>
-    <div id="winter_calendar"></div>
-    <div id="spring_calendar"></div>
+            <!-- Fixed header -->
+            <table class="course-list-header" cellspacing=0 cellpadding=0>
+              <thead>
+                <tr>
+                  <th class="course-list-delete-column"></th>
+                  <th class="course-list-name-column">Class:</th>
+                  <th class="course-list-autumn-column">Au.</th>
+                  <th class="course-list-winter-column">Wi.</th>
+                  <th class="course-list-spring-column">Sp.</th>
+                  <th class="course-list-section-column">Section</th>
+                  <th class="course-list-status-column">Status</th>
+                </tr>
+              </thead>
+            </table>
+
+            <!-- Scrollable body -->
+            <div class="course-list-body-container">
+              <table class="course-list-body-table" cellspacing=0 cellpadding=0>
+                <tbody class="course-list-body">
+
+                  <!-- No courses row -->
+                  <tr class='course-list-no-courses-row'>
+                    <td class="course-list-delete-column"></td>
+                    <td class="course-list-name-column">
+                      You haven't selected any classes!
+                    </td>
+                    <td class="course-list-autumn-column"></td>
+                    <td class="course-list-winter-column"></td>
+                    <td class="course-list-spring-column"></td>
+                    <td class="course-list-section-column"></td>
+                    <td class="course-list-status-column"></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <!-- End scrollable body -->
+          </div>
+        <!-- End course list area -->
+        </div>
+      </div>
+      <div id="top-right">
+        <!-- Tabbed area with preferences panels -->
+      </div>
+      <div id="bottom-section">
+        <!-- Autumn Quarter Calendar -->
+        <div class="preview-view-third preview-view-left">
+          <div class="preview-view-header">
+            <span class="preview-view-quarter">
+              Autumn Quarter:
+            </span>
+            <span class="preview-view-units">
+              0 Units
+            </span>
+          </div>
+          <div class="preview-view-calendar"></div>
+        </div>
+
+        <!-- Winter Quarter Calendar -->
+        <div class="preview-view-third preview-view-middle">
+          <div class="preview-view-header">
+            <span class="preview-view-quarter">
+              Winter Quarter:
+            </span>
+            <span class="preview-view-units">
+              0 Units
+            </span>
+          </div>
+          <div class="preview-view-calendar"></div>
+        </div>
+
+        <!-- Spring Quarter Calendar -->
+        <div class="preview-view-third preview-view-right">
+          <div class="preview-view-header">
+            <span class="preview-view-quarter">
+              Spring Quarter:
+            </span>
+            <span class="preview-view-units">
+              0 Units
+            </span>
+          </div>
+          <div class="preview-view-calendar"></div>
+        </div>
+
+      </div>
+    </div>
   </body>
+
+  <!-- Templates -->
+  <div style='display: none;'>
+    <table>
+      <!-- Class row template -->
+      <tr class='course-list-row-template'>
+        <td class="course-list-delete-column">
+          <img src="./client/images/trashcan.svg">
+        </td>
+        <td class="course-list-name-column"></td>
+        <td class="course-list-autumn-column">
+          <input type="checkbox">
+        </td>
+        <td class="course-list-winter-column">
+          <input type="checkbox">
+        </td>
+        <td class="course-list-spring-column">
+          <input type="checkbox">
+        </td>
+        <td class="course-list-section-column"></td>
+        <td class="course-list-status-column"></td>
+      </tr>
+    </table>
+
+    <!-- Section Viewer Template -->
+    <div class="section-template section-container">
+      <div class="section-instructions">
+        <p>
+          Select a class and a quarter and then click on any of listed sections
+          to toggle its visibility in the calendars.
+        </p>
+      </div>
+      <div class="section-viewer-container">
+        <div class="section-viewer-course-selection">
+          Course:
+          <select class="section-course-select">
+          </select>
+          Quarter:
+          <select class="section-quarter-select">
+            <option value="0">Autumn</option>
+            <option value="1">Winter</option>
+            <option value="2">Spring</option>
+          </select>
+        </div>
+        <div class="section-viewer-selector-container">
+          <div class="section-primary-container">
+            <div class="section-section-header">Primary Section:</div>
+            <div class="section-section-container"></div>
+            <div class="section-buttons">
+              <input type=button value="Show All" class="section-all-button"/>
+              <input type=button value="Show None" class="section-none-button"/>
+            </div>
+          </div>
+          <div class="section-secondary-container">
+            <div class="section-section-header">Secondary Section:</div>
+            <div class="section-section-container"></div>
+            <div class="section-buttons">
+              <input type=button value="Show All" class="section-all-button"/>
+              <input type=button value="Show None" class="section-none-button"/>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 </html>

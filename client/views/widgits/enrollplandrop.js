@@ -15,11 +15,11 @@ EnrollPlanDrop = function(elem, controller, course) {
   this.leftArrow_ = $('<span>').addClass(EnrollPlanDrop.ARROW_CLASS).
                                 addClass(EnrollPlanDrop.LEFT_ARROW).
                                 text('<');
+  // TYPE: number
+  this.index_ = course.getStatus().getEnrollmentStatus();
   // TYPE: jQuery
   this.text_ = $('<span>').addClass(EnrollPlanDrop.TEXT).
-                           text(EnrollPlanDrop.OPTIONS[1]);
-  // TYPE: number
-  this.index_ = 1;
+                           text(EnrollPlanDrop.OPTIONS[this.index_]);
   // TYPE: jQuery
   this.rightArrow_ = $('<span>').addClass(EnrollPlanDrop.ARROW_CLASS).
                                  addClass(EnrollPlanDrop.RIGHT_ARROW).
@@ -41,7 +41,7 @@ EnrollPlanDrop = function(elem, controller, course) {
  * Cycles through the list of options.
  * PARAM-TYPE: boolean positive True to cycle through in the positive direction.
  */
-EnrollPlanDrop.prototype.move= function(positive) {
+EnrollPlanDrop.prototype.move = function(positive) {
   var diff = positive ? 1 : -1;
   var len = EnrollPlanDrop.OPTIONS.length;
   this.index_ = (this.index_ + len + diff) % len;

@@ -18,8 +18,8 @@ fi
 # Delete all the old ones
 rm ../client/models/data/*
 
-# Run
-java -cp "jdom-2.0.1.jar:explorecourses.jar:." FetchCourses
+# Run with more memory
+java -Xmx512m -cp "jdom-2.0.1.jar:explorecourses.jar:." FetchCourses
 
 # Return to original directory
 cd - > /dev/null

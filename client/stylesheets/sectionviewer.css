@@ -1,0 +1,173 @@
+/*
+ * Style for the section viewer.
+ *
+ * The class names for this are terrible, just look at the HTML
+ * to figure it out.
+ */
+
+.section-container {
+  position: absolute;
+  margin: 8px;
+  top: 0;
+  left: 0;
+  width: calc(100% - 16px);
+  height: calc(100% - 16px);
+}
+
+.section-instructions {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 15%;
+  overflow: scroll;
+}
+
+.section-instructions p {
+  margin: 3px;
+}
+
+.section-viewer-container {
+  position: absolute;
+  top: 17%;
+  left: 0;
+  width: 100%;
+  height: 83%;
+  overflow: scroll;
+}
+
+.section-viewer-course-selection {
+  position: absolute;
+  padding: 3px;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 25px;
+}
+
+/* Course select box */
+.section-course-select {
+  width: 90px;
+}
+
+/* The actual selection area */
+.section-viewer-selector-container {
+  position: absolute;
+  top: 28px;
+  left: 0;
+  width: 100%;
+  height: calc(100% - 28px);
+}
+
+.section-primary-container,
+.section-secondary-container {
+  position: absolute;
+  top: 0px;
+  width: calc(50% - 4px);
+  height: 100%;
+  border: 1px solid black;
+}
+
+.section-primary-container {
+  left: 0;
+}
+
+.section-secondary-container {
+  right: 0px;
+}
+
+/* Center the primary/secondary section labels */
+.section-section-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 30px;
+  text-align: center;
+  line-height: 30px;
+  border-bottom: 1px solid black;
+}
+
+/* Set up the buttons */
+.section-buttons {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 30px;
+  padding: 3px;
+  border-top: 1px solid black;
+}
+
+.section-buttons input {
+  outline: none;
+  border: 1px solid black;
+  background-color: #f2a6a6;
+  height: 24px;
+  width: 100px;
+  font-family: "HelveticaNeue-Light",
+               "Helvetica Neue Light",
+               "Helvetica Neue",
+                Helvetica, Arial,
+               "Lucida Grande",
+                sans-serif;
+  font-size: 12pt;
+}
+
+.section-buttons input:hover {
+  background-color: #f9d3d3;
+}
+
+.section-buttons input:active {
+  background-color: #eb7979;
+}
+
+.section-all-button {
+  float: left;
+}
+
+.section-none-button {
+  float: right;
+}
+
+.section-section-container {
+  position: absolute;
+  left: 0;
+  top: 30px;
+  width: 100%;
+  height: calc(100% - 60px);
+  overflow: scroll;
+}
+
+/* Style for the actual section list */
+
+.section-course-sections {
+  width: 100%;
+}
+
+.section-individual-section {
+  width: 100%;
+  padding: 3px;
+  text-align: left;
+  border-top: 1px solid black;
+}
+
+.section-individual-section:hover {
+  background: #ddd;
+}
+
+.section-individual-section:active {
+  background: #ccc;
+}
+
+.section-individual-section:first-child {
+  border-top: none;
+}
+
+.section-individual-section span {
+  color: red;
+}
+
+.section-individual-section.section-showing-section span {
+  color: green;
+}

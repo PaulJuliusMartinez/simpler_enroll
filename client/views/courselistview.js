@@ -5,18 +5,17 @@
 
 /*
  * Constructor takes:
- * PARAM-TYPE: jQuery parent The parent element of the view.
  * PARAM-TYPE: CourseListController controller The controller of the view.
  */
-CourseListView = function(parent, controller) {
-  // TYPE: jQuery
-  this.parent_ = parent;
+CourseListView = function(controller) {
   // TYPE: CourseListController
   this.controller_ = controller;
   // Type: Object.jQuery
   this.courses_ = {};
   // TYPE: number
   this.numClasses_ = 0;
+  // TYPE: jQuery
+  this.template_ = $('.' + CourseListView.TEMPLATE);
 };
 
 
@@ -27,41 +26,13 @@ this.table_;
 this.noClasses_ = 0;
 
 /*
- * Renders the view.
+ * Decorates a component.
+ * PARAM-TYPE: jQuery parent The parent element of the view.
  */
-CourseListView.prototype.render = function() {
-  var headertext = $('<h1>').text('Courses I Want To Take:');
-  var body = $('<div>').addClass(CourseListView.BODY);
-  this.table_ = $('<table>').addClass(CourseListView.TABLE).
-                             attr('cellspacing', 0).
-                             attr('cellpadding', 0);
-  var header = $('<thead>').addClass(CourseListView.HEADER_BAR);
-  header.append($('<tr>').append(
-      $('<th>').addClass(CourseListView.EDIT_COLUMN),
-      $('<th>').addClass(CourseListView.NAME_COLUMN).text('Class:'),
-      $('<th>').addClass(CourseListView.AUTUMN_COLUMN).text('A'),
-      $('<th>').addClass(CourseListView.WINTER_COLUMN).text('W'),
-      $('<th>').addClass(CourseListView.SPRING_COLUMN).text('S'),
-      $('<th>').addClass(CourseListView.SECTION_COLUMN).text('Section'),
-      $('<th>').addClass(CourseListView.CERTAINTY_COLUMN).text('Status')
-  ));
-
-  body.append(this.table_);
-  this.table_.append(header);
-  this.noClasses_ = $('<tr>').
-                        addClass(CourseListView.NO_COURSES_ROW).
-                        append($('<td>'),
-                               $('<td>').text(CourseListView.NO_COURSES_TEXT),
-                               $('<td>'), $('<td>'), $('<td>'),
-                               $('<td>'), $('<td>')
-                        );
-  this.table_.append(this.noClasses_);
-
-  // A tbody element is added after adding a row. In the future, that's what we
-  // want to append stuff to.
-  this.table_ = this.table_.children('tbody');
-
-  this.parent_.append(headertext, body);
+CourseListView.prototype.decorate = function(parent) {
+  this.table_ = $(parent.find('.course-list-body')[0]);
+  // Add the 'No classes' message.
+  this.noClasses_ = $($('.' + CourseListView.NO_COURSES_ROW)[0]);
 };
 
 /*
@@ -81,7 +52,14 @@ CourseListView.prototype.addCourse = function(course) {
     // Since we added a row, remove the 'No classes selected' message.
     // jQuery remove is idempotent, so we can do this every time.
     this.noClasses_.remove();
-    this.table_.sortable({ axis: 'y' });
+    // This isn't working right now.
+    //this.table_.sortable({ axis: 'y' });
+
+    // Add course select event to the row.
+    row.click(function() {
+      $.Events(Events.COURSE_SELECTED).dispatch(
+          course, course.firstQuarterOffered());
+    });
   }
 };
 
@@ -108,50 +86,50 @@ CourseListView.prototype.removeCourse = function(course) {
  * RETURN-TYPE: jQuery The new <tr> element.
  */
 CourseListView.prototype.createCourseRow = function(course) {
-  var row = $('<tr>').addClass(CourseListView.COURSE_ROW);
+  var row = this.template_.clone();
+  row.removeClass(CourseListView.TEMPLATE);
+  var cols = row.children();
 
-  // Trashcan
-  row.append(this.createTrashcan(course));
+  // Listen to trashcan event.
+  var controller = this.controller_;
+  $(cols[0]).click(function() {
+    controller.removeCourse(course);
+  });
 
   // Name
-  row.append($('<td>').addClass(CourseListView.NAME_COLUMN).
-                       text(course.getShortName() + ': ' + course.getTitle()));
+  $(cols[1]).text(course.getShortName() + ': ' + course.getTitle());
 
   // Quarters offered in.
-  row.append(this.createCheckBox(course, 0));
-  row.append(this.createCheckBox(course, 1));
-  row.append(this.createCheckBox(course, 2));
+  this.createCheckBox($(cols[2]), course, 0);
+  this.createCheckBox($(cols[3]), course, 1);
+  this.createCheckBox($(cols[4]), course, 2);
 
   // Discussion sections?
-  row.append($('<td>').text((course.hasSecondaryComponent() ? 'Yes' : 'No')));
+  $(cols[5]).text((course.hasSecondaryComponent() ? 'Yes' : 'No'));
 
   // Enroll/Plan/Drop
-  var td = $('<td>').addClass(CourseListView.CERTAINTY_COLUMN);
-  var widgit = new EnrollPlanDrop(td, this.controller_, course);
-  row.append(td);
+  var widgit = new EnrollPlanDrop($(cols[6]), this.controller_, course);
 
   return row;
 };
 
 /*
  * Creates a checkbox in a td element and returns it.
+ * PARAM-TYPE: jQuery td The td element to fill.
  * PARAM-TYPE: Course course The course it is for.
  * PARAM-TYPE: number quarter Which quarter it is for (0-2).
- * RETURN-TYPE: jQuery The new checkbox, embedded in a td element.
  */
-CourseListView.prototype.createCheckBox = function(course, quarter) {
-  var cssClass = CourseListView.QUARTER_COLUMNS[quarter];
-  var td = $('<td>').addClass(cssClass);
+CourseListView.prototype.createCheckBox = function(td, course, quarter) {
   var isOffered = course.isOfferedIn(quarter);
-  var checkbox = $('<input>').attr('type', 'checkbox').
-                              prop('checked', isOffered).
-                              attr('disabled', !isOffered);
+  var shouldShow = course.getStatus().getQuarterStatus(quarter);
+  var checkbox = $(td.children()[0]);
+  checkbox.prop('checked', shouldShow).attr('disabled', !isOffered);
+
   var controller = this.controller_;
   td.click(function() {
     controller.willTakeClassInQuarter(course, quarter, checkbox.is(':checked'));
   });
   td.append(checkbox);
-  return td;
 };
 
 /*
@@ -159,14 +137,10 @@ CourseListView.prototype.createCheckBox = function(course, quarter) {
  * PARAM-TYPE: Course course The course that's getting removed.
  */
 CourseListView.prototype.createTrashcan = function(course) {
-  var cssClass = CourseListView.EDIT_COLUMN;
+  var cssClass = CourseListView.DELETE_COLUMN;
   var td = $('<td>').addClass(cssClass).
                      append($('<img>').
                          attr('src', './client/images/trashcan.svg'));
-  var controller = this.controller_;
-  $(td.children()[0]).click(function() {
-    controller.removeCourse(course);
-  });
   return td;
 };
 
@@ -174,6 +148,7 @@ CourseListView.prototype.createTrashcan = function(course) {
  * Constants
  * TYPE: string
  */
+CourseListView.TEMPLATE = 'course-list-row-template';
 CourseListView.NO_COURSES_TEXT = "You haven't selected any classes!";
 // CSS Constants
 CourseListView.HEADER_TEXT = 'course-list-header-text';
@@ -182,6 +157,7 @@ CourseListView.TABLE = 'course-list-table';
 CourseListView.HEADER_BAR = 'course-list-header-bar';
 CourseListView.NO_COURSES = 'course-list-no-courses';
 // Columns
+CourseListView.DELETE_COLUMN = 'course-list-delete-column';
 CourseListView.NAME_COLUMN = 'course-list-name-column';
 CourseListView.AUTUMN_COLUMN = 'course-list-autumn-column';
 CourseListView.WINTER_COLUMN = 'course-list-winter-column';
@@ -190,8 +166,7 @@ CourseListView.QUARTER_COLUMNS = [CourseListView.AUTUMN_COLUMN,
                                   CourseListView.WINTER_COLUMN,
                                   CourseListView.SPRING_COLUMN];
 CourseListView.SECTION_COLUMN = 'course-list-section-column';
-CourseListView.CERTAINTY_COLUMN = 'course-list-certainty-column';
-CourseListView.EDIT_COLUMN = 'course-list-edit-column';
+CourseListView.STATUS_COLUMN = 'course-list-status-column';
 // Rows
 CourseListView.NO_COURSES_ROW = 'course-list-no-courses-row';
 CourseListView.COURSE_ROW = 'course-list-course-row';

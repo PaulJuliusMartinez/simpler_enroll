@@ -1,0 +1,75 @@
+/*
+ * Style for a tabbed interface.
+ */
+
+.tabs-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: 1px solid black;
+  margin: 8px;
+  width: calc(100% - 16px);
+  height: calc(100% - 16px);
+  border: 5px solid #a31818;
+  border-radius: 3px;
+}
+
+/* Tabs */
+.tabs-table {
+  position: absolute;
+  table-layout: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 25px;
+  border-collapse: collapse;
+}
+
+.tabs-tab {
+  font-weight: normal;
+  width: auto;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-left: 1px solid #a31818;
+  border-right: 1px solid #a31818;
+  border-bottom: 1px solid #a31818;
+  text-align: center;
+  cursor: pointer;
+}
+
+.tabs-tab:first-child {
+  border-left: 0px;
+}
+
+.tabs-tab:last-child {
+  border-right: 0px;
+}
+
+.tabs-selected {
+  font-weight: bold;
+  border-left: 2px solid #a31818;
+  border-right: 2px solid #a31818;
+  border-bottom: 2px solid #a31818;
+}
+
+/* Bodies */
+
+.tabs-body {
+  position: absolute;
+  top: 25px;
+  left: 0;
+  width: 100%;
+  height: calc(100% - 25px);
+}
+
+.tabs-not-displayed {
+  display: none;
+}
+
+.tabs-displayed {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
