@@ -68,7 +68,6 @@ UserState.saveCourses = function(courses) {
   }
   var data = {courses: courseArr};
   document.cookie = cookie.replace(oldCookie, JSON.stringify(data));
-  window.console.log(JSON.stringify(data));
 };
 
 /*
