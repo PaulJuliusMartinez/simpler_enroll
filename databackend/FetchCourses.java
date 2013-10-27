@@ -375,11 +375,12 @@ public class FetchCourses {
     String s = "{";
     s += "\"days\":" + convertDaysToBooleanArray(m.getDays()) + ",";
     try {
-      s += "\"start\":\"" + m.getStartTime().split(" ")[3] + "\",";
-      s += "\"end\":\"" + m.getEndTime().split(" ")[3] + "\",";
+      System.out.println(m.getStartTime() + "***" + m.getEndTime());
+      s += "\"start\":\"" + m.getStartTime() + "\",";
+      s += "\"end\":\"" + m.getEndTime() + "\",";
     } catch (ArrayIndexOutOfBoundsException e) {
-      System.out.println("Error with the splitting? Start: " +
-          m.getStartTime() + " - End: " + m.getEndTime());
+      //System.out.println("Error with the splitting? Start: " +
+          //m.getStartTime() + " - End: " + m.getEndTime());
       return null;
     }
     s += "\"location\":\"" + m.getLocation() + "\"";

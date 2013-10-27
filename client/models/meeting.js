@@ -39,9 +39,14 @@ Meeting.prototype.getID = function() { return this.id_; };
  * RETURN-TYPE: number
  */
 Meeting.parseTimeString = function(timeString) {
-  var hours = parseInt(timeString.slice(0, 2));
-  var minutes = parseInt(timeString.slice(3, 5));
-  return hours * 60 + minutes;
+  var colon = timeString.indexOf(':');
+  var hours = parseInt(timeString.slice(0, colon));
+  timeString = timeString.substring(colon + 1);
+  colon = timeString.indexOf(':');
+  var minutes = parseInt(timeString.slice(0, colon));
+  timeString = timeString.substring(timeString.indexOf(' ') + 1);
+  var afternoon = (timeString == 'PM' && hours != 12) ? 12 : 0;
+  return (afternoon + hours) * 60 + minutes;
 };
 
 /*
