@@ -14,6 +14,7 @@
     <script src="./client/controllers/courselistcontroller.js"></script>
     <script src="./client/controllers/previewcontroller.js"></script>
     <script src="./client/controllers/sectioncontroller.js"></script>
+    <script src="./client/controllers/informationcontroller.js"></script>
 
     <!--Views-->
     <script src="./client/views/mainview.js"></script>
@@ -22,6 +23,7 @@
     <script src="./client/views/previewview.js"></script>
     <script src="./client/views/calendarview.js"></script>
     <script src="./client/views/sectionview.js"></script>
+    <script src="./client/views/informationview.js"></script>
 
     <!--Not views, but other things-->
     <script src="./client/views/meetingrenderer.js"></script>
@@ -52,6 +54,7 @@
     <link rel="stylesheet" type="text/css" href="./client/stylesheets/courseinfopopup.css"/>
     <link rel="stylesheet" type="text/css" href="./client/stylesheets/tabs.css"/>
     <link rel="stylesheet" type="text/css" href="./client/stylesheets/sectionviewer.css"/>
+    <link rel="stylesheet" type="text/css" href="./client/stylesheets/info.css"/>
 
     <!--Utility-->
     <script src="./client/utility/uniqueid.js"></script>
@@ -244,4 +247,15 @@
         </div>
       </div>
     </div>
+
+    <!-- Course Information Template -->
+    <div class="info-template info-container">
+      <div class="info-number"></div>
+      <div class="info-title"></div>
+      <p/>
+      <div class="info-description"></div>
+      <p/>
+      <span class="info-gers"></span>
+    </div>
+  </div>
 </html>

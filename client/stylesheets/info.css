@@ -1,0 +1,32 @@
+/* Style for the class information viewer */
+
+.info-container {
+  position: absolute;
+  margin: 8px;
+  top: 0;
+  left: 0;
+  width: calc(100% - 16px);
+  height: calc(100% - 16px);
+}
+
+.info-number {
+  display: inline-block;
+  font-size: 19pt;
+  font-weight: bold;
+  border-bottom: 3px solid #a31818;
+}
+
+.info-title {
+  display: inline-block;
+  font-size: 19pt;
+  border-bottom: 1px solid #a31818;
+}
+
+.info-description {
+  font-size: 13pt;
+  text-align:justify;
+}
+
+.info-gers {
+
+}
