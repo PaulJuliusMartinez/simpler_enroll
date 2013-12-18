@@ -17,8 +17,12 @@ MainController = function() {
   // Create tabbed area.
   var tabs = new Tabs();
   tabs.render($('#top-right'));
+  var classInfoTab = tabs.addTab('Class Information');
   var sectionTab = tabs.addTab('Sections');
+  tabs.displayTab(0);
 
+  // TYPE: InformationController
+  this.information_ = new InformationController(classInfoTab);
   // TYPE: SectionController
   this.sections_ = new SectionController(sectionTab);
 };
@@ -31,6 +35,7 @@ MainController = function() {
 MainController.prototype.addCourse = function(course) {
   this.courseList_.addCourse(course);
   this.sections_.addCourse(course);
+  this.information_.addCourse(course);
   this.refreshComponents();
   // Save state
   var courses = this.courseList_.getCourses();
