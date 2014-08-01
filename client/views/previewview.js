@@ -53,10 +53,11 @@ PreviewView.prototype.getCalendarView = function(quarter) {
 /*
  * Set the units for the quarter.
  * PARAM-TYPE: number quarter Which quarter.
- * PARAM-TYPE: number units How many units.
+ * PARAM-TYPE: number enrolled How many units are enrolled.
+ * PARAM-TYPE: number planned How many units are planned.
  */
-PreviewView.prototype.setUnits = function(quarter, units) {
-  this.unitLabels_[quarter].text(units + ' Units');
+PreviewView.prototype.setUnits = function(quarter, enrolled, planned) {
+  this.unitLabels_[quarter].text(enrolled + '/' + planned + ' Units');
 };
 
 // CSS Constants

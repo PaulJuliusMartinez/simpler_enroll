@@ -22,6 +22,7 @@ InformationView.prototype.decorate = function(parent) {
   this.container_ = $($('.' + InformationView.TEMPLATE)[0]);
   this.container_.removeClass(InformationView.TEMPLATE);
   parent.append(this.container_);
+  this.container_.hide();
 };
 
 /*
@@ -29,6 +30,7 @@ InformationView.prototype.decorate = function(parent) {
  * PARAM-TYPE: Course course The course to add.
  */
 InformationView.prototype.showCourse = function(course) {
+  this.container_.show();
   this.container_.find('.' + InformationView.NUMBER)[0].innerHTML =
     course.getDepartment() + ' ' + course.getNumber() + ': ';
   this.container_.find('.' + InformationView.TITLE)[0].innerHTML =
@@ -37,6 +39,25 @@ InformationView.prototype.showCourse = function(course) {
     course.getDescription();
   this.container_.find('.' + InformationView.GERS)[0].innerHTML =
     'GERs satisfied: ' + InformationView.GERsToString(course.getGERs());
+
+  // Set up listeners
+  var buttons = this.container_.find('input');
+  for (var i = 0; i < 3; i++) $(buttons[i]).unbind('click');
+  $(buttons[0]).bind('click', function() {
+    course.getStatus().setEnrollmentStatus(Status.ENROLL);
+    $.Events(Events.COURSE_CHANGE).dispatch();
+    $.Events(course.getID() + Events.COURSE_CHANGE).dispatch();
+  });
+  $(buttons[1]).bind('click', function() {
+    course.getStatus().setEnrollmentStatus(Status.PLAN);
+    $.Events(Events.COURSE_CHANGE).dispatch();
+    $.Events(course.getID() + Events.COURSE_CHANGE).dispatch();
+  });
+  $(buttons[2]).bind('click', function() {
+    course.getStatus().setEnrollmentStatus(Status.DROP);
+    $.Events(Events.COURSE_CHANGE).dispatch();
+    $.Events(course.getID() + Events.COURSE_CHANGE).dispatch();
+  });
 };
 
 /*
@@ -60,3 +81,6 @@ InformationView.NUMBER = 'info-number';
 InformationView.TITLE = 'info-title';
 InformationView.DESCRIPTION = 'info-description';
 InformationView.GERS = 'info-gers';
+InformationView.ENROLL = 'info-enroll';
+InformationView.PLAN = 'info-plan';
+InformationView.DROP = 'info-drop';

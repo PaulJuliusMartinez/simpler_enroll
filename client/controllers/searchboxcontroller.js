@@ -97,6 +97,7 @@ SearchBoxController.prototype.submitInput = function(input) {
   var num = match[2].trim().toUpperCase();
   if (num == '') {
     // Do nothing (for now). They've just autocompleted the department.
+    this.view_.setInput(dep);
   } else {
     // TODO/VERYIMPORTANT CHANGE THIS TO A DISPATCH COURSE_ADDED EVENT.
     var searchBox = this;

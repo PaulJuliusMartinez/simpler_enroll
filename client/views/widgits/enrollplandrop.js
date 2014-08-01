@@ -35,6 +35,18 @@ EnrollPlanDrop = function(elem, controller, course) {
   this.text_.click(function() { epd.move(false); });
   this.leftArrow_.click(function() { epd.move(true); });
   this.rightArrow_.click(function() { epd.move(false); });
+
+  $.Events(course.getID() + Events.COURSE_CHANGE).listen(function() {
+    epd.update();
+  });
+};
+
+/*
+ * Updates to show the correct enrollment status.
+ */
+EnrollPlanDrop.prototype.update = function() {
+  this.index_ = this.course_.getStatus().getEnrollmentStatus();
+  this.text_.text(EnrollPlanDrop.OPTIONS[this.index_]);
 };
 
 /*

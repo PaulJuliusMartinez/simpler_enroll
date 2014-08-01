@@ -9,16 +9,24 @@ UserState = {};
  */
 UserState.loadSavedCourses = function() {
   this.ignoreSaveCalls();
-  var cookie = document.cookie;
-  var start = cookie.indexOf(UserState.COURSE_LIST_V1 + "=");
-  if (start == -1) {
-    // If there was no cookie, we'll add one.
-    document.cookie = UserState.COURSE_LIST_V1 + "={\"courses\":[]};" + cookie;
+  // Get the most updated UserState. If none, cycle through checking old ones
+  var courses = localStorage[UserState.COURSE_LIST_V2];
+  // Old V1
+  if (!courses) {
+    var cookie = document.cookie;
+    var start = cookie.indexOf(UserState.COURSE_LIST_V1 + "=");
+    if (start != -1) {
+      var end = cookie.indexOf(";", start);
+      if (end == -1) end = cookie.length;
+      courses = cookie.substring(start + UserState.COURSE_LIST_V1.length + 1, end);
+    }
+  }
+
+
+  if (!courses) {
+    localStorage[UserState.COURSE_LIST_V2] = "{\"courses\":[]}";
   } else {
-    start = cookie.indexOf("=", start) + 1;
-    var end = cookie.indexOf(";", start);
-    if (end == -1) end = cookie.length;
-    var courses = JSON.parse(cookie.substring(start, end)).courses;
+    courses = JSON.parse(courses).courses;
     for (var i = 0; i < courses.length; i++) {
       var dep = courses[i].dep;
       var num = courses[i].num;
@@ -45,12 +53,6 @@ UserState.loadSavedCourses = function() {
  */
 UserState.saveCourses = function(courses) {
   if (this.shouldIgnore_) return;
-  var cookie = document.cookie;
-  var start = cookie.indexOf(UserState.COURSE_LIST_V1 + "=");
-  start = cookie.indexOf("=", start) + 1;
-  var end = cookie.indexOf(";", start);
-  if (end == -1) end = cookie.length;
-  var oldCookie = cookie.substring(start, end);
 
   var courseArr = [];
   for (var i = 0; i < courses.length; i++) {
@@ -67,7 +69,7 @@ UserState.saveCourses = function(courses) {
     courseArr.push(obj);
   }
   var data = {courses: courseArr};
-  document.cookie = cookie.replace(oldCookie, JSON.stringify(data));
+  localStorage[UserState.COURSE_LIST_V2] = JSON.stringify(data);
 };
 
 /*
@@ -86,3 +88,4 @@ UserState.stopIgnoring = function() {
 
 
 UserState.COURSE_LIST_V1 = 'scheduling_course_list_v1';
+UserState.COURSE_LIST_V2 = 'scheduling_course_list_v2';

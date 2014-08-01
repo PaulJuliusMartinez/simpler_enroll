@@ -68,6 +68,16 @@ SearchBoxView.prototype.getInput = function() {
 };
 
 /*
+ * Sets the current input.
+ * PARAM-TYPE: string str What to set it to
+ */
+SearchBoxView.prototype.setInput = function(str) {
+  this.input_.val(str);
+  var searchBox = this;
+  setTimeout(function() { searchBox.input_.focus(); }, 1);
+};
+
+/*
  * Shows the results.
  */
 SearchBoxView.prototype.showResults = function() {

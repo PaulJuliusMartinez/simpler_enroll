@@ -22,7 +22,8 @@ PreviewController.prototype.displayCourseList = function(courses) {
   this.view_.clearCalendars();
 
   for (var quarter = 0; quarter < 3; quarter++) {
-    var units = 0;
+    var plannedUnits = 0;
+    var enrolledUnits = 0;
     for (var i = 0; i < courses.length; i++) {
       if (courses[i].isOfferedIn(quarter) &&
           courses[i].getStatus().getQuarterStatus(quarter) &&
@@ -31,10 +32,18 @@ PreviewController.prototype.displayCourseList = function(courses) {
             courses[i].getPrimarySectionsForQuarter(quarter), quarter);
         this.displaySectionList_(
             courses[i].getSecondarySectionsForQuarter(quarter), quarter);
-        units += courses[i].getMaxUnits();
+
+        switch (courses[i].getStatus().getEnrollmentStatus()) {
+          case Status.ENROLL:
+            enrolledUnits += courses[i].getMaxUnits();
+          case Status.PLAN:
+            plannedUnits += courses[i].getMaxUnits();
+          default:
+            break;
+        }
       }
     }
-    this.view_.setUnits(quarter, units);
+    this.view_.setUnits(quarter, enrolledUnits, plannedUnits);
     this.view_.getCalendarView(quarter).draw();
   }
 };
