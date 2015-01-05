@@ -1,0 +1,2 @@
+{"197":{"department":"EFSLANG","number":"197","title":"Directed Study","description":"","min_units":1,"max_units":3,"gers":[],"id":205293,},
+"397":{"department":"EFSLANG","number":"397","title":"Directed Study","description":"","min_units":1,"max_units":3,"gers":[],"id":121493,}}

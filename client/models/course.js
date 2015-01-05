@@ -24,13 +24,12 @@ Course = function(obj) {
   // TYPE: string[]
   this.gers_ = obj[CourseConstants.GERS] || [];
   // We have a problem if there's no primary component...
-  assert(obj[CourseConstants.PRIMARY_COMPONENT],
-      'This course object had no primary component!');
+  //assert(obj[CourseConstants.PRIMARY_COMPONENT], 'This course object had no primary component!');
   // TYPE: Section[][]
   this.primaryComponent_ = this.convertJSONSectionsToSectionArray(
       obj, CourseConstants.PRIMARY_COMPONENT, true);
   // TYPE: string
-  this.primaryComponentType_ = obj[CourseConstants.PRIMARY_TYPE];
+  this.primaryComponentType_ = obj[CourseConstants.PRIMARY_TYPE] || 'N/A';
   // TYPE: Section[][]
   this.secondaryComponent_ = this.convertJSONSectionsToSectionArray(
       obj, CourseConstants.SECONDARY_COMPONENT, false);

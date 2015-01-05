@@ -69,7 +69,9 @@ public class FetchCourses {
     try {
       List<String> courses = new ArrayList<String>();
       for (Course c : con.getCoursesByQuery(d.getCode())) {
-        if (tooHighLevelClass(c.getSubjectCodeSuffix())) continue;
+        if (tooHighLevelClass(c.getSubjectCodeSuffix())) {
+			continue;
+		}
         String course = convertCourseToJSONKeyObjectPair(c);
         if (course != null) courses.add(course);
       }
@@ -114,13 +116,15 @@ public class FetchCourses {
 
     Map<String, String> sections = getPrimaryAndSecodaryComponentSections(c);
     // Case where a class has no valid sections
-    if (sections == null) return null;
-    s += "\"primary\":" + sections.get("PRIMARY") + ",";
-    s += "\"primary_type\":\"" + sections.get("PRIMARY_TYPE") + "\"";
-    if (sections.containsKey("SECONDARY")) {
-      s += ",\"secondary\":" + sections.get("SECONDARY") + ",";
-      s += "\"secondary_type\":\"" + sections.get("SECONDARY_TYPE") + "\"";
-    }
+    if (sections != null) {
+		System.out.println("Sections were null for " + c.getSubjectCodePrefix() + c.getSubjectCodeSuffix());
+		s += "\"primary\":" + sections.get("PRIMARY") + ",";
+		s += "\"primary_type\":\"" + sections.get("PRIMARY_TYPE") + "\"";
+		if (sections.containsKey("SECONDARY")) {
+		  s += ",\"secondary\":" + sections.get("SECONDARY") + ",";
+		  s += "\"secondary_type\":\"" + sections.get("SECONDARY_TYPE") + "\"";
+		}
+	}
 
     s += "}";
 
@@ -288,6 +292,7 @@ public class FetchCourses {
     try {
       instructors = convertInstructorSetToJSONArray(sec.getInstructors());
     } catch (NullPointerException e) {
+	  //System.out.println("Can't get instructors...");
       instructors = "[]";
     }
     s += "\"instructors\":" + instructors + ",";
@@ -375,12 +380,11 @@ public class FetchCourses {
     String s = "{";
     s += "\"days\":" + convertDaysToBooleanArray(m.getDays()) + ",";
     try {
-      System.out.println(m.getStartTime() + "***" + m.getEndTime());
+      //System.out.println(m.getStartTime() + "***" + m.getEndTime());
       s += "\"start\":\"" + m.getStartTime() + "\",";
       s += "\"end\":\"" + m.getEndTime() + "\",";
     } catch (ArrayIndexOutOfBoundsException e) {
-      //System.out.println("Error with the splitting? Start: " +
-          //m.getStartTime() + " - End: " + m.getEndTime());
+      System.out.println("Error with the splitting? Start: " + m.getStartTime() + " - End: " + m.getEndTime());
       return null;
     }
     s += "\"location\":\"" + m.getLocation() + "\"";
