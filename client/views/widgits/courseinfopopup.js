@@ -45,6 +45,15 @@ CourseInfoPopup.prototype.render = function() {
   var courseName = course.getShortName() + ': ' + course.getTitle();
   this.popup_.append($('<p>').text(courseName));
 
+  var instructors = '';
+  for (var i = 0; i < this.meeting_.getInstructors().length; i++) {
+    if (i != 0) instructors += ',';
+    instructors += this.meeting_.getInstructors()[i];
+  }
+  if (instructors != '') {
+    this.popup_.append($('<p>').text('Instructors: ' + instructors));
+  }
+
   // Add Units, making sure we say 3 units or 4-5 units, but not 3-3 units.
   var minUnits = course.getMinUnits();
   var maxUnits = course.getMaxUnits();

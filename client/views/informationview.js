@@ -58,6 +58,28 @@ InformationView.prototype.showCourse = function(course) {
     $.Events(Events.COURSE_CHANGE).dispatch();
     $.Events(course.getID() + Events.COURSE_CHANGE).dispatch();
   });
+
+  // Show instructors
+  var seenCourse = false;
+  var instructorsStr = '';
+  for (var quarter = 0; quarter < 3; quarter++) {
+    if (course.isOfferedIn(quarter)) {
+      if (seenCourse) instructorsStr += '<br>';
+      seenCourse = true;
+      if (quarter == 0) instructorsStr += 'Autumn: ';
+      if (quarter == 1) instructorsStr += 'Winter: ';
+      if (quarter == 2) instructorsStr += 'Spring: ';
+      var sections = course.getPrimarySectionsForQuarter(quarter);
+      for (var i = 0; i < sections[0].getPrimaryInstructors().length; i++) {
+        if (i != 0) instructorsStr += ', ';
+        instructorsStr += sections[0].getPrimaryInstructors()[i];
+      }
+    }
+  }
+  if (instructorsStr != '') {
+    this.container_.find('.' + InformationView.INSTRUCTORS)[0].innerHTML =
+      "Instructors:<br>" + instructorsStr;
+  }
 };
 
 /*
@@ -80,6 +102,7 @@ InformationView.CONTAINER = 'info-container';
 InformationView.NUMBER = 'info-number';
 InformationView.TITLE = 'info-title';
 InformationView.DESCRIPTION = 'info-description';
+InformationView.INSTRUCTORS = 'info-instructors';
 InformationView.GERS = 'info-gers';
 InformationView.ENROLL = 'info-enroll';
 InformationView.PLAN = 'info-plan';

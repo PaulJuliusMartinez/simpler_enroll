@@ -97,7 +97,13 @@ CourseConstants.SPRING = 2;
      * List of instructors.
      * TYPE: string[]
      */
-    CourseConstants.INSTRUCTORS = 'instructors';
+    CourseConstants.PRIMARY_INSTRUCTORS = 'primary-instructors';
+
+    /*
+     * List of secondary instructors.
+     * TYPE: string[]
+     */
+    CourseConstants.SECONDARY_INSTRUCTORS = 'secondary-instructors';
 
     /*
      * List of meeting times.
@@ -112,6 +118,12 @@ CourseConstants.SPRING = 2;
          * TYPE: boolean[]
          */
         CourseConstants.DAYS = 'days';
+
+        /*
+         * List of instructors.
+         * TYPE: string[]
+         */
+        CourseConstants.INSTRUCTORS = 'instructors';
 
         /*
          * Start and end time, in minutes from midnight.

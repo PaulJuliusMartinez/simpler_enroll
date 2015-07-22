@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.HashMap;
@@ -33,6 +34,7 @@ public class FetchCourses {
     for(School s : connection.getSchools()) {
       for(Department d : s.getDepartments()) {
         if (d.getCode().equals("ENVRINST")) continue; // This one breaks things.
+        System.out.println(d.getCode());
         writeDepartmentClassesToFile(d, connection);
         System.gc();
       }
@@ -70,8 +72,8 @@ public class FetchCourses {
       List<String> courses = new ArrayList<String>();
       for (Course c : con.getCoursesByQuery(d.getCode())) {
         if (tooHighLevelClass(c.getSubjectCodeSuffix())) {
-			continue;
-		}
+          continue;
+        }
         String course = convertCourseToJSONKeyObjectPair(c);
         if (course != null) courses.add(course);
       }
@@ -98,6 +100,9 @@ public class FetchCourses {
     } catch (JDOMException e) {
       e.printStackTrace();
       System.out.println("Fuck JDOMException (What the hell is that!?!) " + d.getCode());
+    } catch (Exception e) {
+      e.printStackTrace();
+      System.out.println("Uggghghhh");
     }
 
   }
@@ -112,19 +117,21 @@ public class FetchCourses {
     s += "\"max_units\":" + c.getMaximumUnits() + ",";
     String GERSSatisfied = parseGERString(c.getGeneralEducationRequirementsSatisfied());
     s += "\"gers\":" + GERSSatisfied + ",";
-    s += "\"id\":" + c.getcourseId() + ",";
+    s += "\"id\":" + c.getCourseId() + ",";
 
     Map<String, String> sections = getPrimaryAndSecodaryComponentSections(c);
     // Case where a class has no valid sections
     if (sections != null) {
-		System.out.println("Sections were null for " + c.getSubjectCodePrefix() + c.getSubjectCodeSuffix());
-		s += "\"primary\":" + sections.get("PRIMARY") + ",";
-		s += "\"primary_type\":\"" + sections.get("PRIMARY_TYPE") + "\"";
-		if (sections.containsKey("SECONDARY")) {
-		  s += ",\"secondary\":" + sections.get("SECONDARY") + ",";
-		  s += "\"secondary_type\":\"" + sections.get("SECONDARY_TYPE") + "\"";
-		}
-	}
+        //System.out.println("Sections were null for " + c.getSubjectCodePrefix() + c.getSubjectCodeSuffix());
+        s += "\"primary\":" + sections.get("PRIMARY") + ",";
+        s += "\"primary_type\":\"" + sections.get("PRIMARY_TYPE") + "\"";
+      if (sections.containsKey("SECONDARY")) {
+        s += ",\"secondary\":" + sections.get("SECONDARY") + ",";
+        s += "\"secondary_type\":\"" + sections.get("SECONDARY_TYPE") + "\"";
+      }
+    } else {
+      return null;
+    }
 
     s += "}";
 
@@ -142,18 +149,13 @@ public class FetchCourses {
     return s.replace("\"", "\\\"");
   }
 
-  private static String parseGERString(String gers) {
-    String[] split = gers.split(",");
-    for (int i = 0; i < split.length; i++) {
-      split[i] = split[i].trim();
-      if (split[i].startsWith("GER:")) split[i] = split[i].substring(4);
-    }
+  private static String parseGERString(Collection<String> gers) {
     String s = "[";
-    for (int i = 0; i < split.length; i++) {
-      if (split[i].length() != 0) {
-        if (i != 0) s += ",";
-        s += "\"" + split[i] + "\"";
-      }
+    boolean first = true;
+    for (String ger : gers) {
+      if (!first) s += ", ";
+      first = false;
+      s += "\"" + ger + "\"";
     }
     s += "]";
     return s;
@@ -284,18 +286,27 @@ public class FetchCourses {
    * Convert a Section into a JSON object. Returns null if the section has
    * 'empty' meeting times. (Ones that last 0 minutes.)
    */
+  @SuppressWarnings("deprecation") // For instructor.getUniqueId
   private static String convertSectionToJSONObject(Section sec) {
     if (!permissibleClassComponents.contains(sec.getComponent())) return null;
     String s = "{";
     // This is causing problems right now.
-    String instructors;
+    Map<String, Instructor> instructors = new HashMap<String, Instructor>();
     try {
-      instructors = convertInstructorSetToJSONArray(sec.getInstructors());
+      for (MeetingSchedule m : sec.getMeetingSchedules()) {
+        for (Instructor inst : m.getInstructors()) {
+          instructors.put(inst.getUniqueId(), inst);
+        }
+      }
     } catch (NullPointerException e) {
-	  //System.out.println("Can't get instructors...");
-      instructors = "[]";
+      System.out.println("Can't get instructors...");
     }
-    s += "\"instructors\":" + instructors + ",";
+    s += "\"primary-instructors\":" +
+         convertPrimaryInstructorsToJSONArray(instructors.values()) +
+         ",";
+    s += "\"secondary-instructors\":" +
+         convertSecondaryInstructorsToJSONArray(instructors.values()) +
+         ",";
     String meetingSchedules = convertMeetingScheduleSetToJSONArray(sec.getMeetingSchedules());
 
     // Ignore sections that never meet.
@@ -303,6 +314,58 @@ public class FetchCourses {
     s += "\"meeting-times\":" + meetingSchedules + ",";
     s += "\"id\":" + sec.getClassId();
     s += "}";
+    return s;
+  }
+
+  /*
+   * Converts the primary instructors from a set of instructors
+   * into a JSON array string.
+   */
+  private static String convertPrimaryInstructorsToJSONArray(Collection<Instructor> set) {
+    boolean isFirst = true;
+    String s = "[";
+    for (Instructor i : set) {
+      if (i.isPrimaryInstructor()) {
+        if (!isFirst) s += ",";
+        s += "\"" + i.getName() + "\"";
+        isFirst = false;
+      }
+    }
+    s += "]";
+    return s;
+  }
+
+  /*
+   * Converts the secondary instructors from a set of instructors
+   * into a JSON array string.
+   */
+  private static String convertSecondaryInstructorsToJSONArray(Collection<Instructor> set) {
+    boolean isFirst = true;
+    String s = "[";
+    for (Instructor i : set) {
+      if (!i.isPrimaryInstructor()) {
+        if (!isFirst) s += ",";
+        s += "\"" + i.getName() + "\"";
+        isFirst = false;
+      }
+    }
+    s += "]";
+    return s;
+  }
+
+  /*
+   * Converts a Set of instructors into JSON array string.
+   */
+  private static String convertInstructorSetToJSONArray(Collection<Instructor> set) {
+    boolean isFirst = true;
+    String s = "[";
+    for (Instructor i : set) {
+      if (!isFirst) s += ",";
+      s += "\"" + i.getName() + "\"";
+      isFirst = false;
+    }
+    s += "]";
+    System.out.println(s);
     return s;
   }
 
@@ -331,21 +394,6 @@ public class FetchCourses {
     if (abbr.equals("SCS")) return "Sophomore College";
     if (abbr.equals("T/D")) return "Thesis/Dissertation";
     return "N/A";
-  }
-
-  /*
-   * Converts a Set of instructors into JSON array string.
-   */
-  private static String convertInstructorSetToJSONArray(Set<Instructor> set) {
-    boolean isFirst = true;
-    String s = "[";
-    for (Instructor i : set) {
-      if (!isFirst) s += ",";
-      s += "\"" + i.getName() + "\"";
-      isFirst = false;
-    }
-    s += "]";
-    return s;
   }
 
   /*
@@ -383,6 +431,7 @@ public class FetchCourses {
       //System.out.println(m.getStartTime() + "***" + m.getEndTime());
       s += "\"start\":\"" + m.getStartTime() + "\",";
       s += "\"end\":\"" + m.getEndTime() + "\",";
+      s += "\"instructors\":" + convertInstructorSetToJSONArray(m.getInstructors()) + ",";
     } catch (ArrayIndexOutOfBoundsException e) {
       System.out.println("Error with the splitting? Start: " + m.getStartTime() + " - End: " + m.getEndTime());
       return null;

@@ -1,2 +1,0 @@
-{"299":{"department":"NEPR","number":"299","title":"Directed Reading in Neurosciences","description":"Prerequisite: consent of instructor.","min_units":1,"max_units":18,"gers":[],"id":128856,},
-"399":{"department":"NEPR","number":"399","title":"Graduate Research","description":"StudenInvestigations sponsored by individual faculty members. Prerequisite: consent of instructor.","min_units":1,"max_units":18,"gers":[],"id":128860,}}

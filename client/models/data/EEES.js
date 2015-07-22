@@ -1,1 +1,0 @@
-{"302":{"department":"EEES","number":"302","title":"Challenges and Practices in Crossdisciplinary Research and Teaching","description":"Required EEES core course. Presentations by Earth Sciences faculty. Pedagological tools to present interdisciplinary concepts to a non-specialist audience.","min_units":1,"max_units":1,"gers":[],"id":206977,}}

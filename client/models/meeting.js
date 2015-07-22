@@ -13,6 +13,8 @@ Meeting = function(section, obj) {
   this.section_ = section;
   // TYPE: boolean[]
   this.days_ = obj[CourseConstants.DAYS];
+  // TYPE: string[]
+  this.instructors_ = obj[CourseConstants.INSTRUCTORS];
   // TYPE: number
   this.startTime_ = Meeting.parseTimeString(obj[CourseConstants.START_TIME]);
   // TYPE: number
@@ -26,6 +28,9 @@ Meeting = function(section, obj) {
 
 // First some simple getters.
 Meeting.prototype.getSection = function() { return this.section_; };
+Meeting.prototype.getInstructors = function() {
+  return this.instructors_.slice();
+};
 Meeting.prototype.getDays = function() { return this.days_.slice(); };
 Meeting.prototype.getStartTime = function() { return this.startTime_; };
 Meeting.prototype.getEndTime = function() { return this.endTime_; };

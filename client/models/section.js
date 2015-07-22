@@ -12,7 +12,9 @@ Section = function(course, obj) {
   // TYPE: Course
   this.course_ = course;
   // TYPE: string[]
-  this.instructors_ = obj[CourseConstants.INSTRUCTORS];
+  this.primaryInstructors_ = obj[CourseConstants.SECONDARY_INSTRUCTORS];
+  // TYPE: string[]
+  this.secondaryInstructors_ = obj[CourseConstants.PRIMARY_INSTRUCTORS];
   // TYPE: Meeting[]
   this.meetings_ = [];
   if (obj[CourseConstants.MEETINGS]) {
@@ -28,8 +30,11 @@ Section = function(course, obj) {
 
 /* Simple getters */
 Section.prototype.getCourse = function() { return this.course_; };
-Section.prototype.getInstructors = function() {
-  return this.instructors_.slice();
+Section.prototype.getPrimaryInstructors = function() {
+  return this.primaryInstructors_.slice();
+};
+Section.prototype.getSecondaryInstructors = function() {
+  return this.secondaryInstructors_.slice();
 };
 Section.prototype.getMeetings = function() {
   return this.meetings_.slice();

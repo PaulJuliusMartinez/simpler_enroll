@@ -1,1 +1,0 @@
-{"1":{"department":"ASNLANG","number":"1","title":"1ST YR JPNESE","description":"","min_units":0,"max_units":60,"gers":[],"id":211952,}}
