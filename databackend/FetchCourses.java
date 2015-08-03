@@ -17,6 +17,7 @@ import java.util.Map;
 import org.jdom2.Document;
 import org.jdom2.JDOMException;
 
+import edu.stanford.services.explorecourses.Attribute;
 import edu.stanford.services.explorecourses.Course;
 import edu.stanford.services.explorecourses.Department;
 import edu.stanford.services.explorecourses.MeetingSchedule;
@@ -201,6 +202,25 @@ public class FetchCourses {
       } else {
         relevantQuarter.get(component).add(JSON);
       }
+    }
+
+    // Look at the attributes to see if the class is taught in the
+    // winter or spring.
+    boolean taughtInWinter = false;
+    boolean taughtInSpring = false;
+    for (Attribute a : c.getAttributes()) {
+        if (a.getDescription().equals("Winter")) taughtInWinter = true;
+        if (a.getDescription().equals("Spring")) taughtInSpring = true;
+    }
+    if (taughtInWinter) {
+        ArrayList<String> sections = new ArrayList<String>();
+        sections.add("{\"primary-instructors\":[],\"secondary-instructors\":[],\"meeting-times\":[{\"days\":[true,false,false,false,false],\"start\":\"9:00:00 AM\",\"end\":\"9:50:00 AM\",\"instructors\":[],\"location\":\"\"}],\"id\":0}");
+        winterClasses.put("LEC", sections);
+    }
+    if (taughtInSpring) {
+        ArrayList<String> sections = new ArrayList<String>();
+        sections.add("{\"primary-instructors\":[],\"secondary-instructors\":[],\"meeting-times\":[{\"days\":[true,false,false,false,false],\"start\":\"9:00:00 AM\",\"end\":\"9:50:00 AM\",\"instructors\":[],\"location\":\"\"}],\"id\":0}");
+        springClasses.put("LEC", sections);
     }
 
     // For classes not taught this year and classes where EVERY section
