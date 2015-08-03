@@ -32,6 +32,13 @@ MeetingRenderer.prototype.addMeeting = function(meeting) {
  * Draws the schedule.
  */
 MeetingRenderer.prototype.draw = function() {
+  if (CYCLE_MEETINGS) {
+      var days = [false, false, false, false, false];
+      for (var i = 0; i < this.meetings_.length; i++) {
+          this.meetings_[i].days_ = days.slice();
+          this.meetings_[i].days_[i % 5] = true;
+      }
+  }
   for (var day = 0; day < 5; day++) {
     this.renderOnDay_(day);
   }

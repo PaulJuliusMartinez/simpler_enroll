@@ -215,28 +215,29 @@ SectionView.prototype.fixDisplay = function() {
 
   // Get the current course/quarter and show that
   var selectedCourse = this.courseSelect_.val();
-  var course = this.courses_[selectedCourse].course;
-  // .val() technically returns a string, so we have to coerce it to
-  // a number so the short circuit evaluation will work
-  var selectedQuarter = this.quarterSelect_.val() || 0;
-  if (!course.isOfferedIn(selectedQuarter))
-    selectedQuarter = course.firstQuarterOffered();
 
   if (selectedCourse) {
+    var course = this.courses_[selectedCourse].course;
+    // .val() technically returns a string, so we have to coerce it to
+    // a number so the short circuit evaluation will work
+    var selectedQuarter = this.quarterSelect_.val() || 0;
+    if (!course.isOfferedIn(selectedQuarter))
+      selectedQuarter = course.firstQuarterOffered();
+
     this.courses_[selectedCourse].primarySections[selectedQuarter].show();
     this.courses_[selectedCourse].secondarySections[selectedQuarter].show();
 
     // Set the course types:
     this.primaryType_.text(course.getPrimarySectionType());
     this.secondaryType_.text(course.getSecondarySectionType());
-  }
 
-  // Only have sections options for the quarters the course is taught
-  this.quarterSelect_.empty();
-  if (course.isOfferedIn(0)) this.quarterSelect_.append(SectionView.AUTUMN_OPTION);
-  if (course.isOfferedIn(1)) this.quarterSelect_.append(SectionView.WINTER_OPTION);
-  if (course.isOfferedIn(2)) this.quarterSelect_.append(SectionView.SPRING_OPTION);
-  this.quarterSelect_.val(selectedQuarter);
+    // Only have sections options for the quarters the course is taught
+    this.quarterSelect_.empty();
+    if (course.isOfferedIn(0)) this.quarterSelect_.append(SectionView.AUTUMN_OPTION);
+    if (course.isOfferedIn(1)) this.quarterSelect_.append(SectionView.WINTER_OPTION);
+    if (course.isOfferedIn(2)) this.quarterSelect_.append(SectionView.SPRING_OPTION);
+    this.quarterSelect_.val(selectedQuarter);
+  }
 }
 
 /*

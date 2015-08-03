@@ -82,6 +82,12 @@ src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"> </script
         window.setTimeout(function() {
           UserState.stopIgnoring();
         }, 3000);
+
+        // Add notices about winter/spring
+        var winterNotice = $('<div>').html("Days, times, and rooms for Winter Quarter classes are not available. However, if a class will be offered during Winter Quarter, it will appear in a 9:00-9:50 AM time slot.").addClass("calendar-notice");
+        var springNotice = $('<div>').html("Days, times, and rooms for Spring Quarter classes are not available. However, if a class will be offered during Spring Quarter, it will appear in a 9:00-9:50 AM time slot.").addClass("calendar-notice");
+        $($('#bottom-section').children()[1]).append(winterNotice);
+        $($('#bottom-section').children()[2]).append(springNotice);
       });
     </script>
   </head>

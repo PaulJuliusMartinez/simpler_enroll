@@ -9,22 +9,11 @@ UserState = {};
  */
 UserState.loadSavedCourses = function() {
   this.ignoreSaveCalls();
-  // Get the most updated UserState. If none, cycle through checking old ones
-  var courses = localStorage[UserState.COURSE_LIST_V2];
-  // Old V1
-  if (!courses) {
-    var cookie = document.cookie;
-    var start = cookie.indexOf(UserState.COURSE_LIST_V1 + "=");
-    if (start != -1) {
-      var end = cookie.indexOf(";", start);
-      if (end == -1) end = cookie.length;
-      courses = cookie.substring(start + UserState.COURSE_LIST_V1.length + 1, end);
-    }
-  }
-
+  // Get the most updated UserState.
+  var courses = localStorage[UserState.COURSE_LIST_V3];
 
   if (!courses) {
-    localStorage[UserState.COURSE_LIST_V2] = "{\"courses\":[]}";
+    localStorage[UserState.COURSE_LIST_V3] = "{\"courses\":[]}";
   } else {
     courses = JSON.parse(courses).courses;
     for (var i = 0; i < courses.length; i++) {
@@ -69,7 +58,7 @@ UserState.saveCourses = function(courses) {
     courseArr.push(obj);
   }
   var data = {courses: courseArr};
-  localStorage[UserState.COURSE_LIST_V2] = JSON.stringify(data);
+  localStorage[UserState.COURSE_LIST_V3] = JSON.stringify(data);
 };
 
 /*
@@ -89,3 +78,4 @@ UserState.stopIgnoring = function() {
 
 UserState.COURSE_LIST_V1 = 'scheduling_course_list_v1';
 UserState.COURSE_LIST_V2 = 'scheduling_course_list_v2';
+UserState.COURSE_LIST_V3 = 'scheduling_course_list_v3';
