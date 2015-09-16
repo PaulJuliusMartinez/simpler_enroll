@@ -86,7 +86,7 @@ CalendarView.prototype.getQuarter = function() {
  */
 CalendarView.prototype.draw = function() {
   CYCLE_MEETINGS = false;
-  if (this.quarter_ == 1 || this.quarter_ == 2) {
+  if (this.quarter_ == 2) {
       CYCLE_MEETINGS = true;
       MEETING_SPOT = 0;
   }

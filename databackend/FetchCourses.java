@@ -204,18 +204,10 @@ public class FetchCourses {
       }
     }
 
-    // Look at the attributes to see if the class is taught in the
-    // winter or spring.
-    boolean taughtInWinter = false;
+    // Look at the attributes to see if the class is taught in the spring.
     boolean taughtInSpring = false;
     for (Attribute a : c.getAttributes()) {
-        if (a.getDescription().equals("Winter")) taughtInWinter = true;
         if (a.getDescription().equals("Spring")) taughtInSpring = true;
-    }
-    if (taughtInWinter) {
-        ArrayList<String> sections = new ArrayList<String>();
-        sections.add("{\"primary-instructors\":[],\"secondary-instructors\":[],\"meeting-times\":[{\"days\":[true,false,false,false,false],\"start\":\"9:00:00 AM\",\"end\":\"9:50:00 AM\",\"instructors\":[],\"location\":\"\"}],\"id\":0}");
-        winterClasses.put("LEC", sections);
     }
     if (taughtInSpring) {
         ArrayList<String> sections = new ArrayList<String>();
