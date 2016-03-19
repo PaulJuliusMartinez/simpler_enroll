@@ -204,17 +204,6 @@ public class FetchCourses {
       }
     }
 
-    // Look at the attributes to see if the class is taught in the spring.
-    boolean taughtInSpring = false;
-    for (Attribute a : c.getAttributes()) {
-        if (a.getDescription().equals("Spring")) taughtInSpring = true;
-    }
-    if (taughtInSpring) {
-        ArrayList<String> sections = new ArrayList<String>();
-        sections.add("{\"primary-instructors\":[],\"secondary-instructors\":[],\"meeting-times\":[{\"days\":[true,false,false,false,false],\"start\":\"9:00:00 AM\",\"end\":\"9:50:00 AM\",\"instructors\":[],\"location\":\"\"}],\"id\":0}");
-        springClasses.put("LEC", sections);
-    }
-
     // For classes not taught this year and classes where EVERY section
     // is an 0 length one.
     if (components.size() == 0) return null;
@@ -377,7 +366,6 @@ public class FetchCourses {
       isFirst = false;
     }
     s += "]";
-    System.out.println(s);
     return s;
   }
 

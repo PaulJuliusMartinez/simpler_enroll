@@ -32,7 +32,7 @@ MeetingRenderer.prototype.addMeeting = function(meeting) {
  * Draws the schedule.
  */
 MeetingRenderer.prototype.draw = function() {
-  if (CYCLE_MEETINGS) {
+  if (false) { //CYCLE_MEETINGS) {
       var days = [false, false, false, false, false];
       for (var i = 0; i < this.meetings_.length; i++) {
           this.meetings_[i].days_ = days.slice();
