@@ -85,13 +85,7 @@ CalendarView.prototype.getQuarter = function() {
  * Draws all the meetings.
  */
 CalendarView.prototype.draw = function() {
-  CYCLE_MEETINGS = false;
-  if (this.quarter_ == 2) {
-      CYCLE_MEETINGS = true;
-      MEETING_SPOT = 0;
-  }
   this.meetingRenderer_.draw();
-  CYCLE_MEETINGS = false;
 };
 
 /*
